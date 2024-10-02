@@ -1,0 +1,22 @@
+version: '3'
+services:
+  frontend:
+    build:
+      context: ./claws-mcc-frontend
+      dockerfile: Dockerfile
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./claws-mcc-frontend:/app
+    command: npm run dev
+    depends_on:
+      - backend
+
+  backend:
+    build:
+      context: ./claws-mcc-backend
+      dockerfile: Dockerfile
+    volumes:
+      - ./claws-mcc-backend:/app
+    ports:
+      - "8080:8080"
