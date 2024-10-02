@@ -17,6 +17,6 @@ COPY . .
 EXPOSE 5173
 
 # Build the app for production by default
-CMD ["npm", "run", "dev"]
+CMD ["npx", "vite"]
 
 

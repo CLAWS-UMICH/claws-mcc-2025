@@ -11,16 +11,22 @@ Before you begin, ensure you have met the following requirements:
 1. **Clone the repository**:
 
     ```bash
-    git clone https://github.com/yourusername/your-repo.git
-    cd your-repo
+    git clone git@github.com:CLAWS-UMICH/claws-mcc-2025.git
+    cd claws-mcc-2025
     ```
 
 2. **Build and Start Docker Containers**:
 
-    Use Docker Compose to build and start the containers.
+    Use Docker Compose to build and start the containers (this script will take care of everything):
 
     ```bash
-    docker-compose up --build
+    ./start.sh
+    ```
+
+    If you encounter permission issues, run:
+
+    ```bash
+    chmod +x start.sh
     ```
 
 ## Running the Application
