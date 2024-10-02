@@ -23,15 +23,13 @@ jobs:
         sudo curl -L "https://github.com/docker/compose/releases/download/v2.6.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
         sudo chmod +x /usr/local/bin/docker-compose
 
+    - name: Log in to GitHub Container Registry
+      run: echo "${{ secrets.GHCR_PAT }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
     - name: Build and push Docker images with docker-compose
       run: |
         docker-compose -f docker-compose.yaml build
-
-    - name: Tag and Push Docker Images
-      run: |
         docker tag claws_mcc_frontend:latest ghcr.io/salesawy1/frontend:latest
         docker tag claws_mcc_backend:latest ghcr.io/salesawy1/backend:latest
         docker push ghcr.io/salesawy1/frontend:latest
         docker push ghcr.io/salesawy1/backend:latest
-      env:
-        GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
