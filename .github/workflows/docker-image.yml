@@ -29,7 +29,7 @@ jobs:
     - name: Build and push Docker images with docker-compose
       run: |
         docker-compose -f docker-compose.yaml build
-        docker tag frontend:latest ghcr.io/salesawy1/frontend:latest
-        docker tag backend:latest ghcr.io/salesawy1/backend:latest
-        docker push ghcr.io/salesawy1/frontend:latest
-        docker push ghcr.io/salesawy1/backend:latest
+        docker tag claws-mcc-2025_frontend:latest ghcr.io/salesawy1/claws-mcc-2025_frontend:latest
+        docker tag claws-mcc-2025_backend:latest ghcr.io/salesawy1/claws-mcc-2025_backend:latest
+        docker push ghcr.io/salesawy1/claws-mcc-2025_frontend:latest
+        docker push ghcr.io/salesawy1/claws-mcc-2025_backend:latest
