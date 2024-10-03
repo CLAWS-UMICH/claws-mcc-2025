@@ -42,9 +42,15 @@ jobs:
         ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ec2-user@ec2-34-217-213-65.us-west-2.compute.amazonaws.com << 'EOF'
           echo "${{ secrets.GH_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
           
+          # Stop and remove any existing container using ports 5173 and 8080
+          docker ps -q --filter "ancestor=ghcr.io/salesawy1/claws-mcc-2025_frontend:latest" | grep -q . && docker stop $(docker ps -q --filter "ancestor=ghcr.io/salesawy1/claws-mcc-2025_frontend:latest") && docker rm $(docker ps -q --filter "ancestor=ghcr.io/salesawy1/claws-mcc-2025_frontend:latest")
+          docker ps -q --filter "ancestor=ghcr.io/salesawy1/claws-mcc-2025_backend:latest" | grep -q . && docker stop $(docker ps -q --filter "ancestor=ghcr.io/salesawy1/claws-mcc-2025_backend:latest") && docker rm $(docker ps -q --filter "ancestor=ghcr.io/salesawy1/claws-mcc-2025_backend:latest")
+          
+          # Pull the latest images
           docker pull ghcr.io/salesawy1/claws-mcc-2025_frontend:latest
           docker pull ghcr.io/salesawy1/claws-mcc-2025_backend:latest
 
+          # Run new containers
           docker run -d -p 5173:5173 ghcr.io/salesawy1/claws-mcc-2025_frontend:latest
           docker run -d -p 8080:8080 ghcr.io/salesawy1/claws-mcc-2025_backend:latest
         EOF
