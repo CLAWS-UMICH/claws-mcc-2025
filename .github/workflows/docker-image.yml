@@ -36,8 +36,6 @@ jobs:
 
     - name: Deploy to AWS EC2
       uses: webfactory/ssh-agent@v0.5.3
-      with:
-        ssh-private-key: ${{ secrets.AWS_PEM }}
       run: |
         echo "${{ secrets.AWS_PEM }}" > temp.pem
         chmod 600 temp.pem
