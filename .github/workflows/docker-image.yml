@@ -40,7 +40,7 @@ jobs:
         echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/id_rsa
         chmod 600 ~/.ssh/id_rsa
         ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ec2-user@ec2-34-217-213-65.us-west-2.compute.amazonaws.com << 'EOF'
-          sudo docker login ghcr.io -u {{ secrets.GHCR_USERNAME }} -p {{ secrets.GHCR_TOKEN }}
+          docker login ghcr.io -u ${{ github.actor }} --password-stdin
           
           sudo docker pull ghcr.io/salesawy1/claws-mcc-2025_frontend:latest
           sudo docker pull ghcr.io/salesawy1/claws-mcc-2025_backend:latest
