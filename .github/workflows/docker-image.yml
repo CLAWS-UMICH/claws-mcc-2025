@@ -35,7 +35,6 @@ jobs:
         docker push ghcr.io/salesawy1/claws-mcc-2025_backend:latest
 
     - name: Deploy to AWS EC2
-      uses: webfactory/ssh-agent@v0.5.3
       run: |
         echo "${{ secrets.AWS_PEM }}" > temp.pem
         chmod 600 temp.pem
