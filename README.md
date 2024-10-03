@@ -1,7 +1,7 @@
 # CLAWS MCC 2025
 
 ## Demo Link
-http://ec2-34-217-213-65.us-west-2.compute.amazonaws.com/
+<a href='http://ec2-34-217-213-65.us-west-2.compute.amazonaws.com/' target='_blank'>http://ec2-34-217-213-65.us-west-2.compute.amazonaws.com/</a>
 
 ## Prerequisites
 
