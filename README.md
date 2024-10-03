@@ -1,5 +1,8 @@
 # CLAWS MCC 2025
 
+## Demo Link
+http://ec2-34-217-213-65.us-west-2.compute.amazonaws.com/
+
 ## Prerequisites
 
 Before you begin, ensure you have met the following requirements:
