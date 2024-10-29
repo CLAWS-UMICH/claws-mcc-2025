@@ -18,3 +18,5 @@ EXPOSE 8080
 
 # Define the command to run the app
 CMD ["python3", "app.py"]
+
+ENV PYTHONUNBUFFERED=1

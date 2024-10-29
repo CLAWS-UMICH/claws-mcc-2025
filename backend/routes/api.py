@@ -8,6 +8,14 @@ def api_routes(app):
     def api_home():
         return jsonify("API")
 
+    @app.route('/frontend')
+    def frontend():
+        return "Frontend WebSocket Endpoint"
+
+    @app.route('/hololens')
+    def hololens():
+        return "HoloLens WebSocket Endpoint"
+
     @app.route('/api/tasklist/', methods=['GET'])
     def tasklist():
         print("GET /api/tasklist/")
