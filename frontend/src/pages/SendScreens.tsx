@@ -1,6 +1,7 @@
 //import { useState, useEffect } from 'react'
 import './SendScreens.css'
-function App() {
+
+function SendScreens() {
 
   return (
     <>
@@ -11,4 +12,4 @@ function App() {
   )
 }
 
-export default App
+export default SendScreens
