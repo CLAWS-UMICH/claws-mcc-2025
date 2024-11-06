@@ -136,13 +136,12 @@ def handle_join_room(_data):
     emit('room_message', {
          'message': f"You have joined room: {room}"}, room=room)
 
-    # send message to vitals
-    _data = {
-        "message": "Hello from the backend!",
-        "room": "VITALS"
-    }
-
-    handle_send_to_room(_data)
+    if 'message' in _data:
+        handle_send_to_room(_data)
+    else:
+        # If no message is provided, send a default message to the room
+        default_message = f"Client {request.sid} has joined the room {room}."
+        emit('room_data', {'data': default_message}, room=room)
 
 
 # Leave a specific room
