@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import useSubscribe from '../hooks/useSubscribe';
 import { io } from 'socket.io-client';
 
@@ -11,16 +11,38 @@ const BackendDemo: React.FC = () => {
   // State for data from backend (optional, depending on backend setup)
   const [backendDemoStream] = useSubscribe('DEMO');
 
+  // Load the initial number from the API on component mount
+  useEffect(() => {
+    const fetchNumber = async () => {
+      const response = await fetch('http://localhost:8080/api/number');
+      const data = await response.json();
+      setNumber(data.number);  // Initialize the number from the API
+    };
+
+    fetchNumber();
+  }, []);
+
   // Function to increment the number
   const incrementNumber = () => {
-    setNumber(number + 1);
+    const newNumber = number + 1;
+    setNumber(newNumber);
+    updateNumberInDatabase(newNumber);  // Save to database
+  };
+
+  // Function to save the number to the database
+  const updateNumberInDatabase = async (newNumber: number) => {
+    await fetch('http://localhost:8080/api/number', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ number: newNumber })
+    });
   };
 
   const emitEventOne = () => {
-    const message = JSON.stringify({ number: number }); // Use current number value
+    const message = JSON.stringify({ number: number });
     console.log(`Sending Number ${number} to Astronaut 1`);
-
-    // Emit to room "hololens_1" with message containing the number
     socket.emit('send_to_room', {
       room: 'hololens_1',
       message: message
@@ -28,10 +50,8 @@ const BackendDemo: React.FC = () => {
   };
 
   const emitEventTwo = () => {
-    const message = JSON.stringify({ number: number }); // Use current number value
+    const message = JSON.stringify({ number: number });
     console.log(`Sending Number ${number} to Astronaut 2`);
-
-    // Emit to room "hololens_2" with message containing the number
     socket.emit('send_to_room', {
       room: 'hololens_2',
       message: message
@@ -51,8 +71,8 @@ const BackendDemo: React.FC = () => {
       <button onClick={incrementNumber}>Increase Number</button>
 
       {/* Buttons for the emit functions */}
-      <button onClick={emitEventOne}>Send Number to Astronaut 1</button>
-      <button onClick={emitEventTwo}>Send Number to Astronaut 2</button>
+      <button onClick={emitEventOne}>Send Number to Astronaut 0</button>
+      <button onClick={emitEventTwo}>Send Number to Astronaut 1</button>
     </div>
   );
 };

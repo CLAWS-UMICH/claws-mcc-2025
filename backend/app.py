@@ -106,7 +106,7 @@ def handle_hololens_connect():
 
     # Send the unique ID back to the HoloLens client
     emit('assign_id', {'id': unique_id})
-    logging.info(f"HoloLens connected with ID: {unique_id}")
+    logging.info(f"HoloLens Client {request.sid} connected with ID: {unique_id}")
 
 # Send data to a specific HoloLens by unique ID
 
