@@ -1,0 +1,89 @@
+.suit-atmosphere {
+    display: flex;
+    gap: 16px;
+    padding: 16px;
+    background-color: #1e1e1e;
+    border-radius: 8px;
+}
+
+.suit-section {
+    background-color: #2b2b2b;
+    padding: 16px;
+    border-radius: 8px;
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.section-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1rem;
+    font-weight: bold;
+    color: #fff;
+}
+
+.status-indicator {
+    width: 10px;
+    height: 10px;
+    background-color: #6c757d;
+    border-radius: 50%;
+}
+
+.suit-data-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid #444;
+}
+
+.suit-data-row1 {
+    flex: 1;
+}
+.suit-data-row2 {
+    flex: 10;
+}
+
+.suit-data-row:last-child {
+    border-bottom: none;
+}
+
+.suit-data-value {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #ffffff;
+}
+
+.suit-data-label-group {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.unit-label {
+    font-size: 0.875rem;
+    color: #999;
+}
+
+.data-label {
+    font-size: 0.875rem;
+    color: #ccc;
+}
+
+/* Two-column layout for Suit Pressure */
+.suit-pressure-columns {
+    display: flex;
+    gap: 16px;
+}
+
+.suit-pressure-column {
+    flex: 1;
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    justify-content: space-between;
+}
