@@ -1,5 +1,4 @@
 import './Vitals.css';
-import PropTypes from 'prop-types';
 import { useState } from 'react';
 
 import SuitAtmosphere from './components/suitAtmosphere';
@@ -52,7 +51,3 @@ function Vitals() {
 }
 
 export default Vitals;
-
-Vitals.propTypes = {
-  suitData: PropTypes.instanceOf(Array).isRequired,
-};

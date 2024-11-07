@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import '../styles/styles.css';
 import { FaBatteryHalf, FaTint } from 'react-icons/fa';
 
@@ -101,17 +100,6 @@ const SuitResources = ({ data }) => {
       </div>
     </div>
   );
-};
-
-SuitResources.propTypes = {
-  data: PropTypes.shape({
-    batt_time_left: PropTypes.number.isRequired,
-    oxy_pri_stroage: PropTypes.number.isRequired,
-    oxy_sec_storage: PropTypes.number.isRequired,
-    oxy_pri_pressure: PropTypes.number.isRequired,
-    oxy_sec_pressure: PropTypes.number.isRequired,
-    coolant_storage: PropTypes.number.isRequired,
-  }).isRequired,
 };
 
 export default SuitResources;
