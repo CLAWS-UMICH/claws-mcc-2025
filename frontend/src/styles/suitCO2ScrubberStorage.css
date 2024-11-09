@@ -1,0 +1,30 @@
+.suit-co2-scrubber-storage-title {
+  padding: 2px;
+  border-radius: 8px;
+  font-size: 8px;
+}
+
+.suit-co2-scrubber-storage {
+    margin: 10px;
+    padding: 10px;  
+    background-color: #333;
+    color: #fff;
+    border-radius: 8px;
+    border: 2px solid #666;
+  }
+  .scrubber-info .scrubber {
+    margin-bottom: 10px;
+  }
+  .scrubber-bar {
+    height: 10px;
+    background-color: #2196f3;
+  }
+  .flex-container {
+    display: flex;
+    justify-content: space-between; /* Adjust spacing as needed */
+    gap: 20px; /* Space between components */
+  }
+  .flex-item {
+    flex: 1; /* Makes each item take equal space */
+  }
+  
