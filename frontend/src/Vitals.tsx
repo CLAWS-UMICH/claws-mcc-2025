@@ -1,35 +1,47 @@
 import './Vitals.css';
 import PropTypes from 'prop-types';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import SuitAtmosphere from './components/suitAtmosphere';
-import SuitResources from './components/SuitResources';
+import SuitResources from './components/suitResources';
 
-function Vitals() {
-  const [suitData, setSuitData] = useState({
-    batt_time_left: 5632,
-    oxy_pri_stroage: 42,
-    oxy_sec_storage: 100,
-    oxy_pri_pressure: 1200,
-    oxy_sec_pressure: 3000,
-    oxy_time_left: 5687,
-    coolant_storage: 100,
-    heart_rate: 87,
-    oxy_consumption: 0.09,
-    co2_production: 0.12,
-    suit_pressure_oxy: 4.0,
-    suit_pressure_co2: 0.0,
-    suit_pressure_other: 0.0,
-    suit_pressure_total: 4.0,
-    helmet_pressure_co2: 0.1,
-    fan_pri_rpm: 30000,
-    fan_sec_rpm: 30000,
-    scrubber_a_co2_storage: 32,
-    scrubber_b_co2_storage: 0,
-    temperature: 70,
-    coolant_liquid_pressure: 400,
-    coolant_gas_pressure: 0
-  });
+// interface VitalsProps {
+//   data: {
+//     batt_time_left: number;
+//     oxy_pri_stroage: number;
+//     oxy_sec_storage: number;
+//     oxy_pri_pressure: number;
+//     oxy_sec_pressure: number;
+//     oxy_time_left: number;
+//     coolant_storage: number;
+//     heart_rate: number;
+//     oxy_consumption: number;
+//     co2_production: number;
+//     suit_pressure_oxy: number;
+//     suit_pressure_co2: number;
+//     suit_pressure_other: number;
+//     suit_pressure_total: number;
+//     helmet_pressure_co2: number;
+//     fan_pri_rpm: number;
+//     fan_sec_rpm: number;
+//     scrubber_a_co2_storage: number;
+//     scrubber_b_co2_storage: number;
+//     temperature: number;
+//     coolant_liquid_pressure: number;
+//     coolant_gas_pressure: number;
+//   };
+//   setSuitData: (data: any) => void;
+// }
+
+function Vitals({ data, setSuitData }:any) { 
+  const [suitData, setSuitDataState] = useState({});
+
+  useEffect(() => {
+    if (data) {
+      setSuitDataState(data);  // Update local state with new data
+      setSuitData(data); // calls the setVitalsData function in App.tsx, updates state in App.tsx
+    }
+  }, [data, setSuitData]);
 
   return (
     <div className="App">
@@ -54,5 +66,6 @@ function Vitals() {
 export default Vitals;
 
 Vitals.propTypes = {
-  suitData: PropTypes.instanceOf(Array).isRequired,
+  data: PropTypes.object,
+  setSuitData: PropTypes.func.isRequired,
 };
