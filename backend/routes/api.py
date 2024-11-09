@@ -18,3 +18,4 @@ def api_routes(app):
         tasks = list(tasks)
 
         return jsonify(dumps(tasks))
+    

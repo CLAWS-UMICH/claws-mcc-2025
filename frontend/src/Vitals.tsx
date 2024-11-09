@@ -5,34 +5,6 @@ import { useEffect, useState } from 'react';
 import SuitAtmosphere from './components/suitAtmosphere';
 import SuitResources from './components/suitResources';
 
-// interface VitalsProps {
-//   data: {
-//     batt_time_left: number;
-//     oxy_pri_stroage: number;
-//     oxy_sec_storage: number;
-//     oxy_pri_pressure: number;
-//     oxy_sec_pressure: number;
-//     oxy_time_left: number;
-//     coolant_storage: number;
-//     heart_rate: number;
-//     oxy_consumption: number;
-//     co2_production: number;
-//     suit_pressure_oxy: number;
-//     suit_pressure_co2: number;
-//     suit_pressure_other: number;
-//     suit_pressure_total: number;
-//     helmet_pressure_co2: number;
-//     fan_pri_rpm: number;
-//     fan_sec_rpm: number;
-//     scrubber_a_co2_storage: number;
-//     scrubber_b_co2_storage: number;
-//     temperature: number;
-//     coolant_liquid_pressure: number;
-//     coolant_gas_pressure: number;
-//   };
-//   setSuitData: (data: any) => void;
-// }
-
 function Vitals({ data, setSuitData }:any) { 
   const [suitData, setSuitDataState] = useState({});
 
