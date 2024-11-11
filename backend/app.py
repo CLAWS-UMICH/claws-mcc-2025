@@ -170,6 +170,34 @@ def handle_leave_room(_data):
 def handle_send_to_room(_data):
     room = _data['room']  # Room name to send the message to
     data = _data['message']  # Message to send
+
+    # add mock data here
+    if room == "VITALS":
+        mock_data = {
+            "batt_time_left": 5632,
+            "oxy_pri_stroage": 42,
+            "oxy_sec_storage": 100,
+            "oxy_pri_pressure": 1200,
+            "oxy_sec_pressure": 3000,
+            "oxy_time_left": 5687,
+            "coolant_storage": 100,
+            "heart_rate": 87,
+            "oxy_consumption": 0.09,
+            "co2_production": 0.12,
+            "suit_pressure_oxy": 4.0,
+            "suit_pressure_co2": 0.0,
+            "suit_pressure_other": 0.0,
+            "suit_pressure_total": 4.0,
+            "helmet_pressure_co2": 0.1,
+            "fan_pri_rpm": 30000,
+            "fan_sec_rpm": 30000,
+            "scrubber_a_co2_storage": 32,
+            "scrubber_b_co2_storage": 0,
+            "temperature": 70,
+            "coolant_liquid_pressure": 400,
+            "coolant_gas_pressure": 0
+        }
+        data = mock_data
     logging.info(f"Sent message to room {room}: {data}")
     emit('room_data', {'data': data}, room=room)
 

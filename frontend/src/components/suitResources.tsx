@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import '../styles/styles.css';
 import { FaBatteryHalf, FaTint } from 'react-icons/fa';
+import { SuitResourcesProps } from '../Vitals';
 
 const SuitResources = ({ data }) => {
   const {

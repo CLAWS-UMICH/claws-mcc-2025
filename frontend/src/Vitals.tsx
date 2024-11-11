@@ -1,20 +1,43 @@
 import './Vitals.css';
 import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
+import { io } from 'socket.io-client';
 
 import SuitAtmosphere from './components/suitAtmosphere';
 import SuitResources from './components/suitResources';
 
-function Vitals({ data, setSuitData }:any) { 
-  const [suitData, setSuitDataState] = useState({});
+function Vitals() {
+  const [suitData, setSuitDataState] = useState();
 
   useEffect(() => {
-    if (data) {
-      setSuitDataState(data);  // Update local state with new data
-      setSuitData(data); // calls the setVitalsData function in App.tsx, updates state in App.tsx
-    }
-  }, [data, setSuitData]);
+    // Connect to the Socket.IO server
+    const socket = io('http://localhost:8080');
 
+    // Join the VITALS room on connection
+    socket.on('connect', () => {
+      console.log('Connected to server');
+
+      // Join VITALS room
+      socket.emit('join_room', { room: 'VITALS' });
+    });
+
+    // Listen for messages sent to the VITALS room
+    socket.on('room_data', (data: any) => {
+      console.log('Message received in VITALS room:', data);
+      setSuitDataState(data);
+    });
+
+    // Clean up connection on component unmount
+    return () => {
+      socket.emit('leave_room', { room: 'VITALS' });
+      socket.disconnect();
+    };
+  }, []);
+
+  if (!suitData) {
+    return <div>Loading...</div>;
+  }
+  
   return (
     <div className="App">
       <header className="App-header">
@@ -36,8 +59,3 @@ function Vitals({ data, setSuitData }:any) {
 }
 
 export default Vitals;
-
-Vitals.propTypes = {
-  data: PropTypes.object,
-  setSuitData: PropTypes.func.isRequired,
-};

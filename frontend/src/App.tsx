@@ -5,7 +5,7 @@ import './Vitals.css';
 import Vitals from './Vitals';
 
 function App() {
-  const [vitalsData, setVitalsData] = useState(null);
+//   const [vitalsData, setVitalsData] = useState(null);
 
   useEffect(() => {
     // Connect to the Socket.IO server
@@ -23,7 +23,7 @@ function App() {
     socket.on('room_data', (data:any) => { // data is read in as json obj
       console.log('Message received in VITALS room:', data);
       // Handle the data received, like updating state or UI
-      setVitalsData(data);
+      // setVitalsData(data);
     });
 
     // Clean up connection on component unmount
@@ -35,7 +35,7 @@ function App() {
 
   return (
     <div className="App">
-      <Vitals data={vitalsData} setSuitData={setVitalsData} /> {/* passing props to vitals component */}
+      <Vitals /> {/* passing props to vitals component */}
     </div>
   );
 }
