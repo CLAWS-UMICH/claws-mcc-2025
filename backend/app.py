@@ -109,14 +109,21 @@ def handle_hololens_connect():
     logging.info(f"HoloLens Client {request.sid} connected with ID: {unique_id}")
 
 # Send data to a specific HoloLens by unique ID
-
-
 @socketio.on('send_to_hololens')
 def handle_send_to_hololens(_data):
-    target_id = _data['id']  # ID of the HoloLens to target
+    target_room = _data['room']  # ID of the HoloLens to target
     data = _data['data']  # Data to send to the HoloLens
-    emit('hololens_data', {'data': data}, room=target_id)
-    logging.info(f"Sent message to hololens {target_id}: {data}")
+
+    # Parse the JSON string to remove escape characters
+    try:
+        parsed_data = json.loads(data)  # Parse the data to get a proper JSON object
+    except json.JSONDecodeError as e:
+        logging.error(f"Failed to parse data for {target_room}: {e}")
+        return
+
+    # Send the parsed data to the target HoloLens
+    emit('hololens_data', {'data': parsed_data}, room=target_room)
+    logging.info(f"Sent message to hololens {target_room}: {parsed_data}")
 
 """
 =================================================

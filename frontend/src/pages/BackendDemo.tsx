@@ -11,50 +11,35 @@ const BackendDemo: React.FC = () => {
   // State for data from backend (optional, depending on backend setup)
   const [backendDemoStream] = useSubscribe('DEMO');
 
-  // Load the initial number from the API on component mount
-  useEffect(() => {
-    const fetchNumber = async () => {
-      const response = await fetch('http://localhost:8080/api/number');
-      const data = await response.json();
-      setNumber(data.number);  // Initialize the number from the API
-    };
-
-    fetchNumber();
-  }, []);
-
   // Function to increment the number
   const incrementNumber = () => {
     const newNumber = number + 1;
     setNumber(newNumber);
-    updateNumberInDatabase(newNumber);  // Save to database
-  };
-
-  // Function to save the number to the database
-  const updateNumberInDatabase = async (newNumber: number) => {
-    await fetch('http://localhost:8080/api/number', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ number: newNumber })
-    });
   };
 
   const emitEventOne = () => {
-    const message = JSON.stringify({ number: number });
-    console.log(`Sending Number ${number} to Astronaut 1`);
-    socket.emit('send_to_room', {
-      room: 'hololens_1',
-      message: message
+    const message = JSON.stringify({
+        type: "TEST",
+        use: "PUT",
+        data: { num: number }
+    });
+    console.log(`Sending Number ${number} to Astronaut 0`);
+    socket.emit('send_to_hololens', {
+      room: 'hololens_0',
+      data: message
     });
   };
 
   const emitEventTwo = () => {
-    const message = JSON.stringify({ number: number });
-    console.log(`Sending Number ${number} to Astronaut 2`);
-    socket.emit('send_to_room', {
-      room: 'hololens_2',
-      message: message
+    const message = JSON.stringify({
+        type: "TEST",
+        use: "PUT",
+        data: { num: number }
+    });
+    console.log(`Sending Number ${number} to Astronaut 1`);
+    socket.emit('send_to_hololens', {
+      room: 'hololens_1',
+      data: message
     });
   };
 
