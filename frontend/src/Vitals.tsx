@@ -5,9 +5,11 @@ import { io, Socket } from 'socket.io-client';
 
 import SuitAtmosphere from './components/suitAtmosphere';
 import SuitResources from './components/suitResources';
+import SuitHelmetFan from './components/suitHelmetFan';
+import SuitCO2ScrubberStorage from './components/suitCO2ScrubberStorage.tsx';
 
 function Vitals() {
-  const [suitData, setSuitDataState] = useState();
+  const [suitData, setSuitDataState] = useState<SuitData>();
   const [socket, setSocket] = useState<Socket>();
 
   useEffect(() => {
@@ -26,7 +28,7 @@ function Vitals() {
     // Listen for messages sent to the VITALS room
     socket.on('room_data', (data: any) => {
       console.log('Message received in VITALS room:', data);
-      setSuitDataState(data);
+      setSuitDataState(data.data);
     });
 
     // Clean up connection on component unmount
@@ -39,7 +41,7 @@ function Vitals() {
   if (!suitData) {
     return <div>Loading...</div>;
   }
-  
+
   return (
     <div className="App">
       <header className="App-header">
@@ -53,6 +55,14 @@ function Vitals() {
       </div>
       <div className="column right_column">
         <SuitAtmosphere suitData={suitData}/>
+        <div className="flex-container">
+        <div className="flex-item">
+            <SuitHelmetFan fanPriRpm={suitData.fan_pri_rpm} fanSecRpm={suitData.fan_sec_rpm} />
+          </div>
+          <div className="flex-item">
+            <SuitCO2ScrubberStorage scrubberA={suitData.scrubber_a_co2_storage} scrubberB={suitData.scrubber_b_co2_storage} />
+          </div>
+        </div>
       </div>
       <div className="App-content">
         {socket ?

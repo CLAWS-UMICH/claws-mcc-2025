@@ -65,4 +65,13 @@
       transform: rotate(360deg);
     }
   }
+  .flex-container {
+    display: flex;
+    justify-content: space-between; /* Adjust spacing as needed */
+    gap: 20px; /* Space between components */
+  }
+  .flex-item {
+    flex: 1; /* Makes each item take equal space */
+  }
+  
   
