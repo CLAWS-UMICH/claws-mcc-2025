@@ -1,9 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React from 'React';
 import '../styles/suitAtmosphere.css';
+import { SuitData } from '../Vitals';
 
 
-const SuitAtmosphere = ({ suitData = {} }) => {
-    
+const SuitAtmosphere = ({ suitData }: { suitData: SuitData }) => {
+    if (!suitData) {
+        return <div>Loading...</div>;
+    }
 
     return (
         <div className="suit-atmosphere">

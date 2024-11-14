@@ -1,10 +1,8 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import '../styles/styles.css';
-import { FaBatteryHalf, FaTint } from 'react-icons/fa';
-import { SuitResourcesProps } from '../Vitals';
+import { SuitData } from '../Vitals';
 
-const SuitResources = ({ data }) => {
+const SuitResources = ({ data }: { data: SuitData }) => {
   const {
     batt_time_left,
     oxy_pri_stroage,
@@ -14,9 +12,9 @@ const SuitResources = ({ data }) => {
     coolant_storage,
   } = data;
 
-  const getFilledSegments = (percentage) => Math.round((percentage / 100) * 10);
+  const getFilledSegments = (percentage: number) => Math.round((percentage / 100) * 10);
 
-  const getSegmentClass = (percentage) => {
+  const getSegmentClass = (percentage: number) => {
     if (percentage > 70) return 'green-segment';
     if (percentage > 30) return 'yellow-segment';
     return 'red-segment';
@@ -31,7 +29,7 @@ const SuitResources = ({ data }) => {
             <div className="section-title">Time Left</div>
             <div className="resource-pair">
               <div className="time-left-box">
-                <FaBatteryHalf className="resource-icon" />
+                {/* <FaBatteryHalf className="resource-icon" /> */}
                 <div className="vertical-bar">
                   {[...Array(10)].map((_, index) => (
                     <div
@@ -68,7 +66,7 @@ const SuitResources = ({ data }) => {
           </div>
           <div className="coolant-box">
             <div className="section-title">Coolant</div>
-            <FaTint className="coolant-icon" />
+            {/* <FaTint className="coolant-icon" /> */}
             <div className="vertical-bar">
               {[...Array(10)].map((_, index) => (
                 <div
@@ -102,17 +100,6 @@ const SuitResources = ({ data }) => {
       </div>
     </div>
   );
-};
-
-SuitResources.propTypes = {
-  data: PropTypes.shape({
-    batt_time_left: PropTypes.number.isRequired,
-    oxy_pri_stroage: PropTypes.number.isRequired,
-    oxy_sec_storage: PropTypes.number.isRequired,
-    oxy_pri_pressure: PropTypes.number.isRequired,
-    oxy_sec_pressure: PropTypes.number.isRequired,
-    coolant_storage: PropTypes.number.isRequired,
-  }).isRequired,
 };
 
 export default SuitResources;
