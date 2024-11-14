@@ -45,7 +45,7 @@ const BackendDemo: React.FC = () => {
 
   return (
     <div>
-      <h1>Backend Demo</h1>
+      <h1>Current Demo</h1>
 
       {/* Display the current number */}
       <div>

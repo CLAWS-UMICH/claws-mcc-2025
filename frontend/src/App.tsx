@@ -7,7 +7,7 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/backend_demo" element={<BackendDemo />} />
+        <Route path="/" element={<BackendDemo />} />
       </Routes>
     </Router>
   );
