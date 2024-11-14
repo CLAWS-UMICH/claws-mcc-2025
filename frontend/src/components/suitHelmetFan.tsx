@@ -1,5 +1,22 @@
 import React from "react";
 import "../styles/suitHelmetFan.css";
+import {fan0, fan1, fan2, fan3, fan4, fan5, fan6, fan7} from '../../public/fans';
+
+const getFilledSegments = (rpm: number) => {
+  const minRPM = 20000;
+  const maxRPM = 30000;
+  const segmentCount = 7;
+  
+  // Clamp RPM between minRPM and maxRPM to ensure correct calculation
+  const clampedRPM = Math.max(minRPM, Math.min(maxRPM, rpm));
+  
+  // Calculate the percentage of RPM relative to the 20k–30k range
+  const percentage = ((clampedRPM - minRPM) / (maxRPM - minRPM)) * 100;
+
+  // Map the percentage to the number of filled segments (out of 7)
+  return Math.round((percentage / 100) * segmentCount);
+};
+
 function SuitHelmetFan({ fanPriRpm, fanSecRpm }) {
   return (
     <div className="suit-helmet-fan-title">
