@@ -10,6 +10,7 @@ import os
 import logging
 import json
 import uuid
+import random
 
 app = Flask(__name__)
 socketio = SocketIO(app, cors_allowed_origins="*")
@@ -165,25 +166,26 @@ def handle_leave_room(_data):
 
 # Send data to a specific room
 
+def ran(range_from, range_to):
+    return random.randint(range_from, range_to)
 
 @socketio.on('send_to_room')
 def handle_send_to_room(_data):
     room = _data['room']  # Room name to send the message to
-    data = _data['message']  # Message to send
-
+    # data = _data['message']  # Message to send
     # add mock data here
     if room == "VITALS":
         mock_data = {
-            "batt_time_left": 5632,
-            "oxy_pri_stroage": 42,
-            "oxy_sec_storage": 100,
-            "oxy_pri_pressure": 1200,
-            "oxy_sec_pressure": 3000,
-            "oxy_time_left": 5687,
-            "coolant_storage": 100,
-            "heart_rate": 87,
-            "oxy_consumption": 0.09,
-            "co2_production": 0.12,
+            "batt_time_left": ran(0, 100),
+            "oxy_pri_stroage": ran(0, 100),
+            "oxy_sec_storage": ran(0, 100),
+            "oxy_pri_pressure": ran(0, 2000),
+            "oxy_sec_pressure": ran(0, 5000),
+            "oxy_time_left": ran(0, 10000),
+            "coolant_storage": ran(0, 100),
+            "heart_rate": ran(0, 190),
+            "oxy_consumption": ran(0, 190),
+            "co2_production":ran(0, 120),
             "suit_pressure_oxy": 4.0,
             "suit_pressure_co2": 0.0,
             "suit_pressure_other": 0.0,
