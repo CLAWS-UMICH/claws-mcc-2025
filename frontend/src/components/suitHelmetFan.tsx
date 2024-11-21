@@ -1,6 +1,6 @@
 import React from "react";
 import "../styles/suitHelmetFan.css";
-import { fan0, fan1, fan2, fan3, fan4, fan5, fan6, fan7 } from '../../public/fans';
+import { fans } from '../../public/fans/';
 
 // Function to map RPM to image index (0 to 7)
 const getImageIndex = (rpm) => {
@@ -15,8 +15,6 @@ const getImageIndex = (rpm) => {
   return Math.round(((clampedRPM - minRPM) / (maxRPM - minRPM)) * imageCount);
 };
 
-// Array of fan images for easier lookup
-const fanImages = [fan0, fan1, fan2, fan3, fan4, fan5, fan6, fan7];
 
 function SuitHelmetFan({ fanPriRpm, fanSecRpm }) {
   return (
@@ -30,7 +28,7 @@ function SuitHelmetFan({ fanPriRpm, fanSecRpm }) {
                 <p>Primary</p>
                 {/* Display the image based on the RPM */}
                 <img
-                  src={fanImages[getImageIndex(fanPriRpm)]}
+                  src={fans[getImageIndex(fanPriRpm)]}
                   alt="Primary Fan"
                   className="fan-image"
                 />
@@ -42,7 +40,7 @@ function SuitHelmetFan({ fanPriRpm, fanSecRpm }) {
                 <p>Secondary</p>
                 {/* Display the image based on the RPM */}
                 <img
-                  src={fanImages[getImageIndex(fanSecRpm)]}
+                  src={fans[getImageIndex(fanSecRpm)]}
                   alt="Secondary Fan"
                   className="fan-image"
                 />
