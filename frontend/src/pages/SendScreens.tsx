@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import './SendScreens.css';
+import QuickShare from "../components/QuickShare"; // Adjust the path if necessary
+
 
 function SendScreens() {
   const [query, setQuery] = useState("");
