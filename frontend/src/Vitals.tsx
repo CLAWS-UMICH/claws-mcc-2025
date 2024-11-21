@@ -66,7 +66,10 @@ function Vitals() {
       </div>
       <div className="App-content">
         {socket ?
-          <button onClick={() => {socket.emit('handle_send_to_room', {room: 'VITALS'})}}>Button to send to room</button>
+          <button onClick={() => {
+            console.log('Button clicked');
+            socket.emit('send_to_room', {room: 'VITALS'})}}>
+              Button to send to room</button>
           :
           <div>Socket not connected</div>
           }
