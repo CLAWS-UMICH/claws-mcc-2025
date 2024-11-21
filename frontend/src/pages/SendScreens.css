@@ -1,0 +1,33 @@
+#container {
+    display: flex;
+    align-items: flex-start;
+    font: 'Avenir';
+}
+
+#search-bar {
+    width: 100%; /* Take full width of the container */
+    border-radius: 5px;
+    height: 46px;
+    background-color: #1F1F1F;
+    display: flex;
+    align-items: center;  
+    justify-content: space-between; /* Space elements between */
+    padding-left: 20px;    
+    padding-right: 20px; /* Add padding on the right */
+    box-sizing: border-box; /* Ensures padding is included in total width */
+}
+
+#screen-share-title {
+    margin: 0;  
+    padding: 0; 
+    /* You may adjust the flex value if needed, but it's not necessary here */
+}
+
+#search-input {
+    flex: 1; /* Allow input to grow and fill available space */
+    margin-left: 20px; /* Optional: Space between title and input */
+    border: none; 
+    height: 26px; 
+    border-radius: 3px;
+    width:200px;
+}
