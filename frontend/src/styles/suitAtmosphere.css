@@ -1,89 +1,97 @@
+/* SuitAtmosphere.css */
 .suit-atmosphere {
     display: flex;
-    gap: 16px;
-    padding: 16px;
-    background-color: #1e1e1e;
-    border-radius: 8px;
+    width: 45.9375rem;
+    padding: 1.25rem;
+    align-items: flex-start;
+    gap: 1.25rem;
+    border-radius: 0.75rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(32, 32, 32, 0.9);
 }
 
-.suit-section {
-    background-color: #2b2b2b;
-    padding: 16px;
-    border-radius: 8px;
-    width: 50%;
+.suit-panel {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    padding: 1rem;
+    gap: 1.25rem;
+    border-radius: 0.75rem;
+    border: 1px solid rgba(79, 79, 79, 1);
 }
 
-.section-header {
+.personal-data {
+    display: flex;
+    width: 15.25rem;
+    height: 16.25rem;
+    padding: 1rem 1rem 0rem 1rem;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.25rem;
+    flex-shrink: 0;
+}
+
+.suit-pressure {
+    flex: 1;
+}
+
+.panel-header {
     display: flex;
     align-items: center;
-    gap: 8px;
-    font-size: 1rem;
-    font-weight: bold;
-    color: #fff;
+    gap: 0.5rem;
 }
 
 .status-indicator {
-    width: 10px;
-    height: 10px;
-    background-color: #6c757d;
+    width: 0.5rem;
+    height: 0.5rem;
+    background: #22C55E;
     border-radius: 50%;
 }
 
-.suit-data-row {
+.panel-header h3 {
+    font-size: 0.875rem;
+    color: rgba(255, 255, 255, 0.9);
+    font-weight: 500;
+}
+
+.data-content {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
+    flex-direction: column;
+    gap: 1.25rem;
+    width: 100%;
+}
+
+.pressure-grid {
+    display: flex;
+    gap: 1.25rem;
+}
+
+.pressure-column {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.data-row {
+    display: flex;
     padding: 8px 0;
     border-bottom: 1px solid #444;
+    gap: 1.25rem;
 }
 
-.suit-data-row1 {
-    flex: 1;
-}
-.suit-data-row2 {
-    flex: 10;
-}
-
-.suit-data-row:last-child {
-    border-bottom: none;
-}
-
-.suit-data-value {
+.data-value {
     font-size: 1.5rem;
-    font-weight: bold;
-    color: #ffffff;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.9);
 }
 
-.suit-data-label-group {
+.data-labels {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    gap: 0.25rem;
 }
 
-.unit-label {
-    font-size: 0.875rem;
-    color: #999;
-}
-
-.data-label {
-    font-size: 0.875rem;
-    color: #ccc;
-}
-
-/* Two-column layout for Suit Pressure */
-.suit-pressure-columns {
-    display: flex;
-    gap: 16px;
-}
-
-.suit-pressure-column {
-    flex: 1;
-    width: 50%;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    justify-content: space-between;
+.unit, .label {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.6);
 }

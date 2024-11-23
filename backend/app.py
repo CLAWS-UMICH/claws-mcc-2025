@@ -177,7 +177,7 @@ def handle_send_to_room(_data):
     if room == "VITALS":
         mock_data = {
             "batt_time_left": ran(0, 100),
-            "oxy_pri_stroage": ran(0, 100),
+            "oxy_pri_storage": ran(0, 100),
             "oxy_sec_storage": ran(0, 100),
             "oxy_pri_pressure": ran(0, 2000),
             "oxy_sec_pressure": ran(0, 5000),

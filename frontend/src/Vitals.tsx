@@ -7,6 +7,8 @@ import SuitAtmosphere from './components/suitAtmosphere';
 import SuitResources from './components/suitResources';
 import SuitHelmetFan from './components/suitHelmetFan';
 import SuitCO2ScrubberStorage from './components/suitCO2ScrubberStorage.tsx';
+import SuitTemperature from './components/SuitTemperature';
+import Dcu from './components/DCU';
 
 function Vitals() {
   const [suitData, setSuitDataState] = useState<SuitData>();
@@ -43,28 +45,54 @@ function Vitals() {
   }
 
   return (
-    <div className="App">
-      <header className="App-header">
-        
-      </header>
-      <div className="column left_column">
-        {/* Live Camera Feed*/}
+    <div className="vitals-container">
+      <div className="top-bar">
+        <div className="time"></div>
+        {/* INSERT NAV BAR */}
       </div>
-      <div className="column middle_column">
-      <SuitResources data={suitData} />
-      </div>
-      <div className="column right_column">
-        <SuitAtmosphere suitData={suitData}/>
-        <div className="flex-container">
-        <div className="flex-item">
-            <SuitHelmetFan fanPriRpm={suitData.fan_pri_rpm} fanSecRpm={suitData.fan_sec_rpm} />
+      <div className="main-content">
+
+        <div className="column left-column">
+          <div className="user-section">
+            <div className="avatar s">S</div>
+            <div className="user-info">
+              <span>Name 1</span>
+              <span className="location">Location 1</span>
+            </div>
           </div>
+          <div className="camera-feed">
+            {/* Camera feed placeholder */}
+          </div>
+          
+          <div className="user-section">
+            <div className="avatar a">A</div>
+            <div className="user-info">
+              <span>Name 2</span>
+              <span className="location">Location 2</span>
+            </div>
+          </div>
+          <div className="camera-feed">
+            {/* Camera feed placeholder */}
+          </div>
+        </div>
+
+        <div className="column middle_column">
+          <SuitResources data={suitData} />
+        </div>
+
+        <div className="column right_column">
+          <SuitAtmosphere suitData={suitData}/>
+          <div className="flex-container">
           <div className="flex-item">
-            <SuitCO2ScrubberStorage scrubberA={suitData.scrubber_a_co2_storage} scrubberB={suitData.scrubber_b_co2_storage} />
+              <SuitHelmetFan fanPriRpm={suitData.fan_pri_rpm} fanSecRpm={suitData.fan_sec_rpm} />
+            </div>
+            <div className="flex-item">
+              <SuitCO2ScrubberStorage scrubberA={suitData.scrubber_a_co2_storage} scrubberB={suitData.scrubber_b_co2_storage} />
+            </div>
           </div>
         </div>
       </div>
-      <div className="App-content">
+      {/* <div className="App-content">
         {socket ?
           <button onClick={() => {
             console.log('Button clicked');
@@ -73,7 +101,7 @@ function Vitals() {
           :
           <div>Socket not connected</div>
           }
-      </div>
+      </div> */}
     </div>
   );
 }
@@ -82,7 +110,7 @@ export default Vitals;
 
 export type SuitData = {
   batt_time_left: number,
-  oxy_pri_stroage: number,
+  oxy_pri_storage: number,
   oxy_sec_storage: number,
   oxy_pri_pressure: number,
   oxy_sec_pressure: number,
