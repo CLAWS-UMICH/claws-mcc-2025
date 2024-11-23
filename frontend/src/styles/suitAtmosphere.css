@@ -74,9 +74,12 @@
 
 .data-row {
     display: flex;
-    padding: 8px 0;
-    border-bottom: 1px solid #444;
+    padding: 4px 0;
     gap: 1.25rem;
+}
+
+.line {
+    border-bottom: 1px solid #444;
 }
 
 .data-value {

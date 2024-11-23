@@ -23,6 +23,7 @@ const SuitAtmosphere = ({ suitData }) => {
                             <span className="unit">BPM</span>
                             <span className="label">Heart Rate</span>
                         </div>
+                        <div className="line"></div>
                     </div>
 
                     <div className="data-row">
@@ -31,6 +32,7 @@ const SuitAtmosphere = ({ suitData }) => {
                             <span className="unit">PSI/MIN</span>
                             <span className="label">O₂ Consumption</span>
                         </div>
+                        <div className="line"></div>
                     </div>
 
                     <div className="data-row">
@@ -39,6 +41,7 @@ const SuitAtmosphere = ({ suitData }) => {
                             <span className="unit">PSI/MIN</span>
                             <span className="label">CO₂ Production</span>
                         </div>
+                        <div className="line"></div>
                     </div>
                 </div>
             </div>
