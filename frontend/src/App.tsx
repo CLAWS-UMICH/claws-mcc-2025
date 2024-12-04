@@ -1,18 +1,16 @@
-//import { useState, useEffect } from 'react'
-//import reactLogo from './assets/react.svg'
-//import viteLogo from '/vite.svg'
-import './App.css'
-//import SendScreens from './pages/SendScreens.tsx'
-
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes, BrowserRouter } from 'react-router-dom';
+import './App.css';
+import BackendDemo from './pages/BackendDemo';
 
 function App() {
   return (
-    <>
-      <h1>
-        Emma Rocks!
-        </h1>
-    </>
-  )
+    <Router>
+      <Routes>
+        <Route path="/" element={<BackendDemo />} />
+      </Routes>
+    </Router>
+  );
 }
 
-export default App
+export default App;

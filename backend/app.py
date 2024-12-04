@@ -37,8 +37,8 @@ client = MongoClient(mongo_uri)
 
 # Store connected HoloLens clients with unique IDs
 next_hololens_id = 0
-available_ids = set() # set of disconnected available IDs for future hololens
-hololens_clients = {} # client ID -> hololens unique ID
+available_ids = set()  # set of disconnected available IDs for future hololens
+hololens_clients = {}  # client ID -> hololens unique ID
 
 # Room management
 active_rooms = set()  # Set to keep track of active room names
@@ -54,11 +54,15 @@ except Exception as e:
     logging.error(f"MongoDB connection failed: {e}")
 
 # Store db in the app context before each request
+
+
 @app.before_request
 def before_request():
     g.db = db
 
 # WebSocket events
+
+
 @socketio.on('connect')
 def on_connect():
     logging.info(f"Client connected: {request.sid}")
@@ -96,22 +100,30 @@ def handle_hololens_connect():
         next_hololens_id += 1
 
     unique_id = f'hololens_{new_id_num}'
-    
     # Map the connection to the unique ID and join the room
     hololens_clients[request.sid] = unique_id
     join_room(unique_id)
 
     # Send the unique ID back to the HoloLens client
     emit('assign_id', {'id': unique_id})
-    logging.info(f"HoloLens connected with ID: {unique_id}")
+    logging.info(f"HoloLens Client {request.sid} connected with ID: {unique_id}")
 
 # Send data to a specific HoloLens by unique ID
 @socketio.on('send_to_hololens')
 def handle_send_to_hololens(_data):
-    target_id = _data['id']  # ID of the HoloLens to target
+    target_room = _data['room']  # ID of the HoloLens to target
     data = _data['data']  # Data to send to the HoloLens
-    emit('hololens_data', {'data': data}, room=target_id)
-    logging.info(f"Sent message to hololens {target_id}: {data}")
+
+    # Parse the JSON string to remove escape characters
+    try:
+        parsed_data = json.loads(data)  # Parse the data to get a proper JSON object
+    except json.JSONDecodeError as e:
+        logging.error(f"Failed to parse data for {target_room}: {e}")
+        return
+
+    # Send the parsed data to the target HoloLens
+    emit('hololens_data', {'data': parsed_data}, room=target_room)
+    logging.info(f"Sent message to hololens {target_room}: {parsed_data}")
 
 """
 =================================================
@@ -120,13 +132,24 @@ def handle_send_to_hololens(_data):
 """
 
 # Join a specific room
+
+
 @socketio.on('join_room')
 def handle_join_room(_data):
     room = _data['room']  # Room name to join
     join_room(room)
     active_rooms.add(room)
     logging.info(f"Client {request.sid} joined room: {room}")
-    emit('room_message', {'message': f"You have joined room: {room}"}, room=room)
+    emit('room_message', {
+         'message': f"You have joined room: {room}"}, room=room)
+
+    if 'message' in _data:
+        handle_send_to_room(_data)
+    else:
+        # If no message is provided, send a default message to the room
+        default_message = f"Client {request.sid} has joined the room {room}."
+        emit('room_data', {'data': default_message}, room=room)
+
 
 # Leave a specific room
 @socketio.on('leave_room')
@@ -142,6 +165,8 @@ def handle_leave_room(_data):
     #     logging.info(f"Room {room} is now empty and removed from active rooms")
 
 # Send data to a specific room
+
+
 @socketio.on('send_to_room')
 def handle_send_to_room(_data):
     room = _data['room']  # Room name to send the message to
@@ -149,5 +174,7 @@ def handle_send_to_room(_data):
     logging.info(f"Sent message to room {room}: {data}")
     emit('room_data', {'data': data}, room=room)
 
+
 if __name__ == '__main__':
-    socketio.run(app, host='0.0.0.0', port=8080, debug=True, allow_unsafe_werkzeug=True)
+    socketio.run(app, host='0.0.0.0', port=8080,
+                 debug=True, allow_unsafe_werkzeug=True)
