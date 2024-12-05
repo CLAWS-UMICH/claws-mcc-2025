@@ -49,20 +49,18 @@
 .time-row {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 8px;  /* Reduced from 12px */
   color: white;
-  width: 100%; /* Ensure full width */
-  padding-right: 8px;
+  width: 100%;
 }
 
 .progress-bar {
-  flex: 1; /* This will make it expand properly */
+  width: 80px;  /* Set fixed width instead of flex: 1 */
   height: 6px;
-  min-width: 120px; /* Add minimum width */
   background: #2A2A2A;
   border-radius: 3px;
   overflow: hidden;
-  margin: 0 8px;
+  margin: 0 4px;  /* Reduced from 8px */
 }
 
 .progress-fill {
@@ -253,4 +251,5 @@
   min-width: 80px;
   text-align: right;
   color: white;
+  margin-left: auto;  /* Push to the right */
 }
