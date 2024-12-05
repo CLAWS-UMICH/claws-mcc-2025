@@ -1,43 +1,49 @@
 import { useState } from 'react';
 import './Tasklist.css';
 
-type Subtask = {
-    id: number;
-    description: string;
-};
-
 type Task = {
     id: number;
+    name: string;
     description: string;
     isEmergency: boolean;
-    subtasks: Subtask[];
+    location: string;
+    assignees: string[];
 };
 
-const TaskListHeader = () => {
+const TaskListHeader = ({ progress }: { progress: string }) => {
     return (
-        // TODO: Space out and add progress bar
-        <div className={"tasklist-header"}>
+        <div className="tasklist-header">
             <h2>Tasks</h2>
-            <button>New Task</button>
+            <div className="progress-bar-container">
+                <div className="progress-bar" style={{ width: progress }}></div>
+                <span className="progress-text">1/3</span>
+            </div>
+            <button className="new-task-button">New Task</button>
         </div>
     );
-}
+};
 
 const TaskList = () => {
     const [tasks, setTasks] = useState<Task[]>([]);
+    const [taskName, setTaskName] = useState('');
+    const [taskLocation, setTaskLocation] = useState('');
+    const [taskAssignees, setTaskAssignees] = useState('');
     const [taskDescription, setTaskDescription] = useState('');
-    const [subtaskDescription, setSubtaskDescription] = useState('');
-    const [selectedTaskId, setSelectedTaskId] = useState<number | null>(null);
 
     const addTask = () => {
-        if (taskDescription.trim() === '') return;
+        if (taskName.trim() === '' || taskLocation.trim() === '' || taskAssignees.trim() === '') return;
         const newTask: Task = {
             id: Date.now(),
+            name: taskName,
             description: taskDescription,
             isEmergency: false,
-            subtasks: [],
+            location: taskLocation,
+            assignees: taskAssignees.split(',').map(name => name.trim()),
         };
         setTasks([...tasks, newTask]);
+        setTaskName('');
+        setTaskLocation('');
+        setTaskAssignees('');
         setTaskDescription('');
     };
 
@@ -47,86 +53,60 @@ const TaskList = () => {
         ));
     };
 
-    const deleteTask = (id: number) => {
-        setTasks(tasks.filter(task => task.id !== id));
-        if (selectedTaskId === id) {
-            setSelectedTaskId(null);
-        }
-    };
-
-    const addSubtask = () => {
-        if (selectedTaskId === null || subtaskDescription.trim() === '') return;
-        const newSubtask: Subtask = {
-            id: Date.now(),
-            description: subtaskDescription,
-        };
-        setTasks(tasks.map(task =>
-            task.id === selectedTaskId
-                ? { ...task, subtasks: [...task.subtasks, newSubtask] }
-                : task
-        ));
-        setSubtaskDescription('');
-    };
-
-    const deleteSubtask = (taskId: number, subtaskId: number) => {
-        setTasks(tasks.map(task =>
-            task.id === taskId
-                ? { ...task, subtasks: task.subtasks.filter(subtask => subtask.id !== subtaskId) }
-                : task
-        ));
-    };
-
     return (
-        <div className={"tasklist"}>
-            <TaskListHeader />
-            <input
-                type="text"
-                placeholder="Enter task description"
-                value={taskDescription}
-                onChange={(e) => setTaskDescription(e.target.value)}
-            />
-            <button onClick={addTask}>Add Task</button>
+        <div className="tasklist">
+            <TaskListHeader progress={`${(tasks.length / 3) * 100}%`} />
 
-            {tasks.map(task => (
-                <div key={task.id} style={{ border: '1px solid black', margin: '10px', padding: '10px' }}>
-                    <p>{task.description}</p>
-                    <label>
-                        <input
-                            type="checkbox"
-                            checked={task.isEmergency}
-                            onChange={() => toggleEmergency(task.id)}
-                        />
-                        Emergency
-                    </label>
-                    <button onClick={() => deleteTask(task.id)}>Delete Task</button>
-                    <button onClick={() => setSelectedTaskId(task.id)}>
-                        {selectedTaskId === task.id ? "Deselect Task" : "Select Task"}
-                    </button>
+            <div className="task-inputs">
+                <input
+                    type="text"
+                    placeholder="Task Name"
+                    value={taskName}
+                    onChange={(e) => setTaskName(e.target.value)}
+                />
+                <input
+                    type="text"
+                    placeholder="Location"
+                    value={taskLocation}
+                    onChange={(e) => setTaskLocation(e.target.value)}
+                />
+                <input
+                    type="text"
+                    placeholder="Assignees (comma-separated)"
+                    value={taskAssignees}
+                    onChange={(e) => setTaskAssignees(e.target.value)}
+                />
+                <textarea
+                    placeholder="Description"
+                    value={taskDescription}
+                    onChange={(e) => setTaskDescription(e.target.value)}
+                />
+                <button onClick={addTask}>Add Task</button>
+            </div>
 
-                    {selectedTaskId === task.id && (
-                        <div style={{ marginTop: '10px' }}>
-                            <h4>Subtasks</h4>
-                            <input
-                                type="text"
-                                placeholder="Enter subtask description"
-                                value={subtaskDescription}
-                                onChange={(e) => setSubtaskDescription(e.target.value)}
-                            />
-                            <button onClick={addSubtask}>Add Subtask</button>
-                            <ul>
-                                {task.subtasks.map(subtask => (
-                                    <li key={subtask.id}>
-                                        {subtask.description}
-                                        <button onClick={() => deleteSubtask(task.id, subtask.id)}>
-                                            Delete Subtask
-                                        </button>
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
-                    )}
+            <div className="tasklist-table">
+                <div className="tasklist-table-header">
+                    <span>Name</span>
+                    <span>Description</span>
+                    <span>Location</span>
+                    <span>Assignee</span>
                 </div>
-            ))}
+                {tasks.map(task => (
+                    <div key={task.id} className="tasklist-row">
+                        <span>{task.name}</span>
+                        <span className="description-cell">{task.description || 'No description'}</span>
+                        <span>{task.location}</span>
+                        <span>
+                            {task.assignees.map((assignee, index) => (
+                                <span key={index} className="assignee-badge">{assignee}</span>
+                            ))}
+                        </span>
+                        <button onClick={() => toggleEmergency(task.id)}>
+                            {task.isEmergency ? 'Unmark Emergency' : 'Mark Emergency'}
+                        </button>
+                    </div>
+                ))}
+            </div>
         </div>
     );
 };
