@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
+import './Tasklist.css';
 
 type Subtask = {
     id: number;
@@ -12,9 +13,17 @@ type Task = {
     subtasks: Subtask[];
 };
 
-type TaskListProps = {};
+const TaskListHeader = () => {
+    return (
+        // TODO: Space out and add progress bar
+        <div className={"tasklist-header"}>
+            <h2>Tasks</h2>
+            <button>New Task</button>
+        </div>
+    );
+}
 
-const TaskList = ({}: TaskListProps) => {
+const TaskList = () => {
     const [tasks, setTasks] = useState<Task[]>([]);
     const [taskDescription, setTaskDescription] = useState('');
     const [subtaskDescription, setSubtaskDescription] = useState('');
@@ -68,8 +77,8 @@ const TaskList = ({}: TaskListProps) => {
     };
 
     return (
-        <div>
-            <h2>Task List</h2>
+        <div className={"tasklist"}>
+            <TaskListHeader />
             <input
                 type="text"
                 placeholder="Enter task description"
@@ -108,7 +117,9 @@ const TaskList = ({}: TaskListProps) => {
                                 {task.subtasks.map(subtask => (
                                     <li key={subtask.id}>
                                         {subtask.description}
-                                        <button onClick={() => deleteSubtask(task.id, subtask.id)}>Delete Subtask</button>
+                                        <button onClick={() => deleteSubtask(task.id, subtask.id)}>
+                                            Delete Subtask
+                                        </button>
                                     </li>
                                 ))}
                             </ul>

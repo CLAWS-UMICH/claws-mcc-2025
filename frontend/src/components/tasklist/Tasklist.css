@@ -1,0 +1,17 @@
+.tasklist {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: black;
+    color: white;
+}
+
+.tasklist-header {
+    display: flex;
+    flex-direction: row;
+    align-content: space-between;
+    border-color: #444444;
+    border-style: solid;
+    border-width: 1px;
+}
