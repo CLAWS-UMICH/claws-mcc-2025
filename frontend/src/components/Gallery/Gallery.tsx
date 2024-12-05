@@ -17,14 +17,18 @@ const Gallery: React.FC<GalleryProps> = ({ sendToAstronaut, images }) => {
 
   const handleImageClick = (id: number) => {
     if (selectedImageId === id) {
-      setSelectedImageId(null); 
+      setSelectedImageId(null);
     } else {
-      setSelectedImageId(id); 
+      setSelectedImageId(id);
     }
   };
 
+  // Determine the class for the gallery container
+  const galleryClass =
+    images.length < 5 ? 'fewer-than-five' : 'greater-than-five';
+
   return (
-    <div id="gallery-container">
+    <div id="gallery-container" className={galleryClass}>
       {images.map((image) => (
         <div
           key={image.id}
