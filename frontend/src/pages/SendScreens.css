@@ -1,36 +1,75 @@
 #container {
     display: flex;
-    align-items: flex-start;
-    font: 'Avenir';
     flex-direction: column;
+    align-items: flex-start;
+    font-family: 'Avenir'; 
 }
 
 #search-bar {
-    width: 100%; /* Take full width of the container */
+    width: 100%;
     border-radius: 5px;
     height: 46px;
-    background-color: #1F1F1F;
+    background-color: #292929;
     display: flex;
     align-items: center;  
-    justify-content: space-between; /* Space elements between */
+    justify-content: space-between; 
     padding-left: 20px;    
-    padding-right: 20px; /* Add padding on the right */
-    box-sizing: border-box; /* Ensures padding is included in total width */
+    padding-right: 20px; 
+    box-sizing: border-box; 
 }
 
 #screen-share-title {
     margin: 0;  
     padding: 0; 
-    /* You may adjust the flex value if needed, but it's not necessary here */
 }
 
 #search-input {
-    flex: 1; /* Allow input to grow and fill available space */
-    margin-left: 20px; /* Optional: Space between title and input */
+    flex: 1;
+    margin-left: 20px; 
     border: none; 
     height: 26px; 
     border-radius: 3px;
-    width:200px;
+    width: 200px;
+}
+
+#main-area {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    width: 100%;
+}
+
+#category-bar {
+    display: flex;
+    border-radius: 5px;
+    flex-direction: column; 
+    width: 269px;
+    background-color: #292929; 
+    padding: 10px;
+    margin-top:10px;
+    box-sizing: border-box;
+    display: flex;
+}
+
+.category-btn {
+    background-color: transparent;
+    border: none;
+    color: white;
+    text-align: left; 
+    padding: 10px;
+    cursor: pointer;
+    width: 100%; 
+    border-radius: 5px;
+    margin-bottom: 5px; 
+}
+
+.category-btn.active {
+    background-color: #414141; 
+    color: white;
+}
+
+.category-btn:hover {
+    background-color: #555; 
 }
 
 #gallery {
