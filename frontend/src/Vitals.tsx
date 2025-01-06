@@ -108,7 +108,18 @@ function Vitals() {
 
 export default Vitals;
 
+export type Alert = {
+  alert_id: number;
+  vital: string;
+  vital_val: number;
+};
+
+export type Alerts = {
+  AllAlerts: Alert[];
+};
+
 export type SuitData = {
+  eva_time: number,
   batt_time_left: number,
   oxy_pri_storage: number,
   oxy_sec_storage: number,
@@ -130,5 +141,6 @@ export type SuitData = {
   scrubber_b_co2_storage: number,
   temperature: number,
   coolant_liquid_pressure: number,
-  coolant_gas_pressure: number
+  coolant_gas_pressure: number,
+  alerts: Alerts,
 }
