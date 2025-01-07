@@ -1,30 +1,66 @@
-.suit-co2-scrubber-storage-title {
-  padding: 2px;
-  border-radius: 8px;
-  font-size: 8px;
+.scrubber-container {
+  width: 100%;
+  max-width: 400px;
 }
 
-.suit-co2-scrubber-storage {
-    margin: 10px;
-    padding: 10px;  
-    background-color: #333;
-    color: #fff;
-    border-radius: 8px;
-    border: 2px solid #666;
-  }
-  .scrubber-info .scrubber {
-    margin-bottom: 10px;
-  }
-  .scrubber-bar {
-    height: 10px;
-    background-color: #2196f3;
-  }
-  .flex-container {
-    display: flex;
-    justify-content: space-between; /* Adjust spacing as needed */
-    gap: 20px; /* Space between components */
-  }
-  .flex-item {
-    flex: 1; /* Makes each item take equal space */
-  }
-  
+.scrubber-title {
+  color: #000;
+  font-size: 18px;
+  padding: 10px;
+}
+
+.scrubber-card {
+  text-align: center;
+  margin: 10px;
+  padding: 10px;
+  background-color: #333;
+  color: #fff;
+  border-radius: 12px;
+  border: 1px solid #666;
+}
+
+.scrubber-content {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  align-items: center;
+}
+
+.meter-container {
+  position: relative;
+  width: 40px;
+  height: 80px;
+  border: 1px solid #666;
+  background-color: transparent;
+}
+
+.meter-fill {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 40%;
+  background: repeating-linear-gradient(
+    45deg,
+    rgba(255, 255, 255, 0.15) 0px,
+    rgba(255, 255, 255, 0.15) 5px,
+    rgba(255, 255, 255, 0.25) 5px,
+    rgba(255, 255, 255, 0.25) 10px
+  );
+}
+
+.meter-value {
+  position: absolute;
+  left: -24px;
+  color: #fff;
+}
+
+.percentage {
+  color: #fff;
+  font-size: 32px;
+}
+
+.separator {
+  width: 2px;
+  height: 100px;
+  background-color: #666;
+}
