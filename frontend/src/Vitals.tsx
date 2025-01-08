@@ -84,10 +84,10 @@ function Vitals() {
           <SuitAtmosphere suitData={suitData}/>
           <div className="flex-container">
           <div className="flex-item">
-              <SuitHelmetFan fanPriRpm={suitData.fan_pri_rpm} fanSecRpm={suitData.fan_sec_rpm} />
+              {/* <SuitHelmetFan fanPriRpm={suitData.fan_pri_rpm} fanSecRpm={suitData.fan_sec_rpm} /> */}
             </div>
             <div className="flex-item">
-              <SuitCO2ScrubberStorage scrubberA={suitData.scrubber_a_co2_storage} scrubberB={suitData.scrubber_b_co2_storage} />
+              {/* <SuitCO2ScrubberStorage scrubberA={suitData.scrubber_a_co2_storage} scrubberB={suitData.scrubber_b_co2_storage} /> */}
             </div>
           </div>
         </div>

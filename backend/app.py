@@ -210,7 +210,18 @@ def handle_send_to_room(_data):
                     "alert_id": 1,
                     "vital": "Temperature",
                     "vital_val": 95
-                }
+                },
+                {
+                    "alert_id": 2,
+                    "vital": "Batt Time Left",
+                    "vital_val": 95
+                },
+                { "alert_id": 3, "vital": "Oxy Pri Storage", "vital_val": 20 },
+                { "alert_id": 4, "vital": "Oxy Sec Storage", "vital_val": 20 },
+                { "alert_id": 5, "vital": "Oxy Pri Pressure", "vital_val": 20 },
+                { "alert_id": 6, "vital": "Oxy Sec Pressure", "vital_val": 20 },
+                { "alert_id": 7, "vital": "Oxy Time Left", "vital_val": 20 },
+                { "alert_id": 8, "vital": "Coolant Storage", "vital_val": 20 }
                 ]
             }
         }
