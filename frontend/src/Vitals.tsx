@@ -3,12 +3,12 @@ import './Vitals.css';
 import { useEffect, useState } from 'react';
 import { io, Socket } from 'socket.io-client';
 
-import SuitAtmosphere from './components/suitAtmosphere';
-import SuitResources from './components/suitResources';
-import SuitHelmetFan from './components/suitHelmetFan';
-import SuitCO2ScrubberStorage from './components/suitCO2ScrubberStorage.tsx';
-import SuitTemperature from './components/SuitTemperature';
-import Dcu from './components/DCU';
+import SuitAtmosphere from './components/vitals/SuitAtmosphere.tsx';
+import SuitResources from './components/vitals/suitResources.tsx';
+import SuitHelmetFan from './components/vitals/suitHelmetFan.tsx';
+import SuitCO2ScrubberStorage from './components/vitals/suitCO2ScrubberStorage.tsx';
+import SuitTemperature from './components/vitals/SuitTemperature.tsx';
+import Dcu from './components/vitals/DCU.tsx';
 
 function Vitals() {
   const [suitData, setSuitDataState] = useState<SuitData>();

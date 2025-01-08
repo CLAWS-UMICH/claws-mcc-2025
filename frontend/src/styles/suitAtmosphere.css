@@ -1,28 +1,40 @@
-.suit-atmosphere {
+.larger-panel {
     display: flex;
-    width: 735px;
-    padding: 20px;
-    gap: 20px;
-    border-radius: 12px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 1.2rem;
+    gap: 1.2rem;
+    border-radius: 0.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
     background: rgba(32, 32, 32, 0.9);
 }
 
 .panel {
     display: flex;
     flex-direction: column;
-    padding: 16px;
-    gap: 20px;
+    padding: 1rem;
+    gap: 1rem;
     border-radius: 12px;
     border: 1px solid #4F4F4F;
     background: rgba(32, 32, 32, 1);
 }
 
+.temperature-dcu-container {
+    display: flex;
+    gap: 1rem;
+}
+
 .personal-data {
-    width: 244px;
+    width: 30%;
+}
+
+.suit-temperature {
+    width: 35%;
 }
 
 .suit-pressure {
+    flex: 1;
+}
+
+.dcu {
     flex: 1;
 }
 
@@ -30,19 +42,24 @@
     display: flex;
     align-items: center;
     gap: 8px;
+    margin-bottom: 0px;
 }
 
-.status-indicator {
-    width: 8px;
-    height: 8px;
-    background: #22C55E;
-    border-radius: 50%;
+.panel-header-padding {
+    margin-top: 1rem;
+}
+
+.panel-header-icon {
+    padding-left: 0.5rem;
+    padding-right: 0.15rem;
 }
 
 .panel-header h3 {
     font-size: 14px;
     color: rgba(255, 255, 255, 0.9);
     font-weight: 500;
+    margin-top: 0px;
+    margin-bottom: 0px;
 }
 
 .data-section {
@@ -50,43 +67,32 @@
     flex-direction: column;
     gap: 0;
     position: relative;
-    padding-left: 16px;
+    padding-left: 0.5rem;
 }
 
 .pressure-grid {
     display: flex;
-    gap: 40px;
+    gap: 1rem;
 }
 
 .pressure-column {
     flex: 1;
     display: flex;
     flex-direction: column;
-    gap: 0;
-    position: relative;
-    padding-left: 16px;
-}
-
-.vertical-line {
-    position: absolute;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    width: 1px;
-    background-color: rgba(255, 255, 255, 0.1);
 }
 
 .data-row {
     display: flex;
-    gap: 20px;
-    padding: 16px 0;
+    gap: 10px;
+    padding: 4px 0;
+    line-height: 1.5;
 }
 
 .data-value {
     font-size: 24px;
     font-weight: 500;
     color: rgba(255, 255, 255, 0.9);
-    min-width: 60px;
+    min-width: 3rem;
 }
 
 .data-labels {
@@ -105,17 +111,10 @@
     color: rgb(255, 255, 255);
 }
 
-.separator {
-    width: 100%;
-    height: 1px;
-    background-color: rgba(255, 255, 255, 0.1);
-    margin: 0;
-}
-
 .horizontal-line {
-    width: 100%;
-    height: 1px;
-    background-color: rgba(255, 255, 255, 0.1);
+    width: 90%;
+    height: 0.10rem;
+    background-color: rgba(255, 255, 255, 0.2);
     border: none;
-    margin: 10px 0;
+    margin: 0.25rem 0;
 }

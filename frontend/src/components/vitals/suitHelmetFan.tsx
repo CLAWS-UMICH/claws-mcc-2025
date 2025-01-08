@@ -1,7 +1,7 @@
 import React from "react";
-import "../styles/suitHelmetFan.css";
-import { fans } from "../../public/fans/";
-import fanIcon from "../../public/mode_fan.png";
+import "../../styles/SuitHelmetFan.css";
+import { fans } from "../../../public/fans";
+import fanIcon from "../../../public/mode_fan.png";
 
 // Function to map RPM to image index (0 to 7)
 const getImageIndex = (rpm) => {

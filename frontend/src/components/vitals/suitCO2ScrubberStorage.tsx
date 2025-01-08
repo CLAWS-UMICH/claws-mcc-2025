@@ -1,5 +1,5 @@
 import React from "react";
-import "../styles/suitCO2ScrubberStorage.css";
+import "../../styles/SuitCO2ScrubberStorage.css";
 function SuitCO2ScrubberStorage({ scrubberA, scrubberB }) {
   return (
     <div className="suit-co2-scrubber-storage-title">

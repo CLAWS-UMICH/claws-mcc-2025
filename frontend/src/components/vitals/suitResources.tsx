@@ -1,6 +1,6 @@
 import React from 'react';
-import '../styles/styles.css';
-import { SuitData } from '../Vitals';
+import '../../styles/Styles.css';
+import { SuitData } from '../../Vitals';
 import { Clock, Battery, Droplet, Gauge } from 'lucide-react';
 
 const SuitResources = ({ data }: { data: SuitData }) => {
