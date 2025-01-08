@@ -176,8 +176,9 @@ def handle_send_to_room(_data):
     # add mock data here
     if room == "VITALS":
         mock_data = {
+            "eva_time:": ran(0, 10000),
             "batt_time_left": ran(0, 100),
-            "oxy_pri_stroage": ran(0, 100),
+            "oxy_pri_storage": ran(0, 100),
             "oxy_sec_storage": ran(0, 100),
             "oxy_pri_pressure": ran(0, 2000),
             "oxy_sec_pressure": ran(0, 5000),
@@ -197,7 +198,21 @@ def handle_send_to_room(_data):
             "scrubber_b_co2_storage": 0,
             "temperature": 70,
             "coolant_liquid_pressure": 400,
-            "coolant_gas_pressure": 0
+            "coolant_gas_pressure": 0,
+            "alerts": {
+                "AllAlerts": [
+                {
+                    "alert_id": 0,
+                    "vital": "Heart Rate",
+                    "vital_val": 140
+                },
+                {
+                    "alert_id": 1,
+                    "vital": "Temperature",
+                    "vital_val": 95
+                }
+                ]
+            }
         }
         data = mock_data
     logging.info(f"Sent message to room {room}: {data}")
