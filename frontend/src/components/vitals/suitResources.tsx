@@ -1,9 +1,32 @@
-import React from 'react';
+import React, { useState } from 'react';
 import '../../styles/Styles.css';
-import { SuitData } from '../../Vitals';
+import '../../styles/SuitResources.css';
 import { Clock, Battery, Droplet, Gauge } from 'lucide-react';
+import oxygenIcon from '../../assets/oxygen.svg';
+import coolantIcon from '../../assets/coolant.svg';
+import batteryIcon from '../../assets/battery.svg';
 
-const SuitResources = ({ data }: { data: SuitData }) => {
+
+const AlertNotification = ({ vital, onClose }) => {
+  return (
+    <div className="alert-notification">
+      <div className="alert-notification-content">
+        <div className="alert-warning-icon">⚠</div>
+        <div className="alert-notification-text">
+          <div>{vital} is Low</div>
+          <div className="alert-notification-subtext">*Add Recommended action if needed</div>
+        </div>
+        <div className="alert-close-icon" onClick={onClose}>✕</div>
+      </div>
+    </div>
+  );
+};
+
+
+const SuitResources = ({ data }) => {
+  const [dismissedNotifications, setDismissedNotifications] = useState(new Set());
+
+
   const {
     batt_time_left,
     oxy_pri_storage,
@@ -12,160 +35,258 @@ const SuitResources = ({ data }: { data: SuitData }) => {
     oxy_sec_pressure,
     oxy_time_left,
     coolant_storage,
+    alerts,
   } = data;
 
-  // Convert battery time (seconds) to hours and minutes
+
+  const handleDismissNotification = (vitalName) => {
+    setDismissedNotifications(prev => new Set([...prev, vitalName]));
+  };
+
+
+  const hasAlert = (vitalName) => {
+    return alerts.AllAlerts.some(alert => alert.vital === vitalName);
+  };
+
+
+  const hasNotification = (vitalName) => {
+    return hasAlert(vitalName) && !dismissedNotifications.has(vitalName);
+  };
+
+
   const batteryHours = Math.floor(batt_time_left / 3600);
   const batteryMinutes = Math.floor((batt_time_left % 3600) / 60);
   const batteryTimeDisplay = `${batteryHours}hr ${batteryMinutes}Min`;
 
-  // Calculate oxygen time display using oxy_time_left
+
   const oxygenHours = Math.floor(oxy_time_left / 3600);
   const oxygenMinutes = Math.floor((oxy_time_left % 3600) / 60);
   const oxygenTimeDisplay = `${oxygenHours}hr ${oxygenMinutes}Min`;
 
+
+  const calculateNeedleRotation = (value) => {
+    const clampedValue = Math.min(Math.max(value, 0), 3000);
+    const percentage = (clampedValue / 3000);
+    const angle = (percentage * 180) - 90;
+    return `rotate(${angle}deg)`;
+  };
+
+
+  const getBatteryClassName = () => {
+    return `progress-fill ${(batt_time_left / 10800) < 0.29 || hasAlert('Batt Time Left') ? 'warning' : ''}`;
+  };
+
+
+  const getOxygenTimeClassName = () => {
+    return `progress-fill ${(oxy_time_left / 10800) < 0.29 || hasAlert('Oxy Time Left') ? 'warning' : ''}`;
+  };
+
+
+  const getOxyPriStorageClassName = () => {
+    return `gauge-fill ${oxy_pri_storage < 20 || hasAlert('Oxy Pri Storage') ? 'warning' : ''}`;
+  };
+
+
+  const getOxySecStorageClassName = () => {
+    return `gauge-fill ${oxy_sec_storage < 20 || hasAlert('Oxy Sec Storage') ? 'warning' : ''}`;
+  };
+
+
+  const getOxyPriPressureClassName = () => {
+    return `needle ${oxy_pri_pressure < 600 || hasAlert('Oxy Pri Pressure') ? 'warning' : ''}`;
+  };
+
+
+  const getOxySecPressureClassName = () => {
+    return `needle ${oxy_sec_pressure < 600 || hasAlert('Oxy Sec Pressure') ? 'warning' : ''}`;
+  };
+
+
+  const renderAlerts = () => {
+    const alertMappings = {
+      'Batt Time Left': 'Time Left for Battery',
+      'Oxy Time Left': 'Oxygen Time',
+      'Oxy Pri Storage': 'Primary Oxygen Storage',
+      'Oxy Sec Storage': 'Secondary Oxygen Storage',
+      'Oxy Pri Pressure': 'Primary Oxygen Pressure',
+      'Oxy Sec Pressure': 'Secondary Oxygen Pressure',
+      'Coolant Storage': 'Coolant Storage'
+    };
+
+
+    return alerts.AllAlerts
+      .filter(alert => hasNotification(alert.vital))
+      .map(alert => (
+        <AlertNotification
+          key={alert.vital}
+          vital={alertMappings[alert.vital]}
+          onClose={() => handleDismissNotification(alert.vital)}
+        />
+      ));
+  };
+
+
   return (
     <div className="suit-resources">
-      <h2 className="suit-resources-title">Suit Resources</h2>
-      
-      <div className="resources-grid">
-        {/* Time Left */}
-        <div className="time-left">
-          <div className="box-header">
-            <Clock size={20} />
-            <span>Time Left</span>
-          </div>
-          
-          <div className="time-content">
-            <div className="time-row">
-              <Battery size={20} />
-              <span>Battery</span>
-              <div className="progress-bar">
-                <div 
-                  className="progress-fill" 
-                  style={{width: `${(batt_time_left/6000) * 100}%`}} 
-                />
+      {renderAlerts()}
+      <h2 className="suit-resources-title large-text">Suit Resources</h2>
+      <div className="encasing-box">
+        <div className="resources-grid">
+          <div className="time-left">
+            <div className="box-header large-text">
+              <Clock size={20} />
+              <span>Time Left</span>
+            </div>
+            <div className="time-content">
+              <div className="time-item">
+                <div className="time-row small-text">
+                  <img src={batteryIcon} alt="Battery Icon" style={{ width: '20px', height: '20px' }} />
+                  <span>Battery</span>
+                  <div className="progress-bar">
+                    <div className={getBatteryClassName()} style={{ width: `${(batt_time_left / 10800) * 100}%` }} />
+                  </div>
+                  <span className="time-value">{batteryTimeDisplay}</span>
+                </div>
+                {hasAlert('Batt Time Left') && (
+                  <div className="alert-indicator" style={{ marginLeft: '90px', marginTop: '4px' }}>
+                    <div className="alert-icon">⚠</div>
+                    <div className="alert-text">Battery is Low</div>
+                  </div>
+                )}
               </div>
-              <span className="time-value">{batteryTimeDisplay}</span>
-            </div>
-
-            <div className="time-row">
-              <Droplet size={20} />
-              <span>Oxygen</span>
-              <div className="progress-bar">
-                <div 
-                  className="progress-fill" 
-                  style={{width: `${oxy_time_left ? (oxy_time_left / 6000) * 100 : 0}%`}} 
-                />
-              </div>
-              <span className="time-value">{oxygenTimeDisplay}</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Coolant Storage */}
-        <div className="coolant">
-          <div className="box-header">
-            <Droplet size={20} />
-            <div className="header-text">
-              <span>Coolant</span>
-              <span>Storage</span>
-            </div>
-          </div>
-          
-          <div className="gauge-container">
-            <div className="measurement">
-              <span>100</span>
-              <span>80</span>
-            </div>
-            <div className="gauge">
-              <div className="gauge-fill" style={{height: `${coolant_storage}%`}}>
-                <div className="striped-background"></div>
+              <div className="time-item">
+                <div className="time-row small-text">
+                  <img src={oxygenIcon} alt="Oxygen Icon" style={{ width: '20px', height: '20px' }} />
+                  <span>Oxygen</span>
+                  <div className="progress-bar">
+                    <div className={getOxygenTimeClassName()} style={{ width: `${oxy_time_left ? (oxy_time_left / 10800) * 100 : 0}%` }} />
+                  </div>
+                  <span className="time-value">{oxygenTimeDisplay}</span>
+                </div>
+                {hasAlert('Oxy Time Left') && (
+                  <div className="alert-indicator" style={{ marginLeft: '90px', marginTop: '4px' }}>
+                    <div className="alert-icon">⚠</div>
+                    <div className="alert-text">Oxygen Time is Low</div>
+                  </div>
+                )}
               </div>
             </div>
-            <span className="percentage">{coolant_storage}%</span>
           </div>
-        </div>
-
-        {/* Oxygen Storage */}
-        <div className="oxygen-storage">
-          <div className="box-header">
-            <Droplet size={20} />
-            <span>Oxygen Storage</span>
-          </div>
-          
-          <div className="storage-content">
-            <div className="storage-section">
-              <span>Primary</span>
-              <div className="storage-gauge">
-                <span className="gauge-label">100</span>
-                <div className="gauge-bar">
-                  <div 
-                    className="gauge-fill" 
-                    style={{height: `${oxy_pri_storage || 0}%`}}
-                  >
+          <div className="coolant">
+            <div className="box-header large-text">
+              <img src={coolantIcon} alt="Coolant Icon" style={{ width: '20px', height: '20px' }} />
+              <div className="header-text">
+                <span>Coolant</span>
+                <span>Storage</span>
+              </div>
+            </div>
+            <div className="gauge-container">
+              <div className="gauge-row">
+                <div className="gauge">
+                  <div className="gauge-fill" style={{ height: `${Math.max(0, (coolant_storage - 80) / 20) * 100}%` }}>
                     <div className="striped-background"></div>
                   </div>
                 </div>
-                <span className="gauge-label">20</span>
-              </div>
-              <span className="percentage">{oxy_pri_storage || 0}%</span>
-            </div>
-
-            <div className="storage-section">
-              <span>Secondary</span>
-              <div className="storage-gauge">
-                <span className="gauge-label">100</span>
-                <div className="gauge-bar">
-                  <div 
-                    className="gauge-fill" 
-                    style={{height: `${oxy_sec_storage}%`}}
-                  >
-                    <div className="striped-background"></div>
-                  </div>
+                <div className="measurement">
+                  <span>100</span>
+                  <span>80</span>
                 </div>
-                <span className="gauge-label">20</span>
               </div>
-              <span className="percentage">{oxy_sec_storage}%</span>
+              <span className="percentage">{coolant_storage}%</span>
+            </div>
+            {hasAlert('Coolant Storage') && (
+              <div className="alert-indicator" style={{ marginTop: '4px', textAlign: 'center' }}>
+                <div className="alert-icon">⚠</div>
+                <div className="alert-text">Coolant Storage is Low</div>
+              </div>
+            )}
+          </div>
+          <div className="oxygen-storage">
+            <div className="box-header large-text">
+              <img src={oxygenIcon} alt="Oxygen Icon" style={{ width: '20px', height: '20px' }} />
+              <span>Oxygen Storage</span>
+            </div>
+            <div className="storage-content">
+              <div className="storage-item small-text">
+                <span className="storage-label">Primary</span>
+                <div className="storage-gauge-container">
+                  <div className="gauge-bar">
+                    <div className={getOxyPriStorageClassName()} style={{ height: `${oxy_pri_storage || 0}%` }}>
+                      <div className="striped-background"></div>
+                    </div>
+                  </div>
+                  <div className="measurement">
+                    <span>100</span>
+                    <span>0</span>
+                  </div>
+                  <span className="percentage">{oxy_pri_storage || 0}%</span>
+                </div>
+                {hasAlert('Oxy Pri Storage') && (
+                  <div className="alert-indicator" style={{ marginTop: '4px' }}>
+                    <div className="alert-icon">⚠</div>
+                    <div className="alert-text">Primary Oxygen Storage is Low</div>
+                  </div>
+                )}
+              </div>
+              <div className="storage-item small-text">
+                <span className="storage-label">Secondary</span>
+                <div className="storage-gauge-container">
+                  <div className="gauge-bar">
+                    <div className={getOxySecStorageClassName()} style={{ height: `${oxy_sec_storage}%` }}>
+                      <div className="striped-background"></div>
+                    </div>
+                  </div>
+                  <div className="measurement">
+                    <span>100</span>
+                    <span>0</span>
+                  </div>
+                  <span className="percentage">{oxy_sec_storage}%</span>
+                </div>
+                {hasAlert('Oxy Sec Storage') && (
+                  <div className="alert-indicator" style={{ marginTop: '4px' }}>
+                    <div className="alert-icon">⚠</div>
+                    <div className="alert-text">Secondary Oxygen Storage is Low</div>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
-        </div>
-
-        {/* Oxygen Pressure */}
-        <div className="oxygen-pressure">
-          <div className="box-header">
-            <Gauge size={20} />
-            <span>Oxygen Pressure</span>
-          </div>
-          
-          <div className="pressure-content">
-            <div className="pressure-section">
-              <span>Primary</span>
-              <div className="pressure-gauge">
-                <div className="gauge-marks"></div>
-                <div 
-                  className="needle" 
-                  style={{
-                    transform: `rotate(${(oxy_pri_pressure / 3000) * 180}deg)`
-                  }}
-                ></div>
-                <div className="pressure-value">{Math.round(oxy_pri_pressure)}</div>
-                <div className="pressure-unit">PSI</div>
-              </div>
+          <div className="oxygen-pressure">
+            <div className="box-header large-text">
+              <Gauge size={20} />
+              <span>Oxygen Pressure</span>
             </div>
-
-            <div className="pressure-section">
-              <span>Secondary</span>
-              <div className="pressure-gauge">
-                <div className="gauge-marks"></div>
-                <div 
-                  className="needle" 
-                  style={{
-                    transform: `rotate(${(oxy_sec_pressure / 3000) * 180}deg)`
-                  }}
-                ></div>
-                <div className="pressure-value">{Math.round(oxy_sec_pressure)}</div>
-                <div className="pressure-unit">PSI</div>
+            <div className="pressure-content">
+              <div className="pressure-section">
+                <span className="small-text">Primary</span>
+                <div className="pressure-gauge">
+                  <div className="gauge-marks"></div>
+                  <div className={getOxyPriPressureClassName()} style={{ transform: calculateNeedleRotation(oxy_pri_pressure) }}></div>
+                  <div className="pressure-value">{Math.round(oxy_pri_pressure)}</div>
+                  <div className="pressure-unit">PSI</div>
+                </div>
+                {hasAlert('Oxy Pri Pressure') && (
+                  <div className="alert-indicator" style={{ marginTop: '4px' }}>
+                    <div className="alert-icon">⚠</div>
+                    <div className="alert-text">Primary Oxygen Pressure is Low</div>
+                  </div>
+                )}
+              </div>
+              <div className="pressure-section">
+                <span className="small-text">Secondary</span>
+                <div className="pressure-gauge">
+                  <div className="gauge-marks"></div>
+                  <div className="gauge-overlay"></div>
+                  <div className={getOxySecPressureClassName()} style={{ transform: calculateNeedleRotation(oxy_sec_pressure) }}></div>
+                  <div className="pressure-value">{Math.round(oxy_sec_pressure)}</div>
+                  <div className="pressure-unit">PSI</div>
+                </div>
+                {hasAlert('Oxy Sec Pressure') && (
+                  <div className="alert-indicator" style={{ marginTop: '4px' }}>
+                    <div className="alert-icon">⚠</div>
+                    <div className="alert-text">Secondary Oxygen Pressure is Low</div>
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -174,5 +295,6 @@ const SuitResources = ({ data }: { data: SuitData }) => {
     </div>
   );
 };
+
 
 export default SuitResources;

@@ -1,0 +1,506 @@
+* {
+    font-family: "Segoe UI", sans-serif; /* Fallback to sans-serif if Segoe UI is unavailable */
+}
+.suit-resources {
+width: auto;
+max-width: 800px;
+margin: 0 auto;
+box-sizing: border-box;
+}
+.suit-resources-title {
+color: white;
+font-size: 24px;
+margin-bottom: 16px;
+}
+.resources-grid {
+display: grid;
+grid-template-columns: 220px 158px;
+grid-template-areas:
+    "time coolant"
+    "storage storage"
+    "pressure pressure";
+gap: 12px;
+}
+/* Time Left Box */
+.time-left {
+grid-area: time;
+display: flex;
+flex-direction: column;
+padding: 16px;
+border-radius: 8px;
+background: #232323;
+border: 1px solid #4F4F4F;
+height: 160px;
+}
+.box-header {
+display: flex;
+align-items: center;
+gap: 8px;
+color: white;
+margin-bottom: 24px;
+}
+.time-content {
+display: flex;
+flex-direction: column;
+gap: 40px;
+margin-top: -10px;
+}
+.time-item {
+display: flex;
+flex-direction: column;
+position: relative;
+}
+.time-row {
+display: flex;
+align-items: center;
+gap: 8px;
+color: white;
+height: 24px;
+margin-bottom: 0;
+}
+.progress-bar {
+position: absolute;
+left: 90px;
+width: 100px;
+height: 10px;
+background: #2A2A2A;
+border-radius: 0;
+overflow: hidden;
+top: 55%;
+transform: translateY(-50%);
+}
+.progress-fill {
+height: 100%;
+background: #4169E1;
+border-radius: 0;
+}
+.time-value {
+position: absolute;
+left: 90px;
+width: 100px;
+text-align: center;
+color: white;
+font-size: 14px;
+top: 24px;
+}
+/* Coolant Box */
+.coolant {
+grid-area: coolant;
+display: flex;
+flex-direction: column;
+padding: 16px;
+border-radius: 8px;
+background: #232323;
+border: 1px solid #4F4F4F;
+height: 160px;
+}
+.header-text {
+display: flex;
+flex-direction: column;
+}
+.gauge-container {
+display: flex;
+flex-direction: column;
+align-items: center;
+margin-top: -15px;
+}
+.gauge-row {
+display: flex;
+align-items: center;
+gap: 12px;
+}
+.gauge {
+width: 40px;
+height: 48px;
+background: #1A1A1A;
+border: 1px solid rgba(255, 255, 255, 0.2);
+overflow: hidden;
+position: relative;
+}
+.gauge-fill {
+position: absolute;
+bottom: 0;
+width: 100%;
+background: #1A1A1A;
+}
+.coolant .percentage {
+margin-top: 10px;
+font-size: 20px;
+color: white;
+}
+/* Oxygen Storage Box */
+.oxygen-storage {
+grid-area: storage;
+padding: 16px;
+border-radius: 8px;
+background: #232323;
+border: 1px solid #4F4F4F;
+height: 180px;
+}
+.storage-content {
+display: flex;
+justify-content: space-around;
+margin-top: 24px;
+}
+.storage-item {
+display: flex;
+flex-direction: column;
+gap: 8px;
+margin-top: 8px;
+}
+.storage-item-container {
+display: flex;
+flex-direction: column;
+gap: 8px;
+}
+.storage-label {
+color: white;
+margin-bottom: 8px;
+text-align: left;
+margin-left: 0;
+}
+.storage-gauge-container {
+display: flex;
+align-items: center;
+gap: 12px;
+margin-bottom: 0;
+}
+.gauge-bar {
+width: 40px;
+height: 64px;
+background: #1A1A1A;
+border: 1px solid rgba(255, 255, 255, 0.2);
+overflow: hidden;
+position: relative;
+}
+.measurement {
+display: flex;
+flex-direction: column;
+justify-content: space-between;
+height: 64px;
+color: rgba(255, 255, 255, 0.4);
+font-size: 12px;
+margin-left: 4px;
+}
+/* Oxygen Pressure Box */
+/* Oxygen Pressure Box */
+.oxygen-pressure {
+grid-area: pressure;
+padding: 16px;
+border-radius: 8px;
+background: #232323;
+height: 210px;
+border: 1px solid #4F4F4F;
+}
+.pressure-content {
+display: flex;
+justify-content: space-around;
+margin-top: 24px;
+}
+.pressure-section {
+text-align: center;
+color: white;
+}
+.pressure-gauge {
+width: 140px;
+height: 140px;
+position: relative;
+margin: 12px auto;
+}
+.gauge-marks {
+width: 100%;
+height: 100%;
+position: absolute;
+background-image: url('../assets/mask-group.svg');
+background-size: contain;
+background-repeat: no-repeat;
+clip-path: polygon(0 0, 100% 0, 100% 75%, 50% 75%, 0 75%);
+}
+.needle {
+position: absolute;
+top: 2%;
+left: 50%;
+width: 1.5px;
+height: 22px;
+background: white;
+transform-origin: 50% 350%;  /* Significantly increased to create a larger arc */
+transform: translateX(-50%) rotate(var(--rotation-angle));
+}
+.pressure-value {
+position: absolute;
+left: 50%;
+bottom: 35%;
+transform: translateX(-50%);
+font-size: 28px;
+color: white;
+}
+.pressure-unit {
+position: absolute;
+left: 50%;
+bottom: 25%;
+transform: translateX(-50%);
+font-size: 12px;
+color: #666;
+}
+/* Common styles */
+.striped-background {
+width: 100%;
+height: 100%;
+background: repeating-linear-gradient(
+    -45deg,
+    #FFFFFF,
+    #FFFFFF 4px,
+    #CCCCCC 4px,
+    #CCCCCC 8px
+);
+}
+.percentage {
+font-size: 20px;
+color: white;
+}
+.encasing-box {
+padding: 15px;
+border-radius: 8px;
+background: #232323;
+border: 1px solid #4F4F4F;
+margin: 12px auto;
+display: flex;
+flex-direction: column;
+width: 100%;
+max-width: 600px;
+height: 94%;
+box-sizing: border-box;
+}
+/* Typography Styles */
+.small-text {
+font-size: 14px;
+color: #FFF;
+font-style: normal;
+font-weight: 600;
+line-height: 22px;
+}
+.large-text {
+font-size: 16px;
+color: #FFF;
+font-style: normal;
+font-weight: 600;
+line-height: 22px;
+}
+/* Add these classes to your existing CSS file */
+/* For the time-left progress bars (battery and oxygen) */
+.progress-fill {
+height: 100%;
+background: #4169E1;
+border-radius: 0;
+transition: background-color 0.3s ease;
+}
+.progress-fill.warning {
+background: #FF0000;
+}
+/* For the oxygen storage gauge fills */
+.gauge-fill {
+position: absolute;
+bottom: 0;
+width: 100%;
+background: #1A1A1A;
+transition: background-color 0.3s ease;
+}
+.gauge-fill .striped-background {
+background: repeating-linear-gradient(
+    -45deg,
+    #FFFFFF,
+    #FFFFFF 4px,
+    #CCCCCC 4px,
+    #CCCCCC 8px
+);
+}
+.gauge-fill.warning .striped-background {
+background: repeating-linear-gradient(
+    -45deg,
+    #FF0000,
+    #FF0000 4px,
+    #CC0000 4px,
+    #CC0000 8px
+);
+}
+/* Pressure gauge needle warning state */
+.needle {
+position: absolute;
+top: 2%;
+left: 50%;
+width: 1.5px;
+height: 22px;
+background: white;
+transform-origin: 50% 350%;
+transform: translateX(-50%) rotate(var(--rotation-angle));
+transition: background-color 0.3s ease;
+}
+.needle.warning {
+background: #FF0000;
+}
+/* Add these classes to your existing CSS file */
+/* For the time-left progress bars (battery and oxygen) */
+.progress-fill {
+height: 100%;
+background: #4169E1;
+border-radius: 0;
+transition: background-color 0.3s ease;
+}
+.progress-fill.warning {
+background: #FF0000;
+}
+/* For the oxygen storage gauge fills */
+.gauge-fill {
+position: absolute;
+bottom: 0;
+width: 100%;
+background: #1A1A1A;
+transition: background-color 0.3s ease;
+}
+.gauge-fill .striped-background {
+background: repeating-linear-gradient(
+    -45deg,
+    #FFFFFF,
+    #FFFFFF 4px,
+    #CCCCCC 4px,
+    #CCCCCC 8px
+);
+}
+.gauge-fill.warning .striped-background {
+background: repeating-linear-gradient(
+    -45deg,
+    #FF0000,
+    #FF0000 4px,
+    #CC0000 4px,
+    #CC0000 8px
+);
+}
+
+
+
+
+/* Alert styles */
+.alert-indicator {
+display: flex;
+align-items: center;
+gap: 4px;
+color: #FF3B30;
+}
+
+
+.alert-icon {
+font-size: 14px;
+line-height: 1;
+}
+
+
+.alert-text {
+color: #FF3B30;
+font-size: 10px;
+font-weight: 500;
+}
+
+
+/* Just the alert adjustments for Time Left section */
+.time-item .alert-indicator {
+display: flex;
+position: absolute;
+align-items: center;
+gap: 4px;
+color: #FF3B30;
+top: 40px;  /* Use top instead of margin-top */
+left: 0px;  /* Use left instead of margin-left */
+}
+
+
+.time-item .alert-text {
+color: #FF3B30;
+font-size: 10px;
+font-weight: 500;
+
+
+}
+
+
+.time-item .alert-icon {
+font-size: 14px;
+line-height: 1;
+}
+
+
+.oxygen-pressure .alert-indicator {
+position: relative;
+top: -30px; /* Moves the alert upwards */
+text-align: center;
+}
+
+
+
+
+
+
+.alert-notification {
+position: fixed;
+right: 20px;
+background: #232323;
+border: 1px solid #FF3B30;
+border-radius: 8px;
+padding: 16px;
+z-index: 1000;
+width: 300px; /* Fixed width instead of min-width */
+max-height: 300px;
+transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+
+
+
+.alert-notification-content {
+display: flex;
+align-items: flex-start;
+gap: 12px;
+}
+
+
+.alert-notification-text {
+flex-grow: 1;
+color: white;
+font-size: 16px;
+}
+
+
+.alert-notification-subtext {
+color: #808080;
+font-size: 14px;
+margin-top: 4px;
+}
+
+
+.alert-warning-icon {
+color: #FF3B30;
+font-size: 20px;
+}
+
+
+.alert-close-icon {
+color: #808080;
+cursor: pointer;
+font-size: 14px;
+padding: 4px;
+transition: color 0.2s ease;
+}
+
+
+.alert-close-icon:hover {
+color: #ffffff;
+}
+
+
+/* Stacking notifications */
+.alert-notification:nth-child(1) { top: 20px; }
+.alert-notification:nth-child(2) { top: 100px; }
+.alert-notification:nth-child(3) { top: 180px; }
+.alert-notification:nth-child(4) { top: 260px; }
+.alert-notification:nth-child(5) { top: 340px; }
+.alert-notification:nth-child(6) { top: 420px; }
+.alert-notification:nth-child(7) { top: 500px; }
