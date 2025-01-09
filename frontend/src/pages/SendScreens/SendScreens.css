@@ -50,6 +50,7 @@
     box-sizing: border-box;
     display: flex;
     position:sticky;
+    height:100%;
 }
 
 .category-btn {

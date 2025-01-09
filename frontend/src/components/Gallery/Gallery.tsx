@@ -39,7 +39,10 @@ const Gallery: React.FC<GalleryProps> = ({ sendToAstronaut, images }) => {
           <p className="gallery-title">{image.title}</p>
 
           {selectedImageId === image.id && (
-            <p className="popover-content">This is some content for {image.title}</p>
+            <ul>
+              <li><button>Send to Steve</button></li>
+              <li><button>Send to Alex</button></li>
+            </ul>
           )}
         </div>
       ))}
