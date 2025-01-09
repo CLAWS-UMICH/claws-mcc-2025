@@ -10,7 +10,7 @@ import SuitCO2ScrubberStorage from './components/vitals/suitCO2ScrubberStorage.t
 import SuitTemperature from './components/vitals/SuitTemperature.tsx';
 import Dcu from './components/vitals/DCU.tsx';
 
-function Vitals() {
+const Vitals = ({}) => {
   const [suitData, setSuitDataState] = useState<SuitData>();
   const [socket, setSocket] = useState<Socket>();
 

@@ -40,13 +40,13 @@ const SuitResources = ({ data }) => {
   };
 
   const validVitals = [
-    'Batt Time Left',
-    'Oxy Time Left',
-    'Oxy Pri Storage',
-    'Oxy Sec Storage',
-    'Oxy Pri Pressure',
-    'Oxy Sec Pressure',
-    'Coolant Storage'
+    'batt_time_left',
+    'oxy_time_left',
+    'oxy_pri_storage',
+    'oxy_sec_storage',
+    'oxy_pri_pressure',
+    'oxy_sec_pressure',
+    'coolant_storage'
   ];
 
   const hasAlert = (vitalName) => {
@@ -76,44 +76,44 @@ const SuitResources = ({ data }) => {
   };
 
   const getBatteryClassName = () => {
-    return `progress-fill ${(batt_time_left / 10800) < 0.29 || hasAlert('Batt Time Left') ? 'warning' : ''}`;
+    return `progress-fill ${(batt_time_left / 10800) < 0.29 || hasAlert('batt_time_left') ? 'warning' : ''}`;
   };
 
   const getOxygenTimeClassName = () => {
-    return `progress-fill ${(oxy_time_left / 10800) < 0.29 || hasAlert('Oxy Time Left') ? 'warning' : ''}`;
+    return `progress-fill ${(oxy_time_left / 10800) < 0.29 || hasAlert('oxy_time_left') ? 'warning' : ''}`;
   };
 
   const getOxyPriStorageClassName = () => {
-    return `gauge-fill ${oxy_pri_storage < 20 || hasAlert('Oxy Pri Storage') ? 'warning' : ''}`;
+    return `gauge-fill ${oxy_pri_storage < 20 || hasAlert('oxy_pri_storage') ? 'warning' : ''}`;
   };
 
   const getOxySecStorageClassName = () => {
-    return `gauge-fill ${oxy_sec_storage < 20 || hasAlert('Oxy Sec Storage') ? 'warning' : ''}`;
+    return `gauge-fill ${oxy_sec_storage < 20 || hasAlert('oxy_sec_storage') ? 'warning' : ''}`;
   };
 
   const getOxyPriPressureClassName = () => {
-    return `needle ${oxy_pri_pressure < 600 || hasAlert('Oxy Pri Pressure') ? 'warning' : ''}`;
+    return `needle ${oxy_pri_pressure < 600 || hasAlert('oxy_pri_pressure') ? 'warning' : ''}`;
   };
 
   const getOxySecPressureClassName = () => {
-    return `needle ${oxy_sec_pressure < 600 || hasAlert('Oxy Sec Pressure') ? 'warning' : ''}`;
+    return `needle ${oxy_sec_pressure < 600 || hasAlert('oxy_sec_pressure') ? 'warning' : ''}`;
   };
 
   const getCoolantClassName = () => {
-    return `gauge-fill ${coolant_storage < 80 || hasAlert('Coolant Storage') ? 'warning' : ''}`;
+    return `gauge-fill ${coolant_storage < 80 || hasAlert('coolant_storage') ? 'warning' : ''}`;
   };
 
   const renderAlerts = () => {
     if (!alerts?.AllAlerts) return null;
 
     const alertMappings = {
-      'Batt Time Left': 'Time Left for Battery',
-      'Oxy Time Left': 'Oxygen Time',
-      'Oxy Pri Storage': 'Primary Oxygen Storage',
-      'Oxy Sec Storage': 'Secondary Oxygen Storage',
-      'Oxy Pri Pressure': 'Primary Oxygen Pressure',
-      'Oxy Sec Pressure': 'Secondary Oxygen Pressure',
-      'Coolant Storage': 'Coolant Storage'
+      'batt_time_left': 'Time Left for Battery',
+      'oxy_time_left': 'Oxygen Time',
+      'oxy_pri_storage': 'Primary Oxygen Storage',
+      'oxy_sec_storage': 'Secondary Oxygen Storage',
+      'oxy_pri_pressure': 'Primary Oxygen Pressure',
+      'oxy_sec_pressure': 'Secondary Oxygen Pressure',
+      'coolant_storage': 'Coolant Storage'
     };
 
     return alerts.AllAlerts
@@ -151,7 +151,7 @@ const SuitResources = ({ data }) => {
                   </div>
                   <span className="time-value">{batteryTimeDisplay}</span>
                 </div>
-                {hasAlert('Batt Time Left') && (
+                {hasAlert('batt_time_left') && (
                   <div className="alert-indicator" style={{ marginLeft: '90px', marginTop: '4px' }}>
                     <div className="alert-icon">⚠</div>
                     <div className="alert-text">Battery is Low</div>
@@ -167,7 +167,7 @@ const SuitResources = ({ data }) => {
                   </div>
                   <span className="time-value">{oxygenTimeDisplay}</span>
                 </div>
-                {hasAlert('Oxy Time Left') && (
+                {hasAlert('oxy_time_left') && (
                   <div className="alert-indicator" style={{ marginLeft: '90px', marginTop: '4px' }}>
                     <div className="alert-icon">⚠</div>
                     <div className="alert-text">Oxygen Time is Low</div>
@@ -198,7 +198,7 @@ const SuitResources = ({ data }) => {
               </div>
               <span className="percentage">{coolant_storage}%</span>
             </div>
-            {(coolant_storage < 80 || hasAlert('Coolant Storage')) && (
+            {(coolant_storage < 80 || hasAlert('coolant_storage')) && (
               <div className="alert-indicator">
                 <div className="alert-icon">⚠</div>
                 <div className="alert-text">Coolant Storage is Low</div>
@@ -227,7 +227,7 @@ const SuitResources = ({ data }) => {
                   </div>
                   <span className="percentage">{oxy_pri_storage || 0}%</span>
                 </div>
-                {hasAlert('Oxy Pri Storage') && (
+                {hasAlert('oxy_pri_storage') && (
                   <div className="alert-indicator" style={{ marginTop: '4px' }}>
                     <div className="alert-icon">⚠</div>
                     <div className="alert-text">Primary Oxygen Storage is Low</div>
@@ -248,7 +248,7 @@ const SuitResources = ({ data }) => {
                   </div>
                   <span className="percentage">{oxy_sec_storage}%</span>
                 </div>
-                {hasAlert('Oxy Sec Storage') && (
+                {hasAlert('oxy_sec_storage') && (
                   <div className="alert-indicator" style={{ marginTop: '4px' }}>
                     <div className="alert-icon">⚠</div>
                     <div className="alert-text">Secondary Oxygen Storage is Low</div>
@@ -271,7 +271,7 @@ const SuitResources = ({ data }) => {
                   <div className="pressure-value">{Math.round(oxy_pri_pressure)}</div>
                   <div className="pressure-unit">PSI</div>
                 </div>
-                {hasAlert('Oxy Pri Pressure') && (
+                {hasAlert('oxy_pri_pressure') && (
                   <div className="alert-indicator" style={{ marginTop: '4px' }}>
                     <div className="alert-icon">⚠</div>
                     <div className="alert-text">Primary Oxygen Pressure is Low</div>
@@ -287,7 +287,7 @@ const SuitResources = ({ data }) => {
                   <div className="pressure-value">{Math.round(oxy_sec_pressure)}</div>
                   <div className="pressure-unit">PSI</div>
                 </div>
-                {hasAlert('Oxy Sec Pressure') && (
+                {hasAlert('oxy_sec_pressure') && (
                   <div className="alert-indicator" style={{ marginTop: '4px' }}>
                     <div className="alert-icon">⚠</div>
                     <div className="alert-text">Secondary Oxygen Pressure is Low</div>
