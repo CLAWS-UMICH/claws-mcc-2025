@@ -7,6 +7,21 @@ interface Image {
   url: string;
 }
 
+const CircleIcon = ({ color }: { color: string }) => {
+  return (
+    <div
+      style={{
+        width: '16px',
+        height: '16px',
+        borderRadius: '50%',
+        backgroundColor: color,
+        marginRight: '10px', 
+      }}
+    ></div>
+  );
+};
+
+
 interface GalleryProps {
   sendToAstronaut: (astronaut_id: number) => void;
   images: Image[];
@@ -39,10 +54,16 @@ const Gallery: React.FC<GalleryProps> = ({ sendToAstronaut, images }) => {
           <p className="gallery-title">{image.title}</p>
 
           {selectedImageId === image.id && (
-            <ul>
-              <li><button>Send to Steve</button></li>
-              <li><button>Send to Alex</button></li>
-            </ul>
+             <ul className="popup-options">
+             <li className="popup-option">
+               <CircleIcon color="#007bff" /> {/* Blue Circle */}
+               <span>Send to Steve</span>
+             </li>
+             <li className="popup-option">
+               <CircleIcon color="#9ff" /> {/* Light Blue Circle */}
+               <span>Send to Alex</span>
+             </li>
+           </ul>
           )}
         </div>
       ))}
