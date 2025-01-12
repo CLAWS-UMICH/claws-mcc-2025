@@ -15,6 +15,11 @@
     align-items: center;
 }
 
+.toast-text {
+    align-items: center;
+    justify-content: center;
+}
+
 .toast-icon {
     font-size: 20px;
     margin-right: 8px;

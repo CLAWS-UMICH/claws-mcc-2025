@@ -201,28 +201,19 @@ def handle_send_to_room(_data):
             "coolant_gas_pressure": 0,
             "alerts": {
                 "AllAlerts": [
-                {
-                    "alert_id": 0,
-                    "vital": "Heart Rate",
-                    "vital_val": 140
-                },
-                {
-                    "alert_id": 1,
-                    "vital": "Temperature",
-                    "vital_val": 95
-                },
-                {
-                    "alert_id": 2,
-                    "vital": "Batt Time Left",
-                    "vital_val": 95
-                },
-                { "alert_id": 3, "vital": "suit_pressure_total", "vital_val": 20 },
-                # { "alert_id": 3, "vital": "Oxy Pri Storage", "vital_val": 20 },
-                # { "alert_id": 4, "vital": "Oxy Sec Storage", "vital_val": 20 },
-                # { "alert_id": 5, "vital": "Oxy Pri Pressure", "vital_val": 20 },
-                # { "alert_id": 6, "vital": "Oxy Sec Pressure", "vital_val": 20 },
-                # { "alert_id": 7, "vital": "Oxy Time Left", "vital_val": 20 },
-                # { "alert_id": 8, "vital": "Coolant Storage", "vital_val": 20 }
+                # { "alert_id": 3, "vital": "heart_rate", "vital_val": 20 },
+                # { "alert_id": 4, "vital": "oxy_consumption", "vital_val": 20 },
+                # { "alert_id": 5, "vital": "co2_production", "vital_val": 20 },
+                # { "alert_id": 6, "vital": "heart_rate", "vital_val": 20 },
+                # { "alert_id": 7, "vital": "oxy_consumption", "vital_val": 20 },
+                { "alert_id": 8, "vital": "oxy_time_left", "vital_val": 20 },
+                { "alert_id": 9, "vital": "batt_time_left", "vital_val": 20 },
+                { "alert_id": 10, "vital": "oxy_pri_storage", "vital_val": 20 },
+                { "alert_id": 11, "vital": "oxy_sec_storage", "vital_val": 20 },
+                { "alert_id": 12, "vital": "oxy_pri_pressure", "vital_val": 20 },
+                { "alert_id": 13, "vital": "oxy_sec_pressure", "vital_val": 20 },
+                { "alert_id": 14, "vital": "oxy_time_left", "vital_val": 20 },
+                { "alert_id": 15, "vital": "coolant_storage", "vital_val": 20 }
                 ]
             }
         }

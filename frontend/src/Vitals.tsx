@@ -2,13 +2,12 @@ import './Vitals.css';
 // import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
 import { io, Socket } from 'socket.io-client';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import './styles/ToastStyles.css';
 
 import SuitAtmosphere from './components/vitals/SuitAtmosphere.tsx';
 import SuitResources from './components/vitals/suitResources.tsx';
-import SuitHelmetFan from './components/vitals/suitHelmetFan.tsx';
-import SuitCO2ScrubberStorage from './components/vitals/suitCO2ScrubberStorage.tsx';
-import SuitTemperature from './components/vitals/SuitTemperature.tsx';
-import Dcu from './components/vitals/DCU.tsx';
 
 const Vitals = ({}) => {
   const [suitData, setSuitDataState] = useState<SuitData>();
@@ -40,68 +39,73 @@ const Vitals = ({}) => {
     };
   }, []);
 
+  useEffect(() => {
+    const printAlerts = {
+      'batt_time_left': 'Battery Time Left',
+      'oxy_pri_storage': 'Primary Oxygen Storage',
+      'oxy_sec_storage': 'Secondary Oxygen Storage',
+      'oxy_pri_pressure': 'Primary Oxygen Pressure',
+      'oxy_sec_pressure': 'Secondary Oxygen Pressure',
+      'oxy_time_left': 'Oxygen Time Left',
+      'coolant_storage': 'Coolant Storage',
+      'heart_rate': 'Heart Rate',
+      'oxy_consumption': 'Oxygen Consumption',
+      'co2_production': 'CO2 Production',
+      'suit_pressure_oxy': 'Suit Pressure Oxygen',
+      'suit_pressure_co2': 'Suit Pressure CO2',
+      'suit_pressure_other': 'Suit Pressure Other',
+      'suit_pressure_total': 'Suit Pressure Total',
+      'helmet_pressure_co2': 'Helmet Pressure CO2',
+      'fan_pri_rpm': 'Primary Fan RPM',
+      'fan_sec_rpm': 'Secondary Fan RPM',
+      'scrubber_a_co2_storage': 'Scrubber A CO2 Storage',
+      'scrubber_b_co2_storage': 'Scrubber B CO2 Storage',
+      'temperature': 'Temperature',
+      'coolant_liquid_pressure': 'Coolant Liquid Pressure',
+      'coolant_gas_pressure': 'Coolant Gas Pressure',
+    }
+
+    if (suitData) {
+      const alerts = suitData.alerts.AllAlerts;
+      // Rest of the code...
+      alerts.forEach((alert) => {
+        toast.error(
+            <div>
+                <div className="toast-header">
+                    <span className="toast-icon">⚠️</span>
+                    <span className="toast-text">Time Left for {printAlerts[alert.vital]} is Low</span>
+                </div>
+                <div className="toast-body">
+                </div>
+            </div>,
+            {
+            className: 'custom-toast',
+            closeButton: true,
+            autoClose: 5000,
+            hideProgressBar: true,
+            position: 'top-right',
+            }
+        );           
+      });
+    }
+}, [suitData]);
+
   if (!suitData) {
     return <div>Loading...</div>;
   }
 
   return (
     <div className="vitals-container">
-      <div className="top-bar">
-        <div className="time"></div>
-        {/* INSERT NAV BAR */}
-      </div>
-      <div className="main-content">
-
-        <div className="column left-column">
-          <div className="user-section">
-            <div className="avatar s">S</div>
-            <div className="user-info">
-              <span>Name 1</span>
-              <span className="location">Location 1</span>
-            </div>
-          </div>
-          <div className="camera-feed">
-            {/* Camera feed placeholder */}
-          </div>
-          
-          <div className="user-section">
-            <div className="avatar a">A</div>
-            <div className="user-info">
-              <span>Name 2</span>
-              <span className="location">Location 2</span>
-            </div>
-          </div>
-          <div className="camera-feed">
-            {/* Camera feed placeholder */}
-          </div>
-        </div>
-
+      <div className='main-content'>
         <div className="column middle_column">
           <SuitResources data={suitData} />
         </div>
 
         <div className="column right_column">
           <SuitAtmosphere suitData={suitData}/>
-          <div className="flex-container">
-          <div className="flex-item">
-              {/* <SuitHelmetFan fanPriRpm={suitData.fan_pri_rpm} fanSecRpm={suitData.fan_sec_rpm} /> */}
-            </div>
-            <div className="flex-item">
-              {/* <SuitCO2ScrubberStorage scrubberA={suitData.scrubber_a_co2_storage} scrubberB={suitData.scrubber_b_co2_storage} /> */}
-            </div>
-          </div>
         </div>
       </div>
-      {/* <div className="App-content">
-        {socket ?
-          <button onClick={() => {
-            console.log('Button clicked');
-            socket.emit('send_to_room', {room: 'VITALS'})}}>
-              Button to send to room</button>
-          :
-          <div>Socket not connected</div>
-          }
-      </div> */}
+      {/* <ToastContainer /> */}
     </div>
   );
 }

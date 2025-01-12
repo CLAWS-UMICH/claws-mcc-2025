@@ -1,39 +1,10 @@
-import '../../styles/SuitAtmosphere.css';
-import React, { useEffect } from 'react';
-import { toast, ToastContainer } from 'react-toastify';
+import '../../styles/PersonalData.css';
 import 'react-toastify/dist/ReactToastify.css';
 import '../../styles/ToastStyles.css';
 
 
 const PersonalData = ({ suitData }) => {
     const alerts = suitData.alerts.AllAlerts;
-
-    useEffect(() => {
-        const allowedVitals = ['heart_rate', 'oxy_consumption', 'co2_production'];
-
-        alerts.forEach((alert) => {
-            if (allowedVitals.includes(alert.vital)) {
-                toast.error(
-                    <div>
-                        <div className="toast-header">
-                            <span className="toast-icon">⚠️</span>
-                            <span>Time Left for Battery is Low</span>
-                        </div>
-                        <div className="toast-body">
-                            *Add Recommended action if needed
-                        </div>
-                    </div>,
-                    {
-                    className: 'custom-toast',
-                    closeButton: true,
-                    autoClose: 5000,
-                    hideProgressBar: true,
-                    position: 'top-right',
-                    }
-                );           
-            }   
-        });
-    }, [suitData]);
 
     const getAlertForVital = (vital) => {
         return alerts.find((alert) => alert.vital === vital);
@@ -61,10 +32,10 @@ const PersonalData = ({ suitData }) => {
 
     return (
         <>
-            <div className="panel personal-data">
+            <div className="personal-data-panel">
                 <div className="panel-header">
                     <img src="personal_data_icon.png" width="25rem" height="25rem" className="panel-header-icon"/>
-                    <h3>Personal Data</h3>
+                    <h3 className='panel-header-text'>Personal Data</h3>
                 </div>
 
                 <div className="data-section">
@@ -119,7 +90,6 @@ const PersonalData = ({ suitData }) => {
                     )}
                 </div>
             </div>
-            <ToastContainer aria-label={undefined} />
         </>
     );
 }

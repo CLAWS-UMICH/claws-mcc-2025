@@ -2,42 +2,46 @@
     font-family: "Segoe UI", sans-serif; /* Fallback to sans-serif if Segoe UI is unavailable */
 }
 .suit-resources {
-width: auto;
-max-width: 800px;
-margin: 0 auto;
-box-sizing: border-box;
-}
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    margin-top: 0rem;
+  }
+  
 .suit-resources-title {
-color: white;
-font-size: 24px;
-margin-bottom: 16px;
+    margin-bottom: 0rem;
 }
+
 .resources-grid {
 display: grid;
-grid-template-columns: 220px 158px;
+grid-template-columns: 110fr 79fr;
+
 grid-template-areas:
     "time coolant"
     "storage storage"
     "pressure pressure";
-gap: 12px;
+gap: 0.75rem;
 }
+
 /* Time Left Box */
 .time-left {
 grid-area: time;
 display: flex;
 flex-direction: column;
-padding: 16px;
-border-radius: 8px;
+padding: 1rem;
+border-radius: 0.5rem;
 background: #232323;
-border: 1px solid #4F4F4F;
-height: 160px;
+border: 0.063rem solid #4F4F4F;
+height: 10rem;
 }
 .box-header {
 display: flex;
 align-items: center;
-gap: 8px;
+gap: 0.5rem;
 color: white;
-margin-bottom: 24px;
+margin-bottom: 1.5rem;
 }
 .time-content {
 display: flex;
@@ -182,8 +186,7 @@ color: rgba(255, 255, 255, 0.4);
 font-size: 12px;
 margin-left: 4px;
 }
-/* Oxygen Pressure Box */
-/* Oxygen Pressure Box */
+
 .oxygen-pressure {
 grid-area: pressure;
 padding: 16px;
@@ -217,15 +220,18 @@ background-repeat: no-repeat;
 clip-path: polygon(0 0, 100% 0, 100% 75%, 50% 75%, 0 75%);
 }
 .needle {
-position: absolute;
-top: 2%;
-left: 50%;
-width: 1.5px;
-height: 22px;
-background: white;
-transform-origin: 50% 350%;  /* Significantly increased to create a larger arc */
-transform: translateX(-50%) rotate(var(--rotation-angle));
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 1.5px;
+    height: 22px;
+    background: white;
+    transform-origin: 50% 50%;
+    transform: translate(-50%, -100%) rotate(var(--rotation-angle));
+    transition: background-color 0.3s ease;
 }
+
+  
 .pressure-value {
 position: absolute;
 left: 50%;
@@ -286,8 +292,7 @@ font-style: normal;
 font-weight: 600;
 line-height: 22px;
 }
-/* Add these classes to your existing CSS file */
-/* For the time-left progress bars (battery and oxygen) */
+
 .progress-fill {
 height: 100%;
 background: #4169E1;
@@ -377,20 +382,25 @@ background: repeating-linear-gradient(
 }
 
 
-
-
 /* Alert styles */
-.alert-indicator {
-display: flex;
-align-items: center;
-gap: 4px;
-color: #FF3B30;
-}
 
+
+
+
+
+.alert-indicator {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin-top: 0.5rem;
+  position: relative;
+  width: 100%;
+}
 
 .alert-icon {
 font-size: 14px;
 line-height: 1;
+color: #FF3B30;
 }
 
 
@@ -406,10 +416,10 @@ font-weight: 500;
 display: flex;
 position: absolute;
 align-items: center;
-gap: 4px;
+gap: 0.25rem;
 color: #FF3B30;
-top: 40px;  /* Use top instead of margin-top */
-left: 0px;  /* Use left instead of margin-left */
+top: 3rem;  
+left: -0.5rem;  
 }
 
 
@@ -417,10 +427,7 @@ left: 0px;  /* Use left instead of margin-left */
 color: #FF3B30;
 font-size: 10px;
 font-weight: 500;
-
-
 }
-
 
 .time-item .alert-icon {
 font-size: 14px;
@@ -437,8 +444,6 @@ text-align: center;
 
 
 
-
-
 .alert-notification {
 position: fixed;
 right: 20px;
@@ -451,8 +456,6 @@ width: 300px; /* Fixed width instead of min-width */
 max-height: 300px;
 transition: opacity 0.3s ease, transform 0.3s ease;
 }
-
-
 
 
 .alert-notification-content {
@@ -512,7 +515,7 @@ color: #ffffff;
     justify-content: center;
     gap: 4px;
     color: #FF3B30;
-    margin-top: 8px;
+    margin-top: -0.25rem;
     position: relative;
     width: 100%;
   }
@@ -527,4 +530,5 @@ color: #ffffff;
     font-size: 14px;
     line-height: 1;
   }
+  
   

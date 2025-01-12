@@ -1,40 +1,10 @@
 import '../../styles/SuitAtmosphere.css';
-import React, { useEffect } from 'react';
-import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import '../../styles/ToastStyles.css';
 
 
 function SuitTemperature({ suitData }) {
     const alerts = suitData.alerts.AllAlerts;
-
-    useEffect(() => {
-        const allowedVitals = ['temperature', 'coolant_liquid_pressure', 'coolant_gas_pressure'];
-
-        alerts.forEach((alert) => {
-            if (allowedVitals.includes(alert.vital)) {
-                toast.error(
-                    <div>
-                        <div className="toast-header">
-                            <span className="toast-icon">⚠️</span>
-                            <span>Time Left for Battery is Low</span>
-                        </div>
-                        <div className="toast-body">
-                            *Add Recommended action if needed
-                        </div>
-                    </div>,
-                    {
-                    className: 'custom-toast',
-                    closeButton: true,
-                    autoClose: 5000,
-                    hideProgressBar: true,
-                    position: 'top-right',
-                    }
-                );           
-            }   
-        });
-    }, [suitData]);
-
 
     const getAlertForVital = (vital) => {
         return alerts.find((alert) => alert.vital === vital);

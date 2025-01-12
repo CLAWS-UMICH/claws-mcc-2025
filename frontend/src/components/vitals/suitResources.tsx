@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import '../../styles/Styles.css';
 import '../../styles/SuitResources.css';
 import { Clock, Battery, Droplet, Gauge } from 'lucide-react';
 import oxygenIcon from '../../assets/oxygen.svg';
@@ -68,12 +67,30 @@ const SuitResources = ({ data }) => {
   const oxygenMinutes = Math.floor((oxy_time_left % 3600) / 60);
   const oxygenTimeDisplay = `${oxygenHours}hr ${oxygenMinutes}Min`;
 
+  
   const calculateNeedleRotation = (value) => {
-    const clampedValue = Math.min(Math.max(value, 0), 3000);
-    const percentage = (clampedValue / 3000);
-    const angle = (percentage * 180) - 90;
+    const minPSI = 600; // Minimum PSI value
+    const maxPSI = 3000; // Maximum PSI value
+    const startAngle = 240; // Start of the gauge in degrees
+    const endAngle = 480; // End of the gauge in degrees
+
+    // Clamp the input value to the valid range
+    const clampedValue = Math.max(minPSI, Math.min(value, maxPSI));
+
+    // Calculate the percentage within the clamped range
+    const percentage = (clampedValue - minPSI) / (maxPSI - minPSI);
+
+    // Map the percentage to the angle range
+    const angle = startAngle + percentage * (endAngle - startAngle);
+
     return `rotate(${angle}deg)`;
-  };
+};
+
+
+  
+  
+  
+  
 
   const getBatteryClassName = () => {
     return `progress-fill ${(batt_time_left / 10800) < 0.29 || hasAlert('batt_time_left') ? 'warning' : ''}`;
