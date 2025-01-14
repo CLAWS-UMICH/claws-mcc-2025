@@ -23,18 +23,18 @@ const CircleIcon = ({ color }: { color: string }) => {
 
 
 interface GalleryProps {
-  sendToAstronaut: (astronaut_id: number) => void;
+  sendToAstronaut: (astronaut_id: number, title: string, imageUrl: string)  => void;
   images: Image[];
 }
 
 const Gallery: React.FC<GalleryProps> = ({ sendToAstronaut, images }) => {
-  const [selectedImageId, setSelectedImageId] = useState<number | null>(null);
+  const [selectedImage, setSelectedImage] = useState<Image | null>(null);
 
-  const handleImageClick = (id: number) => {
-    if (selectedImageId === id) {
-      setSelectedImageId(null);
+  const handleImageClick = (img: Image) => {
+    if (selectedImage === img) {
+      setSelectedImage(null);
     } else {
-      setSelectedImageId(id);
+      setSelectedImage(img);
     }
   };
 
@@ -47,23 +47,21 @@ const Gallery: React.FC<GalleryProps> = ({ sendToAstronaut, images }) => {
       {images.map((image) => (
         <div
           key={image.id}
-          className={`gallery-item ${selectedImageId === image.id ? 'selected' : ''}`}
-          onClick={() => handleImageClick(image.id)}
+          className={`gallery-item ${selectedImage && selectedImage.id === image.id ? 'selected' : ''}`} /**Sorry i made this uglier Marcin -emma */
+          onClick={() => handleImageClick(image)}
         >
           <img src={image.url} alt={image.title} className="gallery-image" />
           <p className="gallery-title">{image.title}</p>
 
-          {selectedImageId === image.id && (
-             <ul className="popup-options">
-             <li className="popup-option">
-               <CircleIcon color="#007bff" /> {/* Blue Circle */}
-               <span>Send to Steve</span>
-             </li>
-             <li className="popup-option">
-               <CircleIcon color="#9ff" /> {/* Light Blue Circle */}
+          {selectedImage && selectedImage.id === image.id && (
+             <div className="popup-options">
+              <button onClick={() => sendToAstronaut(1, selectedImage.title, selectedImage.url)} className="popup-option"><CircleIcon color="#007bff" /> {/* Blue Circle */}
+             <span>Send to Steve</span>
+             </button>
+             <button onClick={() => sendToAstronaut(2, selectedImage.title, selectedImage.url)} className="popup-option"><CircleIcon color="#9ff" /> {/* Light Blue Circle */}
                <span>Send to Alex</span>
-             </li>
-           </ul>
+               </button>
+           </div>
           )}
         </div>
       ))}

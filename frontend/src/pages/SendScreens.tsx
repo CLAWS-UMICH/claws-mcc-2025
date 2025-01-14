@@ -11,6 +11,14 @@ import nasaTest from '../images/nasaTest.jpg';
 import saturnTest from '../images/saturnTest.jpg';
 import sunTest from '../images/sunTest.jpg';
 import nebulaTest from '../images/nebulaTest.jpg';
+import io, { Socket } from 'socket.io-client';
+
+let socket: Socket;
+
+// Initialize WebSocket connection
+if (!socket) {
+  socket = io('ws://localhost:8080'); //  AR headset's WebSocket server URL??
+}
 
 const ALL_IMAGES = [
   { id: 0, title: "Alien", url: alienTest, category: "Category 1" },
@@ -41,10 +49,31 @@ function SendScreens() {
     "Category 8"
   ];
 
-  const sendToAstronautStub = (astronaut_id: number) => {
-    console.log(`Clicked with astronaut id ${astronaut_id}`);
-  };
+ 
+const sendToAstronautStub = async (astronaut_id: number, title: string, imageUrl: string) => {
+  console.log(`Sending to astronaut ${astronaut_id}: ${title}`);
 
+  try {
+    // Convert image URL to binary data
+    const response = await fetch(imageUrl);
+    const imageBlob = await response.blob();
+
+    // Create message object
+    const message = {
+      title,
+      image: await imageBlob.arrayBuffer(), // Convert Blob to ArrayBuffer for binary sending
+    };
+
+    // Send message over WebSocket
+    socket.emit('send_to_hololens', {
+      id: astronaut_id,
+      data: message,
+    });
+    console.log('DATA SENT SUCCESSFULLY HOOORAHHHH (go software engineer go). This what u sent:', message);
+  } catch (error) {
+    console.error('Failed to send data but do not give up-- use this error 2 help:', error);
+  }
+};
   // Automatically filter images when query or selectedCategory changes
   useEffect(() => {
     let filteredImages = ALL_IMAGES;
