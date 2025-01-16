@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import '../../styles/SuitResources.css';
 import { Clock, Battery, Droplet, Gauge } from 'lucide-react';
 import oxygenIcon from '../../assets/oxygen.svg';
@@ -21,7 +21,7 @@ const AlertNotification = ({ vital, onClose }) => {
 };
 
 const SuitResources = ({ data }) => {
-  const [dismissedNotifications, setDismissedNotifications] = useState(new Set());
+  const [alerts, setAlerts] = useState<Array<string>>([]);
 
   const {
     batt_time_left,
@@ -31,11 +31,19 @@ const SuitResources = ({ data }) => {
     oxy_sec_pressure,
     oxy_time_left,
     coolant_storage,
-    alerts,
+    alerts: sourceAlerts,
   } = data;
 
-  const handleDismissNotification = (vitalName) => {
-    setDismissedNotifications(prev => new Set([...prev, vitalName]));
+  useEffect(() => {
+    if (!sourceAlerts) return;
+
+    // const newAlerts = sourceAlerts.AllAlerts.map(alert => alert.vital);
+    const newAlerts = ['batt_time_left', 'oxy_time_left', 'oxy_pri_storage', 'oxy_sec_storage', 'oxy_pri_pressure', 'oxy_sec_pressure', 'coolant_storage'];
+    setAlerts(newAlerts);
+  }, [sourceAlerts]);
+
+  const handleDismissNotification = (vitalName: string) => {
+    setAlerts(alerts.filter(a => a !== vitalName));
   };
 
   const validVitals = [
@@ -48,16 +56,13 @@ const SuitResources = ({ data }) => {
     'coolant_storage'
   ];
 
-  const hasAlert = (vitalName) => {
-    return alerts?.AllAlerts?.some(alert => 
-      alert.vital === vitalName && 
-      validVitals.includes(vitalName)
-    ) || false;
+  const hasAlert = (vitalName: string) => {
+    return alerts.includes(vitalName) && validVitals.includes(vitalName);
   };
 
-  const hasNotification = (vitalName) => {
-    return hasAlert(vitalName) && !dismissedNotifications.has(vitalName);
-  };
+  // const hasNotification = (vitalName) => {
+  //   return hasAlert(vitalName) && (!dismissedNotifications || !dismissedNotifications.has(vitalName));
+  // };
 
   const batteryHours = Math.floor(batt_time_left / 3600);
   const batteryMinutes = Math.floor((batt_time_left % 3600) / 60);
@@ -121,7 +126,7 @@ const SuitResources = ({ data }) => {
   };
 
   const renderAlerts = () => {
-    if (!alerts?.AllAlerts) return null;
+    if (!alerts.length) return null;
 
     const alertMappings = {
       'batt_time_left': 'Time Left for Battery',
@@ -133,16 +138,12 @@ const SuitResources = ({ data }) => {
       'coolant_storage': 'Coolant Storage'
     };
 
-    return alerts.AllAlerts
-      .filter(alert => 
-        hasNotification(alert.vital) && 
-        Object.keys(alertMappings).includes(alert.vital)
-      )
+    return alerts
       .map(alert => (
         <AlertNotification
-          key={alert.vital}
-          vital={alertMappings[alert.vital]}
-          onClose={() => handleDismissNotification(alert.vital)}
+          key={alert}
+          vital={alertMappings[alert]}
+          onClose={() => handleDismissNotification(alert)}
         />
       ));
   };
