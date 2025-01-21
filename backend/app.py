@@ -169,8 +169,106 @@ def handle_leave_room(_data):
 
 @socketio.on('send_to_room')
 def handle_send_to_room(_data):
-    room = _data['room']  # Room name to send the message to
-    data = _data['message']  # Message to send
+    room = _data['room']
+    # ------------------------------------
+    # TASKLIST Feature
+    # ------------------------------------
+    if room == "TASKLIST":
+        # The incoming message presumably has the structure:
+        # {
+        #   "id": 1,
+        #   "type": "TaskList",
+        #   "use": "POST"/"PUT"/"DELETE"/"GET",
+        #   "data": { "AllTasks": [ ... ] }  or for DELETE { "task_id": X }
+        # }
+        message = _data.get('message', {})
+        if not message or message.get("type") != "TaskList":
+            # Not a valid TaskList request
+            emit('room_data', {'error': "Invalid TaskList request"}, room=room)
+            return
+
+        use_method = message.get("use", "").upper()
+        db = g.db
+        tasklist_collection = db.tasklist
+
+        if use_method == "GET":
+            # Return all tasks
+            all_tasks = get_all_tasks_from_db(db)
+            # Convert to JSON-serializable
+            tasks_json = json.loads(json.dumps(all_tasks, default=str))
+            emit('room_data', {"data": tasks_json}, room=room)
+
+        elif use_method == "POST":
+            # Insert tasks. The "data" field should have "AllTasks"
+            all_tasks = message.get("data", {}).get("AllTasks", [])
+            for t in all_tasks:
+                # Enforce subtask emergency inheritance
+                enforce_subtask_emergency(t, t.get("isEmergency", False))
+                # Insert the main task as one document in the collection
+                if not t.get("isSubtask"):
+                    # main task
+                    tasklist_collection.insert_one(t)
+                else:
+                    # If for some reason a subtask with isSubtask=True
+                    # is passed at top-level, ignore or handle as needed
+                    pass
+            emit('room_data', {"success": True, "action": "POST"}, room=room)
+
+        elif use_method == "PUT":
+            # Update tasks. 
+            # Instruction says: "simply send the list of complete tasks 
+            # that need to be modified and we will iterate to change them"
+            all_tasks = message.get("data", {}).get("AllTasks", [])
+            for updated_task in all_tasks:
+                enforce_subtask_emergency(updated_task, updated_task.get("isEmergency", False))
+                # Upsert by main task_id (only if isSubtask=False)
+                if not updated_task.get("isSubtask"):
+                    main_id = updated_task["task_id"]
+                    # Replace the entire document with updated_task
+                    tasklist_collection.replace_one(
+                        {"task_id": main_id, "isSubtask": False},
+                        updated_task,
+                        upsert=True
+                    )
+                else:
+                    # If they want to update a subtask directly, you would
+                    # find the parent doc and update its subtask array.
+                    # For simplicity, ignoring direct subtask PUT
+                    pass
+
+            emit('room_data', {"success": True, "action": "PUT"}, room=room)
+
+        elif use_method == "DELETE":
+            # "PUT and DELETE methods would just be a json containing the int of the task ID."
+            # We only delete main tasks
+            data_payload = message.get("data", {})
+            # Could be { "task_id": X } or something similar
+            task_id = data_payload.get("task_id")
+            if task_id is None:
+                # Maybe they put it at top-level
+                task_id = message.get("task_id")
+            if task_id is not None:
+                # Delete if it's a main task
+                result = tasklist_collection.delete_one({
+                    "task_id": task_id, 
+                    "isSubtask": False
+                })
+                if result.deleted_count == 1:
+                    emit('room_data', {"success": True, "deleted_task_id": task_id}, room=room)
+                else:
+                    emit('room_data', {"success": False, 
+                                       "reason": "Main task not found or subtask attempted"}, 
+                         room=room)
+            else:
+                emit('room_data', {"success": False, 
+                                   "reason": "No task_id provided"}, room=room)
+
+        else:
+            emit('room_data', {"error": f"Unsupported use method: {use_method}"}, room=room)
+        return
+
+    # If no special handling, just broadcast the incoming "message" if present
+    data = _data.get('message', 'No message provided.')
     logging.info(f"Sent message to room {room}: {data}")
     emit('room_data', {'data': data}, room=room)
 
