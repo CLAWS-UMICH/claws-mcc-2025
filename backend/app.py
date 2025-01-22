@@ -60,6 +60,37 @@ except Exception as e:
 def before_request():
     g.db = db
 
+def get_all_tasks_from_db(db):
+    """
+    Fetch all tasks from the tasklist collection in the database.
+    """
+    try:
+        # Access the tasklist collection
+        tasklist_collection = db.tasklist
+        # Retrieve all documents as a list
+        tasks = list(tasklist_collection.find())
+        return tasks
+    except Exception as e:
+        logging.error(f"Failed to fetch tasks: {e}")
+        return []
+
+
+def enforce_subtask_emergency(task, is_emergency):
+    """
+    Recursively ensures that subtasks inherit the isEmergency status from the parent task.
+    """
+    try:
+        # Set the task's isEmergency field to the parent's value
+        task["isEmergency"] = is_emergency
+        
+        # If the task has subtasks, apply the same logic to them
+        if "subtasks" in task and isinstance(task["subtasks"], list):
+            for subtask in task["subtasks"]:
+                enforce_subtask_emergency(subtask, is_emergency)
+    except Exception as e:
+        logging.error(f"Error enforcing subtask emergency status: {e}")
+
+
 # WebSocket events
 
 
