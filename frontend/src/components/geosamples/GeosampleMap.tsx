@@ -1,5 +1,5 @@
 import React from "react";
-import { Circle, GoogleMap, InfoBox, InfoWindow, Marker, useJsApiLoader } from "@react-google-maps/api";
+import { GoogleMap, InfoBox, InfoWindow, Marker, Circle, useJsApiLoader } from "@react-google-maps/api";
 import { BaseGeosample, BaseZone, ManagerAction } from "./GeosampleTypes.tsx";
 import sampleImage from '../../assets/sampleImage.png';
 import starredImage from '../../assets/starredImage.png';
@@ -158,7 +158,7 @@ const GeosampleMap: React.FC<GeosampleMapProps> = ({geosamples, zones, dispatch,
                         label={{ text: getMarkerLabel(marker.zone_id, marker.geosample_id), color: "white", fontWeight: "bold", fontSize: "26px" }}
                         icon={{url: marker.starred ? starredImage : sampleImage, labelOrigin: origin, scaledSize: scaleSize}}                        
                         zIndex={zIndices[marker.geosample_id]}
-                        onRightClick={(e) => handleRightClick(e, marker)}
+                        onRightClick={(e: google.maps.MapMouseEvent) => handleRightClick(e, marker)}
                     />
                 </div>
             );
