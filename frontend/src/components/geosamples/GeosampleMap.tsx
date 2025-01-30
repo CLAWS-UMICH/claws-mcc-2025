@@ -1,4 +1,7 @@
 import React from "react";
+import sampleImage from '../../assets/sampleImage.png';
+import starredImage from '../../assets/starredImage.png';
+
 import {
     GoogleMap,
     InfoWindow,
