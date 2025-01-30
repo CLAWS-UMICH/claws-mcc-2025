@@ -1,0 +1,142 @@
+.suit-atmosphere-panel {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+}
+
+.panel-1 {
+    display: flex;
+    gap: 1.2rem;
+    border-radius: 0.5rem;
+}
+
+.personal-data {
+    flex: 133;
+}
+
+.data-section {
+    flex: 249;
+    width: 100%;
+    /* flex-direction: column;
+    gap: 0;
+    position: relative;
+    padding-left: 0.5rem; */
+}
+
+.data-row {
+    display: flex;
+    align-items: flex-start;
+    padding-left: 0.25rem;
+    gap: 1.25rem;
+    align-self: stretch;
+}
+
+.data-value {
+    font-size: 24px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.data-labels {
+    display: flex;
+    flex-direction: column;
+}
+
+.suit-pressure-panel {
+    display: flex;
+    width: 26.9375rem;
+    height: 16.25rem;
+    padding: 1rem 1rem 0rem 1rem;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.25rem;
+    flex-shrink: 0;
+    border-radius: 0.75rem;
+    border: 1px solid #4F4F4F;
+}
+
+.rounded-border {
+    display: flex;
+    padding: 1.25rem;
+    align-items: flex-start;
+    gap: 1.25rem;
+    border-radius: 0.75rem;
+    border: 1px solid #4F4F4F;
+}
+
+.panel-header {
+    display: flex;
+}
+
+.panel-header-text {
+    color: #FFF;
+    font-size: 1rem;
+    font-style: normal;
+    font-weight: 600;
+}
+
+.temperature-dcu-container {
+    display: flex;
+    gap: 1rem;
+}
+
+.suit-temperature {
+    width: 35%;
+}
+
+.suit-pressure {
+    flex: 1;
+}
+
+.dcu {
+    flex: 1;
+}
+
+.panel-header-padding {
+    margin-top: 1rem;
+}
+
+.panel-header h3 {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.9);
+    font-weight: 500;
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+
+.pressure-grid {
+    display: flex;
+    gap: 2rem;
+}
+
+.pressure-column {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.unit {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.label {
+    font-size: 12px;
+    color: rgb(255, 255, 255);
+}
+
+.horizontal-line {
+    width: 100%;
+    height: 0.10rem;
+    background-color: rgba(255, 255, 255, 0.2);
+    border: none;
+    margin-top: 0.75rem;
+    margin-bottom: 0.75rem;
+}
+
+.error-message {
+    color: red;
+    font-size: 14px;
+    margin-top: 8px;
+}
