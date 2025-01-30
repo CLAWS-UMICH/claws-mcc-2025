@@ -143,7 +143,6 @@ def handle_join_room(_data):
     logging.info(f"Client {request.sid} joined room: {room}")
     emit('room_message', {
          'message': f"You have joined room: {room}"}, room=room)
-        
     handle_send_to_room(_data)
 
 
