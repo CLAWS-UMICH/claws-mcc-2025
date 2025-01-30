@@ -68,7 +68,6 @@ def before_request():
 def on_connect():
     logging.info(f"Client connected: {request.sid}")
 
-
 @socketio.on('disconnect')
 def handle_disconnect():
     sid = request.sid
@@ -83,13 +82,11 @@ def handle_disconnect():
 
     # TODO: Update logic on active rooms if they disconnect
 
-
 """
 =================================================
                 Hololens Sockets
 =================================================
 """
-
 
 @socketio.on('connect_hololens')
 def handle_hololens_connect():
@@ -104,25 +101,30 @@ def handle_hololens_connect():
         next_hololens_id += 1
 
     unique_id = f'hololens_{new_id_num}'
-
     # Map the connection to the unique ID and join the room
     hololens_clients[request.sid] = unique_id
     join_room(unique_id)
 
     # Send the unique ID back to the HoloLens client
     emit('assign_id', {'id': unique_id})
-    logging.info(f"HoloLens connected with ID: {unique_id}")
+    logging.info(f"HoloLens Client {request.sid} connected with ID: {unique_id}")
 
 # Send data to a specific HoloLens by unique ID
-
-
 @socketio.on('send_to_hololens')
 def handle_send_to_hololens(_data):
-    target_id = _data['id']  # ID of the HoloLens to target
+    target_room = _data['room']  # ID of the HoloLens to target
     data = _data['data']  # Data to send to the HoloLens
-    emit('hololens_data', {'data': data}, room=target_id)
-    logging.info(f"Sent message to hololens {target_id}: {data}")
 
+    # Parse the JSON string to remove escape characters
+    try:
+        parsed_data = json.loads(data)  # Parse the data to get a proper JSON object
+    except json.JSONDecodeError as e:
+        logging.error(f"Failed to parse data for {target_room}: {e}")
+        return
+
+    # Send the parsed data to the target HoloLens
+    emit('hololens_data', {'data': parsed_data}, room=target_room)
+    logging.info(f"Sent message to hololens {target_room}: {parsed_data}")
 
 """
 =================================================
@@ -142,13 +144,12 @@ def handle_join_room(_data):
     emit('room_message', {
          'message': f"You have joined room: {room}"}, room=room)
 
-    # send message to vitals
-    _data = {
-        "message": "Hello from the backend!",
-        "room": "VITALS"
-    }
-
-    handle_send_to_room(_data)
+    if 'message' in _data:
+        handle_send_to_room(_data)
+    else:
+        # If no message is provided, send a default message to the room
+        default_message = f"Client {request.sid} has joined the room {room}."
+        emit('room_data', {'data': default_message}, room=room)
 
 
 # Leave a specific room
