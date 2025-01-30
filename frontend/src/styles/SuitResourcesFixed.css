@@ -1,0 +1,13 @@
+:root {
+    --color-bg: #232323;
+    --color-border: #4F4F4F;
+    --color-text: #FFFFFF;
+    --color-warning: #FF3B30;
+    --color-primary: #4169E1;
+    --spacing-base: 1rem;
+  }
+
+  .suit-resources {
+    width: 100%;
+    margin: 0 auto;
+  }

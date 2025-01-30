@@ -1,0 +1,41 @@
+<svg width="101" height="101" viewBox="0 0 101 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Mask group">
+<mask id="mask0_10894_3041" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="-1" width="101" height="102">
+<g id="Group 211">
+<path id="Vector" d="M50.1758 0.140015V100.14" stroke="#ACACAC" stroke-width="1.5" stroke-miterlimit="10"/>
+<path id="Vector_2" d="M44.9766 0.419922L55.4266 99.8699" stroke="#ACACAC" stroke-width="1.5" stroke-miterlimit="10"/>
+<path id="Vector_3" d="M39.8262 1.22998L60.6162 99.05" stroke="#ACACAC" stroke-width="1.5" stroke-miterlimit="10"/>
+<path id="Vector_4" d="M34.7969 2.58008L65.6969 97.6901" stroke="#ACACAC" stroke-width="1.5" stroke-miterlimit="10"/>
+<path id="Vector_5" d="M29.9258 4.44995L70.5958 95.7999" stroke="#ACACAC" stroke-width="1.5" stroke-miterlimit="10"/>
+<path id="Vector_6" d="M25.2871 6.81006L75.2871 93.4201" stroke="#ACACAC" stroke-width="1.5" stroke-miterlimit="10"/>
+<path id="Vector_7" d="M20.916 9.65002L79.686 90.55" stroke="#ACACAC" stroke-width="1.5" stroke-miterlimit="10"/>
+<path id="Vector_8" d="M16.8574 12.9299L83.7774 87.2499" stroke="#ACACAC" stroke-width="1.5" stroke-miterlimit="10"/>
+<path id="Vector_9" d="M13.1758 16.62L87.4858 83.53" stroke="#ACACAC" stroke-width="1.5" stroke-miterlimit="10"/>
+<path id="Vector_10" d="M9.89648 20.6699L90.7965 79.4499" stroke="#ACACAC" stroke-width="1.5" stroke-miterlimit="10"/>
+<path id="Vector_11" d="M7.05664 25.04L93.6566 75.04" stroke="#ACACAC" stroke-width="1.5" stroke-miterlimit="10"/>
+<path id="Vector_12" d="M4.6875 29.6799L96.0475 70.3599" stroke="#ACACAC" stroke-width="1.5" stroke-miterlimit="10"/>
+<path id="Vector_13" d="M2.82617 34.55L97.9262 65.4501" stroke="#ACACAC" stroke-width="1.5" stroke-miterlimit="10"/>
+<path id="Vector_14" d="M1.47656 39.5801L99.2866 60.3701" stroke="#ACACAC" stroke-width="1.5" stroke-miterlimit="10"/>
+<path id="Vector_15" d="M0.65625 44.73L100.106 55.18" stroke="#ACACAC" stroke-width="1.5" stroke-miterlimit="10"/>
+<path id="Vector_16" d="M0.386719 49.9399H100.387" stroke="#ACACAC" stroke-width="1.5" stroke-miterlimit="10"/>
+<path id="Vector_17" d="M0.65625 55.1399L100.106 44.6899" stroke="#ACACAC" stroke-width="1.5" stroke-miterlimit="10"/>
+<path id="Vector_18" d="M1.47656 60.29L99.2866 39.5" stroke="#ACACAC" stroke-width="1.5" stroke-miterlimit="10"/>
+<path id="Vector_19" d="M2.82617 65.3199L97.9262 34.4199" stroke="#ACACAC" stroke-width="1.5" stroke-miterlimit="10"/>
+<path id="Vector_20" d="M4.6875 70.19L96.0475 29.51" stroke="#ACACAC" stroke-width="1.5" stroke-miterlimit="10"/>
+<path id="Vector_21" d="M7.05664 74.8301L93.6566 24.8301" stroke="#ACACAC" stroke-width="1.5" stroke-miterlimit="10"/>
+<path id="Vector_22" d="M9.89648 79.1999L90.7965 20.4199" stroke="#ACACAC" stroke-width="1.5" stroke-miterlimit="10"/>
+<path id="Vector_23" d="M13.1758 83.2501L87.4858 16.3401" stroke="#ACACAC" stroke-width="1.5" stroke-miterlimit="10"/>
+<path id="Vector_24" d="M16.8574 86.94L83.7774 12.62" stroke="#ACACAC" stroke-width="1.5" stroke-miterlimit="10"/>
+<path id="Vector_25" d="M20.916 90.2201L79.686 9.32007" stroke="#ACACAC" stroke-width="1.5" stroke-miterlimit="10"/>
+<path id="Vector_26" d="M25.2871 93.06L75.2871 6.44995" stroke="#ACACAC" stroke-width="1.5" stroke-miterlimit="10"/>
+<path id="Vector_27" d="M29.9258 95.4201L70.5958 4.07007" stroke="#ACACAC" stroke-width="1.5" stroke-miterlimit="10"/>
+<path id="Vector_28" d="M34.7969 97.2899L65.6969 2.17993" stroke="#ACACAC" stroke-width="1.5" stroke-miterlimit="10"/>
+<path id="Vector_29" d="M39.8262 98.6401L60.6162 0.820068" stroke="#ACACAC" stroke-width="1.5" stroke-miterlimit="10"/>
+<path id="Vector_30" d="M44.9766 99.45L55.4266 0" stroke="#ACACAC" stroke-width="1.5" stroke-miterlimit="10"/>
+</g>
+</mask>
+<g mask="url(#mask0_10894_3041)">
+<path id="Subtract" fill-rule="evenodd" clip-rule="evenodd" d="M50.3867 98C76.8964 98 98.3867 76.5097 98.3867 50C98.3867 23.4903 76.8964 2 50.3867 2C23.8771 2 2.38672 23.4903 2.38672 50C2.38672 76.5097 23.8771 98 50.3867 98ZM50.3867 88C71.3735 88 88.3867 70.9868 88.3867 50C88.3867 29.0132 71.3735 12 50.3867 12C29.3999 12 12.3867 29.0132 12.3867 50C12.3867 70.9868 29.3999 88 50.3867 88Z" fill="#626262"/>
+</g>
+</g>
+</svg>

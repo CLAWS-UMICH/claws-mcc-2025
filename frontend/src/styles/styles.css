@@ -1,0 +1,255 @@
+.suit-resources {
+  width: 398px;
+  background: #141414;
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.suit-resources-title {
+  color: white;
+  font-size: 24px;
+  margin-bottom: 16px;
+}
+
+.resources-grid {
+  display: grid;
+  grid-template-columns: 220px 158px;
+  grid-template-areas: 
+    "time coolant"
+    "storage storage"
+    "pressure pressure";
+  gap: 12px;
+}
+
+/* Time Left Box */
+.time-left {
+  grid-area: time;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 16px;
+  border-radius: 8px;
+  background: #232323;
+  border: 1px solid #4F4F4F;
+}
+
+.box-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: white;
+}
+
+.time-content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.time-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;  /* Reduced from 12px */
+  color: white;
+  width: 100%;
+}
+
+.progress-bar {
+  width: 80px;  /* Set fixed width instead of flex: 1 */
+  height: 6px;
+  background: #2A2A2A;
+  border-radius: 3px;
+  overflow: hidden;
+  margin: 0 4px;  /* Reduced from 8px */
+}
+
+.progress-fill {
+  height: 100%;
+  background: #4169E1;
+}
+
+/* Coolant Box */
+.coolant {
+  grid-area: coolant;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px;
+  border-radius: 8px;
+  background: #232323;
+  border: 1px solid #4F4F4F;
+}
+
+.header-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.gauge-container {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.measurement {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 40px;
+  color: #666;
+  font-size: 12px;
+}
+
+.gauge {
+  width: 40px;
+  height: 40px;
+  background: #2A2A2A;
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
+}
+
+.gauge-fill {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  background: #2A2A2A;
+}
+
+/* Oxygen Storage Box */
+.oxygen-storage {
+  grid-area: storage;
+  padding: 16px;
+  border-radius: 8px;
+  background: #232323;
+  border: 1px solid #4F4F4F;
+}
+
+.storage-content {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+  padding: 0 40px;
+}
+
+.storage-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  color: white;
+}
+
+.storage-gauge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 12px 0;
+}
+
+.gauge-bar {
+  width: 40px;
+  height: 60px;
+  background: #2A2A2A;
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
+}
+
+.gauge-label {
+  color: #666;
+  font-size: 12px;
+}
+
+/* Oxygen Pressure Box */
+.oxygen-pressure {
+  grid-area: pressure;
+  padding: 16px;
+  border-radius: 8px;
+  background: #232323;
+  border: 1px solid #4F4F4F;
+}
+
+.pressure-content {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 24px;
+}
+
+.pressure-section {
+  text-align: center;
+  color: white;
+}
+
+.pressure-gauge {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  background: #1A1A1A;
+  position: relative;
+  margin: 12px auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.gauge-marks {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: repeating-conic-gradient(
+    from 180deg,
+    #333 0deg 2deg,
+    transparent 2deg 6deg
+  );
+  border-radius: 50%;
+}
+
+.needle {
+  position: absolute;
+  bottom: 50%;
+  left: 50%;
+  width: 2px;
+  height: 40%;
+  background: white;
+  transform-origin: bottom;
+}
+
+.pressure-value {
+  font-size: 28px;
+  z-index: 1;
+}
+
+.pressure-unit {
+  font-size: 12px;
+  color: #666;
+  z-index: 1;
+}
+
+/* Common styles */
+.striped-background {
+  width: 100%;
+  height: 100%;
+  background: repeating-linear-gradient(
+    45deg,
+    #4F4F4F,
+    #4F4F4F 4px,
+    #333 4px,
+    #333 8px
+  );
+}
+
+.percentage {
+  font-size: 20px;
+  color: white;
+  margin-top: 4px;
+}
+
+.time-value {
+  min-width: 80px;
+  text-align: right;
+  color: white;
+  margin-left: auto;  /* Push to the right */
+}
