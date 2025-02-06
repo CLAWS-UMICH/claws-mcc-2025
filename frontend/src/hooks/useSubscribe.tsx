@@ -10,7 +10,7 @@ function useSubscribe(room: string) {
   useEffect(() => {
     if (!socket) {
       // Only initialize the socket connection once
-      socket = io('http://localhost:8080');
+      socket = io(document.location.origin + '/');
     }
 
     // Join the room when connected

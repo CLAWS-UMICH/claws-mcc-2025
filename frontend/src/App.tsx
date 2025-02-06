@@ -10,7 +10,7 @@ import './components/vitals/Vitals.css';
 function App() {
   useEffect(() => {
     // Connect to the Socket.IO server
-    const socket = io('http://localhost:8080');
+    const socket = io(document.location.origin + '/');
 
     // Join the VITALS room on connection
     socket.on('connect', () => {

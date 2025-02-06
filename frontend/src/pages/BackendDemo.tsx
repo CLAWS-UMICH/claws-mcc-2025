@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import useSubscribe from '../hooks/useSubscribe';
 import { io } from 'socket.io-client';
 
-const socket = io('http://localhost:8080'); // Replace with your server URL
+const socket = io(document.location.origin + '/'); // Replace with your server URL
 
 const BackendDemo: React.FC = () => {
   // State for the number to be displayed

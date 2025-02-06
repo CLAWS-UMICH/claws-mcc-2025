@@ -12,7 +12,7 @@ function App() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const url = "http://localhost:8080/"
+        const url = document.location.origin + '/';
         const response = await fetch(url)
         console.log(response)
         const data = await response.json()

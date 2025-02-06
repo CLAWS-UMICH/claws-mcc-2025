@@ -15,7 +15,7 @@ const Vitals = ({ }) => {
 
   useEffect(() => {
     // Connect to the Socket.IO server
-    const socket = io('http://localhost:8080');
+    const socket = io('http://backend:8080');
 
     // Join the VITALS room on connection
     socket.on('connect', () => {
