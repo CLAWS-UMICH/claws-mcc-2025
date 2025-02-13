@@ -17,6 +17,10 @@
 }
 
 /* Search Bar */
+.search-bar-section {
+    padding-bottom: 3.5%;
+}
+
 .search-bar {
     display: flex;
     align-items: center;
@@ -40,7 +44,7 @@
 .close-btn {
     position: absolute;
     top: 0%;
-    right: -4%;
+    right: -3%;
     background-color: transparent;
     color: white;
     border: none;
@@ -52,18 +56,58 @@
     border: transparent;
 }
 
-/* Filter Section */
-.filter-section {
+.icon {
+    width: 24px;
+    height: auto;
+}
+
+.icon-header {
+    display: flex;
+    gap: 3px;
+    align-items: center;
     margin-bottom: 16px;
 }
 
-.filter-section h3 {
-    margin-bottom: 8px;
+.filter-section {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    margin-bottom: 2.5%;
 }
 
-.filter-type .tags {
+.filter-section text {
+    font-size: 20px;
+}
+
+.type-section {
     display: flex;
-    gap: 8px;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.type-section label {
+    font-size: 18px;
+}
+
+.distance-section {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.distance-section label {
+    font-size: 18px;
+}
+
+.stations-section {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    margin-bottom: 1.25%;
+}
+
+.stations-section text {
+    font-size: 20px;
 }
 
 .tag {
@@ -72,11 +116,7 @@
     border-radius: 12px;
 }
 
-.filter-distance select {
-    width: calc(100% - 10px);
-}
-
-/* Stations Section */
+/* Stations Section
 .stations-section h3 {
     font-weight
-}
+} */
