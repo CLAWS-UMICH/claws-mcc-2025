@@ -1,4 +1,4 @@
-import './styles/SuitAtmosphere.css';
+import './styles/suitAtmosphere.css';
 import 'react-toastify/dist/ReactToastify.css';
 import './styles/ToastStyles.css';
 
