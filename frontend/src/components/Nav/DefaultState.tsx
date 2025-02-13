@@ -3,46 +3,134 @@ import Select from 'react-select';
 import './Panel.css';
 import './Nav.css'
 
+import filterImage from './images/filter.png';
+import webAssetImage from './images/webAsset.png';
+
+
 const DefaultState = () => {
 
-    const options = [
-        { value: 'samples', label: 'Samples' },
-        { value: 'stations', label: 'Stations' }
+    const typeOptions = [
+        { value: 'samples', label: 'Samples', icon: '⬡' },
+        { value: 'stations', label: 'Stations', icon: 'S' },
     ];
+
+    const distanceOptions = [
+        { value: '1_mile', label: 'Within 1 mile', icon: '' },
+        { value: '5_miles', label: 'Within 5 miles', icon: '' },
+        { value: '10_miles', label: 'Within 10 miles', icon: '' },
+    ];
+
+    const customStyles = {
+        control: (provided) => ({
+            ...provided,
+            backgroundColor: '#000', // Black background
+            border: '1px solid #555', // Border color
+            borderRadius: '8px', // Rounded corners
+            boxShadow: 'none',
+            minHeight: '35px',
+        }),
+        placeholder: (provided) => ({
+            ...provided,
+          color: '#aaa', // Placeholder text color
+        }),
+        singleValue: (provided) => ({
+            ...provided,
+            display: 'flex',
+            alignItems: 'center',
+            color: '#fff', // White text color
+        }),
+        multiValue: (provided) => ({
+            ...provided,
+            backgroundColor: '#000', // Dark background for tags
+            borderRadius: '8px', // Rounded corners for tags
+            display: 'flex',
+            alignItems: 'center',
+        }),
+        multiValueLabel: (provided) => ({
+            ...provided,
+            color: '#fff', // White text for tag labels
+            display: 'flex',
+            alignItems: 'center',
+        }),
+        multiValueRemove: (provided) => ({
+            ...provided,
+            color: '#fff', // White "X" color
+            cursor: 'pointer',
+            ':hover': {
+                color: '#f00', // Red on hover
+                backgroundColor: 'transparent',
+            },
+        }),
+        dropdownIndicator: (provided) => ({
+            ...provided,
+            color: '#fff', // White dropdown arrow
+            ':hover': {
+                color: '#aaa', // Lighter arrow on hover
+            },
+        }),
+        menu: (provided) => ({
+            ...provided,
+            backgroundColor: '#222', // Dropdown menu background
+        }),
+        option: (provided, state) => ({
+            ...provided,
+            backgroundColor: state.isFocused ? '#333' : '#222', // Highlighted option
+            color: state.isSelected ? '#fff' : '#aaa', // Selected/Unselected text color
+        }),
+    };
+
+    const formatOptionLabel = ({ label, icon }) => (
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+            <span style={{ marginRight: 8 }}>{icon}</span> {/* Icon */}
+            {label}
+        </div>
+    );
 
     return (
         <>
-            <div className="main-container">
+            <div className="default-state-container">
                 <div className="panel">
                     <div className="panel-contents">
                         {/* Search Bar */}
-                        <button className="close-btn">✖</button>
-                        <div className="search-bar">
-                            <input type="text" placeholder="Search" />
+                        <div className="search-bar-section">
+                            <button className="close-btn">✖</button>
+                            <div className="search-bar">
+                                <input type="text" placeholder="Search" />
+                            </div>
                         </div>
-
                         {/* Filter Section */}
                         <div className="filter-section">
-                            <h3>Filter</h3>
-                            <div className="filter-type">
+                            <span className="icon-header">
+                                <img className="icon" src={filterImage} alt="test"/>
+                                <text>Filter</text>
+                            </span>
+                            <div className="type-section">
                                 <label>Type</label>
-                                <div className="tags">
-                                    <Select className="tag" options={options} />
-                                </div>
+                                <Select 
+                                    options={typeOptions} 
+                                    isMulti
+                                    placeholder=""
+                                    styles={customStyles}
+                                    formatOptionLabel={formatOptionLabel}
+                                />
                             </div>
-                            <div className="filter-distance">
+                            <div className="distance-section">
                                 <label>Distance</label>
-                                <select>
-                                    <option>Within 1 mile</option>
-                                    <option>Within 5 miles</option>
-                                    <option>Within 10 miles</option>
-                                </select>
+                                <Select 
+                                    options={distanceOptions} 
+                                    placeholder=""
+                                    styles={customStyles}
+                                    formatOptionLabel={formatOptionLabel}
+                                />
                             </div>
                         </div>
 
                         {/* Stations Section */}
                         <div className="stations-section">
-                            <h3>Stations</h3>
+                            <span className="icon-header">
+                                <img className="icon" src={webAssetImage} alt="test"/>
+                                <text>Stations</text>
+                            </span>
                             <div className="station-item">
                                 <span className="station-icon">A</span>
                                 <div className="station-info">
