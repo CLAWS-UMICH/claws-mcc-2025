@@ -10,6 +10,7 @@ import os
 import logging
 import json
 import uuid
+import random
 
 app = Flask(__name__)
 socketio = SocketIO(app, cors_allowed_origins="*")
@@ -166,11 +167,94 @@ def handle_leave_room(_data):
 
 # Send data to a specific room
 
+def ran(range_from, range_to):
+    return random.randint(range_from, range_to)
+
+@socketio.on('send_message')
+def handle_send_message(_data):
+    """
+    Expects a JSON payload of the form:
+    {
+       "room": "MESSAGING",
+       "message_id": 0,
+       "sent_to": 1,
+       "message": "Hello world!",
+       "from": 0
+    }
+    """
+    room        = _data.get("room", "MESSAGING")
+    message_id  = _data.get("message_id", 0)
+    sent_to     = _data.get("sent_to", 0)
+    message_txt = _data.get("message", "")
+    from_id     = _data.get("from", 0)
+
+    # Store the message in the DB
+    msg_doc = {
+       "message_id": message_id,
+       "sent_to":    sent_to,
+       "message":    message_txt,
+       "from":       from_id
+    }
+    try:
+        g.db.messages.insert_one(msg_doc)
+        logging.info(f"Inserted message into DB: {msg_doc}")
+    except Exception as e:
+        logging.error(f"Error inserting message: {e}")
+
+    # Broadcast to everyone in "room" (for real apps, you might want to
+    # broadcast only to the user with ID == `sent_to`, etc.)
+    emit("new_message", msg_doc, room=room)
+    logging.info(f"Sent new message to room {room}: {msg_doc}")
 
 @socketio.on('send_to_room')
 def handle_send_to_room(_data):
     room = _data['room']  # Room name to send the message to
-    data = _data['message']  # Message to send
+    # data = _data['message']  # Message to send
+    # add mock data here
+    if room == "VITALS":
+        mock_data = {
+            "eva_time:": ran(0, 10000),
+            "batt_time_left": ran(0, 100),
+            "oxy_pri_storage": ran(0, 100),
+            "oxy_sec_storage": ran(0, 100),
+            "oxy_pri_pressure": ran(0, 2000),
+            "oxy_sec_pressure": ran(0, 5000),
+            "oxy_time_left": ran(0, 10000),
+            "coolant_storage": ran(0, 100),
+            "heart_rate": ran(0, 190),
+            "oxy_consumption": ran(0, 190),
+            "co2_production":ran(0, 120),
+            "suit_pressure_oxy": 4.0,
+            "suit_pressure_co2": 0.0,
+            "suit_pressure_other": 0.0,
+            "suit_pressure_total": 4.0,
+            "helmet_pressure_co2": 0.1,
+            "fan_pri_rpm": 30000,
+            "fan_sec_rpm": 30000,
+            "scrubber_a_co2_storage": 32,
+            "scrubber_b_co2_storage": 0,
+            "temperature": 70,
+            "coolant_liquid_pressure": 400,
+            "coolant_gas_pressure": 0,
+            "alerts": {
+                "AllAlerts": [
+                # { "alert_id": 3, "vital": "heart_rate", "vital_val": 20 },
+                # { "alert_id": 4, "vital": "oxy_consumption", "vital_val": 20 },
+                # { "alert_id": 5, "vital": "co2_production", "vital_val": 20 },
+                # { "alert_id": 6, "vital": "heart_rate", "vital_val": 20 },
+                # { "alert_id": 7, "vital": "oxy_consumption", "vital_val": 20 },
+                { "alert_id": 8, "vital": "oxy_time_left", "vital_val": 20 },
+                { "alert_id": 9, "vital": "batt_time_left", "vital_val": 20 },
+                { "alert_id": 10, "vital": "oxy_pri_storage", "vital_val": 20 },
+                { "alert_id": 11, "vital": "oxy_sec_storage", "vital_val": 20 },
+                { "alert_id": 12, "vital": "oxy_pri_pressure", "vital_val": 20 },
+                { "alert_id": 13, "vital": "oxy_sec_pressure", "vital_val": 20 },
+                { "alert_id": 14, "vital": "oxy_time_left", "vital_val": 20 },
+                { "alert_id": 15, "vital": "coolant_storage", "vital_val": 20 }
+                ]
+            }
+        }
+        data = mock_data
     logging.info(f"Sent message to room {room}: {data}")
     emit('room_data', {'data': data}, room=room)
 
