@@ -1,57 +1,32 @@
-type ARLocation = {
+type Locatable = {
     latitude: number;
     longitude: number;
 };
 
-export type EvaData = {
-    name: string;
-    id: number;
-    data: {
-        SiO2: number;
-        TiO2: number;
-        Al2O3: number;
-        FeO: number;
-        MnO: number;
-        MgO: number;
-        CaO: number;
-        K2O: number;
-        P2O3: number;
-    }
-};
+type SampleElements =
+    | "SiO2"
+    | "TiO2"
+    | "Ai2O3"
+    | "FeO"
+    | "MnO"
+    | "MgO"
+    | "CaO"
+    | "K2O"
+    | "P2O3"
+    | "Other";
 
-export type BaseGeosample = {
-    _id?: number;
-    geosample_id: number;
-    zone_id: string;
+export type Geosample = {
+    id: number;
+    zoneId: string;
     starred: boolean;
-    eva_data: EvaData;
-    time: string; 
+    bookmarked: boolean;
+    datetime: string;
     color: string;
+    subcolor: string;
     shape: string;
-    rock_type: string; 
-    location: ARLocation;
+    rockType: string;
     author: number;
     description: string;
-    photo_jpg: string;
-};
-
-export type BaseZone = {
-    _id?: number;
-    zone_id: string;
-    ZoneGeosamplesIds: number[];
-    location: ARLocation;
-    radius: number;
-};
-
-export type ManagerState = {
-    sample_zones: BaseZone[];
-    geosamples: BaseGeosample[];
-    selected?: BaseGeosample;
-};
-
-export type ManagerAction =
-    { type: 'set', payload: {zones: BaseZone[], samples: BaseGeosample[]} } | // Should only be used by ServerListener
-    { type: 'delete', payload: BaseGeosample } |
-    { type: 'update', payload: BaseGeosample } |
-    { type: 'select', payload: BaseGeosample } |
-    { type: 'deselect' };
+    photoJpg: string;
+    elementalComposition: Record<SampleElements, number>;
+} & Locatable;

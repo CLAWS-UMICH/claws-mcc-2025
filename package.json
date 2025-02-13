@@ -1,7 +1,0 @@
-{
-  "dependencies": {
-    "@fluentui/react-components": "^9.58.2",
-    "@react-google-maps/api": "^2.20.5",
-    "react-use-websocket": "^4.11.1"
-  }
-}
