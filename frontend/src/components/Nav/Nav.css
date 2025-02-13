@@ -1,0 +1,34 @@
+.main-container {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.panel {
+    position: absolute;
+    display: flex;
+    top: 0;
+    left: 0;
+    width: 33%;
+    height: 100%;
+    background-color: #1c1c1c;
+    color: white;
+    padding: 20px;
+    z-index: 2;
+    overflow: auto;
+}
+
+.background-img {
+    position: absolute;
+    top: 0%;
+    left: 0%;
+    width: 100%;
+    height: 100%;
+}
+
+.background-img img {
+    width: 100%;
+    height: auto;
+}
