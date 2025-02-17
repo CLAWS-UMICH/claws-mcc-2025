@@ -2,6 +2,7 @@ from dotenv import load_dotenv
 from routes.api import api_routes
 from routes.home import home_routes
 from flask import Flask, g, request
+from datetime import datetime
 
 from flask_cors import CORS
 from pymongo import MongoClient, errors
@@ -187,13 +188,15 @@ def handle_send_message(_data):
     sent_to     = _data.get("sent_to", 0)
     message_txt = _data.get("message", "")
     from_id     = _data.get("from", 0)
+    timestamp = datetime.now().astimezone()
 
     # Store the message in the DB
     msg_doc = {
        "message_id": message_id,
        "sent_to":    sent_to,
        "message":    message_txt,
-       "from":       from_id
+       "from":       from_id,
+       "timestamp": timestamp
     }
     try:
         g.db.messages.insert_one(msg_doc)
@@ -205,6 +208,23 @@ def handle_send_message(_data):
     # broadcast only to the user with ID == `sent_to`, etc.)
     emit("new_message", msg_doc, room=room)
     logging.info(f"Sent new message to room {room}: {msg_doc}")
+
+@socketio.on('get_messages')
+def handle_get_messages(_data):
+    room = _data.get("room", "MESSAGING")
+    try:
+        messages_cursor = g.db.messages.find(
+            {"room": room},
+            {"_id": 0}
+        ).sort("timestamp", 1)
+
+        messages = list(messages_cursor)
+
+        # Send messages only to the requester
+        emit("load_messages", {"messages": messages}, room=request.sid)
+    except Exception as e:
+        emit("error", {"message": "Could not retrieve messages"}, room=request.sid)
+
 
 @socketio.on('send_to_room')
 def handle_send_to_room(_data):
