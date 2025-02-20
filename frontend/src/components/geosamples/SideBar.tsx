@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import { useState, useMemo } from "react";
 import "./SideBar.css";
 import { Geosample } from "./GeosampleTypes";
 import {
@@ -9,16 +9,20 @@ import {
     Star16Filled,
     Star16Regular,
     Search16Regular,
-    Edit16Regular,
+    Edit16Regular
 } from "@fluentui/react-icons";
 
 interface SideBarProps {
     geosamples: Geosample[];
-    selectedSample?: Geosample;
-    onSelectSample: (sample: Geosample | null) => void;
+    selectedSample: Geosample | null;
+    onSelectSample: (sample: number) => void;
 }
 
-const SideBar: React.FC<SideBarProps> = ({ geosamples, selectedSample, onSelectSample }) => {
+const SideBar = ({
+    geosamples,
+    selectedSample,
+    onSelectSample
+}: SideBarProps) => {
     const initialOpenZones = useMemo(() => {
         return geosamples.reduce((acc, sample) => {
             acc[sample.zoneId] = true;
@@ -52,7 +56,7 @@ const SideBar: React.FC<SideBarProps> = ({ geosamples, selectedSample, onSelectS
             justifyContent: "center",
             color: "white",
             fontSize: "12px",
-            marginRight: "8px",
+            marginRight: "8px"
         };
 
         let shapeStyle = {};
@@ -61,23 +65,21 @@ const SideBar: React.FC<SideBarProps> = ({ geosamples, selectedSample, onSelectS
                 shapeStyle = { borderRadius: "0" };
                 break;
             case "hexagon":
-                shapeStyle = { clipPath: "polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)" };
+                shapeStyle = {
+                    clipPath:
+                        "polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)"
+                };
                 break;
             default:
                 shapeStyle = { borderRadius: "50%" };
                 break;
         }
 
-        return (
-            <div style={{ ...iconStyle, ...shapeStyle }}>
-                {iconText}
-            </div>
-        );
+        return <div style={{ ...iconStyle, ...shapeStyle }}>{iconText}</div>;
     };
 
     return (
         <div className="sidebar">
-            
             <div className="sidebar-header">
                 <h3 className="sidebar-title">All Samples</h3>
                 <div className="icon-group">
@@ -86,11 +88,15 @@ const SideBar: React.FC<SideBarProps> = ({ geosamples, selectedSample, onSelectS
                 </div>
             </div>
 
-            
             {Object.entries(groupedByZone).map(([zoneId, samples]) => (
                 <div key={zoneId} className="zone">
-                    <div className="zone-header" onClick={() => toggleZone(zoneId)}>
-                        <h4 className="zone-title"><strong>{`Zone ${zoneId}`}</strong></h4>
+                    <div
+                        className="zone-header"
+                        onClick={() => toggleZone(zoneId)}
+                    >
+                        <h4 className="zone-title">
+                            <strong>{`Zone ${zoneId}`}</strong>
+                        </h4>
                         <span>{openZones[zoneId] ? "▼" : "▲"}</span>
                     </div>
                     {openZones[zoneId] && (
@@ -98,13 +104,21 @@ const SideBar: React.FC<SideBarProps> = ({ geosamples, selectedSample, onSelectS
                             {samples.map((sample, index) => (
                                 <li
                                     key={sample.id}
-                                    className={`sample-item ${selectedSample?.id === sample.id ? "selected" : ""}`}
-                                    onClick={() => onSelectSample(sample)}
+                                    className={`sample-item ${
+                                        selectedSample?.id === sample.id
+                                            ? "selected"
+                                            : ""
+                                    }`}
+                                    onClick={() => onSelectSample(index)}
                                 >
                                     {getSampleIcon(sample, index)}
                                     <div className="sample-info">
-                                        <span className="sample-name">{sample.description}</span>
-                                        <span className="sample-rock-type">{sample.rockType}</span>
+                                        <span className="sample-name">
+                                            {sample.description}
+                                        </span>
+                                        <span className="sample-rock-type">
+                                            {sample.rockType}
+                                        </span>
                                     </div>
                                     {sample.starred ? (
                                         <Star16Filled className="star-icon" />
@@ -118,29 +132,30 @@ const SideBar: React.FC<SideBarProps> = ({ geosamples, selectedSample, onSelectS
                 </div>
             ))}
 
-            
             <div className="map-data">
                 <h4 className="map-data-title">Map Data</h4>
                 {selectedSample && (
                     <>
-          
                         <div className="map-data-content">
                             <div className="map-data-row">
                                 <Location16Regular />
                                 <p className="data-text">
-                                    <strong>Sample:</strong>{`Zone ${selectedSample.zoneId}, ${selectedSample.description}`}
+                                    <strong>Sample:</strong>
+                                    {`Zone ${selectedSample.zoneId}, ${selectedSample.description}`}
                                 </p>
                             </div>
                             <div className="map-data-row">
                                 <Location16Regular />
                                 <p className="data-text">
-                                    <strong>Location:</strong> {`${selectedSample.latitude}, ${selectedSample.longitude}`}
+                                    <strong>Location:</strong>{" "}
+                                    {`${selectedSample.latitude}, ${selectedSample.longitude}`}
                                 </p>
                             </div>
                             <div className="map-data-row">
                                 <Clock16Regular />
                                 <p className="data-text">
-                                    <strong>Collected Time:</strong> {selectedSample.datetime.split("T")[1]}
+                                    <strong>Collected Time:</strong>{" "}
+                                    {selectedSample.datetime.split("T")[1]}
                                 </p>
                             </div>
                         </div>
@@ -152,7 +167,9 @@ const SideBar: React.FC<SideBarProps> = ({ geosamples, selectedSample, onSelectS
                                 <input
                                     type="checkbox"
                                     checked={isTraverseEnabled}
-                                    onChange={() => setIsTraverseEnabled(!isTraverseEnabled)}
+                                    onChange={() =>
+                                        setIsTraverseEnabled(!isTraverseEnabled)
+                                    }
                                 />
                                 <span className="toggle-slider"></span>
                             </label>

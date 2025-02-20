@@ -1,9 +1,9 @@
-type Locatable = {
+export type Locatable = {
     latitude: number;
     longitude: number;
 };
 
-type SampleElements =
+export type SampleElements =
     | "SiO2"
     | "TiO2"
     | "Ai2O3"
@@ -30,3 +30,5 @@ export type Geosample = {
     photoJpg: string;
     elementalComposition: Record<SampleElements, number>;
 } & Locatable;
+
+// export interface GeosamplesEvents {}
