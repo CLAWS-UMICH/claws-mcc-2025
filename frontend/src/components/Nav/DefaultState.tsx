@@ -162,10 +162,6 @@ const DefaultState = () => {
                     </div>
                 </div>
             </div>
-
-            <div className="background-img">
-
-            </div>
         </>
     );
 };
