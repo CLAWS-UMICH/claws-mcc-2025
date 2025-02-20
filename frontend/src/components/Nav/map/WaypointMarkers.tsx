@@ -32,6 +32,7 @@ export default function WaypointMarkers({ waypoints, MAP_WIDTH, MAP_HEIGHT, plot
     return (
         <>
             {waypoints.map((waypoint, index) => {
+                console.log("waypoint", waypoint)
                 const point = plotPoint(waypoint.location.latitude, waypoint.location.longitude, MAP_WIDTH, MAP_HEIGHT);
                 // let type = waypoint.type;
                 let src_path = ""

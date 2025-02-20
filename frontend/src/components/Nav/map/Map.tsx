@@ -2,6 +2,9 @@ import React, { useEffect, useState } from 'react';
 import rockyardMapBorder from './rockyardMapBorders.png';
 import rockyardMap from './rockyardMap.png';
 import test from 'node:test';
+
+import type { Waypoint } from '../types.ts'
+
 // import useDynamicWebSocket from '../../hooks/useWebSocket';
 import WaypointMarkers from './WaypointMarkers';
 // import EVAMarkers from './EVAMarkers';
@@ -9,25 +12,8 @@ import WaypointMarkers from './WaypointMarkers';
 // import ImageWithTextOverlay from './ImageWithTextOverlay';
 // import { toLatLon } from 'utm';
 
-export enum WaypointType {
-    // Blue
-    STATION,
-    // Pink
-    NAV,
-    // Green
-    GEO,
-    // Red
-    DANGER
-}
 
-export type Waypoint = {
-    waypoint_id: number; //sequential
-    location: { latitude: number, longitude: number };
-    type: WaypointType;
-    title: String
-}
-
-export default function Map() {
+export default function Map({ waypoints, setWaypoints }: { waypoints: Waypoint, setWaypoints: (waypoint: Waypoint) => void }) {
     const SCALE = 0.16;
     const LARGE_WIDTH = 4251 * SCALE;
     const LARGE_HEIGHT = 3543 * SCALE;
@@ -51,6 +37,8 @@ export default function Map() {
         }
     }
 
+
+    console.log("waypoints", waypoints)
 
     const gridRows = 27;
     const gridCols = 33;
@@ -104,12 +92,11 @@ export default function Map() {
 
     function plotPoint(lat, long, imageWidth, imageHeight) {
         const gridPos = latLongToGrid(lat, long);
-        console.log("Grid position:", gridPos);
         return gridToPixel(gridPos.row, gridPos.col, imageWidth, imageHeight);
     }
 
     // const [waypoints, setWaypoints] = useState<Array<BaseWaypoint>>([]);
-    const [waypoints, setWaypoints] = useState([testPoint])
+    // const [waypoints, setWaypoints] = useState([testPoint])
     // const [EVALocations, setEVALocations] = useState<Array<object>>([
     //     { name: "EVA1", lat: 0, long: 0 },
     //     { name: "EVA2", lat: 0, long: 0 }
