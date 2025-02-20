@@ -31,7 +31,7 @@ const DefaultState = () => {
         }),
         placeholder: (provided) => ({
             ...provided,
-          color: '#aaa', // Placeholder text color
+            color: '#aaa', // Placeholder text color
         }),
         singleValue: (provided) => ({
             ...provided,
@@ -88,85 +88,83 @@ const DefaultState = () => {
 
     return (
         <>
-            <div className="default-state-container">
-                <div className="panel">
-                    <div className="panel-contents">
-                        {/* Search Bar */}
-                        <div className="search-bar-section">
-                            <button className="close-btn">✖</button>
-                            <div className="search-bar">
-                                <input type="text" placeholder="Search" />
-                            </div>
+            <div style={{ width: "33%", backgroundColor: "black", color: "white" }}>
+                <div className="panel-contents">
+                    {/* Search Bar */}
+                    <div className="search-bar-section">
+                        <button className="close-btn">✖</button>
+                        <div className="search-bar">
+                            <input type="text" placeholder="Search" />
                         </div>
-                        {/* Filter Section */}
-                        <div className="filter-section">
-                            <span className="icon-header">
-                                <img className="icon" src={filterImage} alt="test"/>
-                                <text>Filter</text>
-                            </span>
-                            <div className="type-section">
-                                <label>Type</label>
-                                <Select 
-                                    options={typeOptions} 
-                                    isMulti
-                                    placeholder=""
-                                    styles={customStyles}
-                                    formatOptionLabel={formatOptionLabel}
-                                />
-                            </div>
-                            <div className="distance-section">
-                                <label>Distance</label>
-                                <Select 
-                                    options={distanceOptions} 
-                                    placeholder=""
-                                    styles={customStyles}
-                                    formatOptionLabel={formatOptionLabel}
-                                />
-                            </div>
+                    </div>
+                    {/* Filter Section */}
+                    <div className="filter-section">
+                        <span className="icon-header">
+                            <img className="icon" src={filterImage} alt="test" />
+                            <text>Filter</text>
+                        </span>
+                        <div className="type-section">
+                            <label>Type</label>
+                            <Select
+                                options={typeOptions}
+                                isMulti
+                                placeholder=""
+                                styles={customStyles}
+                                formatOptionLabel={formatOptionLabel}
+                            />
                         </div>
+                        <div className="distance-section">
+                            <label>Distance</label>
+                            <Select
+                                options={distanceOptions}
+                                placeholder=""
+                                styles={customStyles}
+                                formatOptionLabel={formatOptionLabel}
+                            />
+                        </div>
+                    </div>
 
-                        {/* Stations Section */}
-                        <div className="stations-section">
-                            <span className="icon-header">
-                                <img className="icon" src={webAssetImage} alt="test"/>
-                                <text>Stations</text>
-                            </span>
-                            <div className="station-item">
-                                <span className="station-icon">A</span>
-                                <div className="station-info">
-                                    <h4>The Hab</h4>
-                                    <p>Location: 42.265869, -83.750031</p>
-                                    <p>Date: 1/25/2024</p>
-                                    <p>Time: 14:21:12</p>
-                                    <p>Slope: Avg. 7.5°</p>
-                                    <p>Surface Texture: Soft</p>
-                                </div>
-                            </div>
-                        </div>
-
+                    {/* Stations Section */}
+                    <div className="stations-section">
+                        <span className="icon-header">
+                            <img className="icon" src={webAssetImage} alt="test" />
+                            <text>Stations</text>
+                        </span>
                         <div className="station-item">
-                            <span className="station-icon">B</span>
+                            <span className="station-icon">A</span>
                             <div className="station-info">
-                                <h4>Comms Tower</h4>
+                                <h4>The Hab</h4>
                                 <p>Location: 42.265869, -83.750031</p>
                                 <p>Date: 1/25/2024</p>
                                 <p>Time: 14:21:12</p>
-                                <p>Slope: Unavailable</p>
-                                <p>Surface Texture: Hard</p>
+                                <p>Slope: Avg. 7.5°</p>
+                                <p>Surface Texture: Soft</p>
                             </div>
                         </div>
+                    </div>
 
-                        {/* Samples Section */}
-                        <div className="samples-section">
-                            <h3>Samples</h3>
-                            {/* Add sample items here */}
+                    <div className="station-item">
+                        <span className="station-icon">B</span>
+                        <div className="station-info">
+                            <h4>Comms Tower</h4>
+                            <p>Location: 42.265869, -83.750031</p>
+                            <p>Date: 1/25/2024</p>
+                            <p>Time: 14:21:12</p>
+                            <p>Slope: Unavailable</p>
+                            <p>Surface Texture: Hard</p>
                         </div>
                     </div>
-                </div>
 
-                <div className="background-img">
-                    
+                    {/* Samples Section */}
+                    <div className="samples-section">
+                        <h3>Samples</h3>
+                        {/* Add sample items here */}
+                    </div>
                 </div>
+            </div>
+
+            <div className="background-img">
+
             </div>
         </>
     );

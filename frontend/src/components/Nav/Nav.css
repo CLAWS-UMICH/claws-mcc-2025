@@ -1,23 +1,16 @@
 .main-container {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     position: relative;
     width: 100%;
     height: 100%;
 }
 
 .panel {
-    position: absolute;
-    display: flex;
-    top: 0;
-    left: 0;
     width: 33%;
     height: 100%;
-    background-color: #1c1c1c;
+    background-color: red;
     color: white;
-    padding: 20px;
-    z-index: 2;
-    overflow: auto;
 }
 
 .background-img {
