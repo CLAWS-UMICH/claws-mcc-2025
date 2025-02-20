@@ -1,1 +1,1 @@
-{"root":["./src/app.tsx","./src/main.tsx","./src/vite-env.d.ts"],"version":"5.6.2"}
+{"root":["./src/app.tsx","./src/reference.tsx","./src/main.tsx","./src/vite-env.d.ts","./src/components/tasklist/tasklist.tsx","./src/components/tasklist/__tests__/tasklist.test.tsx","./src/hooks/usesubscribe.tsx","./src/pages/backenddemo.tsx","./src/pages/messages.tsx","./src/pages/sendscreens.tsx"],"errors":true,"version":"5.6.2"}
