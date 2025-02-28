@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import './SendScreens.css';
 import SearchBar from './SearchBar.tsx';
 import Gallery from '../components/Gallery/Gallery';
@@ -13,12 +13,6 @@ import sunTest from '../images/sunTest.jpg';
 import nebulaTest from '../images/nebulaTest.jpg';
 import io, { Socket } from 'socket.io-client';
 
-let socket: Socket;
-
-// Initialize WebSocket connection
-if (!socket) {
-  socket = io('ws://localhost:8080'); //  AR headset's WebSocket server URL??
-}
 
 const ALL_IMAGES = [
   { id: 0, title: "Alien", url: alienTest, category: "Category 1" },
@@ -50,30 +44,59 @@ function SendScreens() {
   ];
 
  
-const sendToAstronautStub = async (astronaut_id: number, title: string, imageUrl: string) => {
-  console.log(`Sending to astronaut ${astronaut_id}: ${title}`);
+  const sendToAstronautStub = async (astronaut_id: number, title: string, imageUrl: string) => {
+    console.log(`Connecting to send image "${title}" to astronaut ${astronaut_id}...`);
 
-  try {
-    // Convert image URL to binary data
-    const response = await fetch(imageUrl);
-    const imageBlob = await response.blob();
+    try {
+      // Connect to WebSocket server
+      const socket = io('http://backend:8080');
 
-    // Create message object
-    const message = {
-      title,
-      image: await imageBlob.arrayBuffer(), // Convert Blob to ArrayBuffer for binary sending
-    };
+      // Wait for the connection to establish
+      socket.on('connect', async () => {
+        console.log('Connected to server');
 
-    // Send message over WebSocket
-    socket.emit('send_to_hololens', {
-      id: astronaut_id,
-      data: message,
-    });
-    console.log('DATA SENT SUCCESSFULLY HOOORAHHHH (go software engineer go). This what u sent:', message);
-  } catch (error) {
-    console.error('Failed to send data but do not give up-- use this error 2 help:', error);
-  }
-};
+        // Join the specific astronaut room
+        const room = `SEND_SCREEN_ASTRO_${astronaut_id}`;
+        socket.emit('join_room', { room });
+
+        console.log(`Joined room: ${room}`);
+
+        // Convert image URL to binary data
+        const response = await fetch(imageUrl);
+        const imageBlob = await response.blob();
+        const imageBuffer = await imageBlob.arrayBuffer();
+
+        // Create message object
+        const message_for_ar = JSON.stringify({
+          type: room,
+          use: 'GET',
+          data: {
+            imageTitle: title,
+            image: imageBuffer, // Binary image data
+          }
+        });
+
+        // Send message
+        socket.emit('send_to_hololens', { room, data: message_for_ar });
+
+        console.log('Image sent successfully:', message_for_ar);
+
+        // Leave room and disconnect after sending
+        socket.emit('leave_room', { room });
+        socket.disconnect();
+        console.log('Disconnected from server.');
+      });
+
+      // Handle connection errors
+      socket.on('connect_error', (err) => {
+        console.error('Connection error:', err);
+      });
+
+    } catch (error) {
+      console.error('⚠️ Failed to send data:', error);
+    }
+  };
+
   // Automatically filter images when query or selectedCategory changes
   useEffect(() => {
     let filteredImages = ALL_IMAGES;
@@ -124,6 +147,6 @@ const sendToAstronautStub = async (astronaut_id: number, title: string, imageUrl
       </div>
     </>
   );
-}
+};
 
 export default SendScreens;
