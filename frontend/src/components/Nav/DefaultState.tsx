@@ -22,7 +22,9 @@ const DefaultState = ({ waypoints, setWaypoints }) => {
             <h3>{waypoint.title}</h3>
             <span className="station-location">
                 <img className="icon" src={location} alt="test" />
-                Location: {waypoint.location.latitude}, {waypoint.location.longitude}
+                Latitude: {waypoint.location.latitude}, 
+                <br/>
+                Longitude: {waypoint.location.longitude}
             </span>
         </div>
     ));
