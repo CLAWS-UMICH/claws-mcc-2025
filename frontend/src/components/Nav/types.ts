@@ -10,7 +10,7 @@ export enum WaypointType {
 }
 export type Waypoint = {
     waypoint_id: number; //sequential
-    location: { lat: number, long: number };
+    location: { latitude: number, longitude: number };
     type: WaypointType;
-    title: String
+    title: string
 }

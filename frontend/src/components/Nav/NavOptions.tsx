@@ -5,7 +5,7 @@ const NavOptions = () => {
     const handleWaypointModeChange = (isActive: boolean) => {
         // Handle any parent logic when waypoint mode changes
         console.log('Waypoint mode:', isActive);
-      };
+    };
 
     return (
         <div className="nav-options">

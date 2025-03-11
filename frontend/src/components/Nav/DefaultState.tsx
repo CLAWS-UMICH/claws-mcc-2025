@@ -1,13 +1,31 @@
 import React, { useState } from 'react';
 import Select from 'react-select';
-import './Panel.css';
-import './Nav.css'
+import './DefaultStatePanel.css';
+import './Nav.css';
+import './Dropdown.css';
 
 import filterImage from './images/filter.png';
 import webAssetImage from './images/webAsset.png';
+import upBtn from './images/upBtn.png';
+import downBtn from './images/downBtn.png';
+import location from './images/locationIcon.png';
+import samples from './images/samplesIcon.png';
 
 
-const DefaultState = () => {
+
+const DefaultState = ({ waypoints, setWaypoints }) => {
+    const [stationsTab, setStationsTab] = useState(false);
+    const [samplesTab, setSamplesTab] = useState(false);
+
+    const waypointComponents = waypoints.map((waypoint) => (
+        <div className="station" key={waypoint.waypoint_id}>
+            <h3>{waypoint.title}</h3>
+            <span className="station-location">
+                <img className="icon" src={location} alt="test" />
+                Location: {waypoint.location.latitude}, {waypoint.location.longitude}
+            </span>
+        </div>
+    ));
 
     const typeOptions = [
         { value: 'samples', label: 'Samples', icon: '⬡' },
@@ -86,79 +104,103 @@ const DefaultState = () => {
         </div>
     );
 
+    const handleStationsChange = ()  => {
+        setStationsTab(!stationsTab);
+    }
+
+    console.log(waypoints);
+
     return (
         <>
-            <div style={{ width: "33%", backgroundColor: "black", color: "white" }}>
+            <div className="panel-container">
                 <div className="panel-contents">
-                    {/* Search Bar */}
-                    <div className="search-bar-section">
-                        <button className="close-btn">✖</button>
-                        <div className="search-bar">
-                            <input type="text" placeholder="Search" />
+                    <div className="top-container">
+                        {/* Search Bar */}
+                        <div className="search-bar-section">
+                            <div className="search-bar">
+                                <input type="text" placeholder="Search" />
+                            </div>
                         </div>
-                    </div>
-                    {/* Filter Section */}
-                    <div className="filter-section">
-                        <span className="icon-header">
-                            <img className="icon" src={filterImage} alt="test" />
-                            <text>Filter</text>
-                        </span>
-                        <div className="type-section">
-                            <label>Type</label>
-                            <Select
-                                options={typeOptions}
-                                isMulti
-                                placeholder=""
-                                styles={customStyles}
-                                formatOptionLabel={formatOptionLabel}
-                            />
-                        </div>
-                        <div className="distance-section">
-                            <label>Distance</label>
-                            <Select
-                                options={distanceOptions}
-                                placeholder=""
-                                styles={customStyles}
-                                formatOptionLabel={formatOptionLabel}
-                            />
-                        </div>
-                    </div>
-
-                    {/* Stations Section */}
-                    <div className="stations-section">
-                        <span className="icon-header">
-                            <img className="icon" src={webAssetImage} alt="test" />
-                            <text>Stations</text>
-                        </span>
-                        <div className="station-item">
-                            <span className="station-icon">A</span>
-                            <div className="station-info">
-                                <h4>The Hab</h4>
-                                <p>Location: 42.265869, -83.750031</p>
-                                <p>Date: 1/25/2024</p>
-                                <p>Time: 14:21:12</p>
-                                <p>Slope: Avg. 7.5°</p>
-                                <p>Surface Texture: Soft</p>
+                        <div className="filter-section">
+                            <span className="icon-header">
+                                <img className="icon" src={filterImage} alt="test" />
+                                <b>Filter</b>
+                            </span>
+                            <div className="type-section">
+                                <label>Type</label>
+                                <Select
+                                    options={typeOptions}
+                                    isMulti
+                                    placeholder=""
+                                    styles={customStyles}
+                                    formatOptionLabel={formatOptionLabel}
+                                />
+                            </div>
+                            <div className="distance-section">
+                                <label>Distance</label>
+                                <Select
+                                    options={distanceOptions}
+                                    placeholder=""
+                                    styles={customStyles}
+                                    formatOptionLabel={formatOptionLabel}
+                                />
                             </div>
                         </div>
                     </div>
 
-                    <div className="station-item">
-                        <span className="station-icon">B</span>
-                        <div className="station-info">
-                            <h4>Comms Tower</h4>
-                            <p>Location: 42.265869, -83.750031</p>
-                            <p>Date: 1/25/2024</p>
-                            <p>Time: 14:21:12</p>
-                            <p>Slope: Unavailable</p>
-                            <p>Surface Texture: Hard</p>
+                    <div className="stations-section">
+                        <span className="stations-header">
+                            <span className="icon-header">
+                                <img className="icon" src={webAssetImage} alt="test" />
+                                <b>Stations</b>
+                            </span>
+                            <button
+                                type="button"
+                                className="dropdown-btn"
+                                onClick={() => setStationsTab(!stationsTab)}
+                            >
+                                {!stationsTab ? (
+                                    <img className="icon" src={downBtn} alt="test" />
+                                ) : (
+                                    <img className="icon" src={upBtn} alt="test" />
+                                )}
+                            </button>
+                        </span>
+                        <div className="scrolling-container">
+                            {stationsTab && (
+                                <>
+                                    {waypointComponents}
+                                </>
+                            )}
                         </div>
                     </div>
 
                     {/* Samples Section */}
                     <div className="samples-section">
-                        <h3>Samples</h3>
-                        {/* Add sample items here */}
+                        <span className="samples-header">
+                            <span className="icon-header">
+                                <img className="icon" src={samples} alt="test" />
+                                <b>Samples</b>
+                            </span>
+                            <button
+                                type="button"
+                                className="dropdown-btn"
+                                onClick={() => setSamplesTab(!samplesTab)}
+                            >
+                                {!samplesTab ? (
+                                    <img className="icon" src={downBtn} alt="test" />
+                                ) : (
+                                    <img className="icon" src={upBtn} alt="test" />
+                                )}
+                            </button>
+                        </span>
+                        <div className="scrolling-container">
+                            {samplesTab && (
+                                <>
+                                    {/* REPLACE WITH Sample Components */}
+                                </>
+                            )}
+                        </div>
                     </div>
                 </div>
             </div>
