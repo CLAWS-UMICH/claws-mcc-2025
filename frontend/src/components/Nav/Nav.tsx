@@ -17,6 +17,10 @@ const Nav = () => {
     const waypointData = [
         { waypoint_id: 1, location: { latitude: 29.565249461045536, longitude: -95.08134679492866 }, type: WaypointType.GEO, title: "Waypoint 1" },
         { waypoint_id: 2, location: { latitude: 29.56476723137908, longitude: -95.08149860397305 }, type: WaypointType.GEO, title: "Waypoint 2" },
+        { waypoint_id: 1, location: { latitude: 29.565249461045536, longitude: -95.08134679492866 }, type: WaypointType.GEO, title: "Waypoint 1" },
+        { waypoint_id: 2, location: { latitude: 29.56476723137908, longitude: -95.08149860397305 }, type: WaypointType.GEO, title: "Waypoint 2" },
+        { waypoint_id: 1, location: { latitude: 29.565249461045536, longitude: -95.08134679492866 }, type: WaypointType.GEO, title: "Waypoint 1" },
+        { waypoint_id: 2, location: { latitude: 29.56476723137908, longitude: -95.08149860397305 }, type: WaypointType.GEO, title: "Waypoint 2" },
     ];
 
     /*
