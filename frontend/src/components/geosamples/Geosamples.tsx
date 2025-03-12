@@ -2,20 +2,18 @@ import { useState } from "react";
 import SideBar from "./SideBar";
 import GeosampleDetail from "./GeosampleDetail";
 import { Geosample } from "./GeosampleTypes";
-import "./Geosamples.css";
 
-//Hi i hardcoded some values for geosamplemanager, bc idk where it is actually coming from!!! feel free to get rid of it here...
 const Geosamples = () => {
-    const geosamples: Geosample[] = [
+    const fakeGeosamples: Geosample[] = [
         {
             id: 1,
             zoneId: "A",
             starred: true,
             bookmarked: false,
             datetime: "2025-02-17T14:21:21Z",
-            color: "gold",
+            color: "Gold",
             subcolor: "lightyellow",
-            shape: "circle",
+            shape: "Circle",
             rockType: "igneous",
             author: 1,
             description: "Geo Sample 1",
@@ -30,10 +28,10 @@ const Geosamples = () => {
                 CaO: 11.7,
                 K2O: 1.9,
                 P2O3: 0.4,
-                Other: 5.5
+                Other: 5.5,
             },
             latitude: 42.265869,
-            longitude: -83.750031
+            longitude: -83.750031,
         },
         {
             id: 2,
@@ -41,9 +39,9 @@ const Geosamples = () => {
             starred: false,
             bookmarked: false,
             datetime: "2025-02-17T14:22:00Z",
-            color: "green",
+            color: "Green",
             subcolor: "lightgreen",
-            shape: "square",
+            shape: "Square",
             rockType: "sedimentary",
             author: 2,
             description: "Geo Sample 2",
@@ -58,10 +56,10 @@ const Geosamples = () => {
                 CaO: 12.0,
                 K2O: 2.0,
                 P2O3: 0.5,
-                Other: 6.0
+                Other: 6.0,
             },
             latitude: 42.26587,
-            longitude: -83.750032
+            longitude: -83.750032,
         },
         {
             id: 3,
@@ -69,9 +67,9 @@ const Geosamples = () => {
             starred: true,
             bookmarked: false,
             datetime: "2025-02-17T14:23:00Z",
-            color: "blue",
+            color: "Blue",
             subcolor: "lightblue",
-            shape: "hexagon",
+            shape: "Hexagon",
             rockType: "metamorphic",
             author: 3,
             description: "Geo Sample 3",
@@ -86,30 +84,59 @@ const Geosamples = () => {
                 CaO: 11.5,
                 K2O: 2.5,
                 P2O3: 0.3,
-                Other: 4.3
+                Other: 4.3,
             },
             latitude: 42.265871,
-            longitude: -83.750033
-        }
+            longitude: -83.750033,
+        },
     ];
 
-    const [selectedSample, setSelectedSample] = useState<number>(0);
+    const [geosamples, setGeosamples] = useState<Geosample[]>(fakeGeosamples);
+
+    // Index of the selected sample, or null if no sample is selected
+    const [selectedSample, setSelectedSample] = useState<Geosample | null>(
+        fakeGeosamples[0],
+    );
 
     return (
-        <div>
-            {/* <Test sample={selectedSample} onDelete={(id) => console.log(id)} /> */}
+        <div className="flex h-full flex-row">
             <SideBar
                 geosamples={geosamples}
-                selectedSample={geosamples[selectedSample]}
-                onSelectSample={setSelectedSample}
-            />
-            <GeosampleDetail
-                sample={geosamples[selectedSample]}
-                onDelete={(id) => {
-                    setSelectedSample(1);
-                    console.log(`Deleted sample with ID: ${id}`);
+                selectedSample={selectedSample !== null ? selectedSample : null}
+                onSelectSample={(newSample) => {
+                    setSelectedSample(newSample);
                 }}
             />
+            {selectedSample !== null && (
+                <GeosampleDetail
+                    key={selectedSample.id}
+                    sample={selectedSample}
+                    onDelete={() => {
+                        console.log(
+                            `Deleted sample with ID: ${selectedSample}`,
+                        );
+                        setGeosamples((prev) =>
+                            prev.filter((x) => x.id !== selectedSample.id),
+                        );
+                        if (geosamples.length > 1) {
+                            setSelectedSample(geosamples[0]);
+                        }
+                    }}
+                    onUpdate={(newSample) => {
+                        console.log(
+                            `Updated sample with ID: ${selectedSample}`,
+                        );
+                        setSelectedSample({ ...selectedSample, ...newSample });
+                        setGeosamples((prev) =>
+                            prev.map((x) =>
+                                x.id === newSample.id
+                                    ? { ...x, ...newSample }
+                                    : x,
+                            ),
+                        );
+                    }}
+                />
+            )}
         </div>
     );
 };

@@ -1,33 +1,36 @@
 import { useState, useMemo } from "react";
 import "./SideBar.css";
-import { Geosample } from "./GeosampleTypes";
+import { type Geosample } from "./GeosampleTypes";
 import {
-    Location16Regular,
-    Clock16Regular,
+    LocationRegular,
+    ClockRegular,
     ArrowSyncRegular,
-    Temperature16Regular,
-    Star16Filled,
-    Star16Regular,
-    Search16Regular,
-    Edit16Regular
+    TemperatureRegular,
+    StarFilled,
+    StarRegular,
+    SearchRegular,
+    EditRegular,
 } from "@fluentui/react-icons";
 
 interface SideBarProps {
     geosamples: Geosample[];
     selectedSample: Geosample | null;
-    onSelectSample: (sample: number) => void;
+    onSelectSample: (sample: Geosample) => void;
 }
 
 const SideBar = ({
     geosamples,
     selectedSample,
-    onSelectSample
+    onSelectSample,
 }: SideBarProps) => {
     const initialOpenZones = useMemo(() => {
-        return geosamples.reduce((acc, sample) => {
-            acc[sample.zoneId] = true;
-            return acc;
-        }, {} as Record<string, boolean>);
+        return geosamples.reduce(
+            (acc, sample) => {
+                acc[sample.zoneId] = true;
+                return acc;
+            },
+            {} as Record<string, boolean>,
+        );
     }, [geosamples]);
 
     const [openZones, setOpenZones] = useState(initialOpenZones);
@@ -38,11 +41,14 @@ const SideBar = ({
     };
 
     const groupedByZone = useMemo(() => {
-        return geosamples.reduce((acc, sample) => {
-            acc[sample.zoneId] = acc[sample.zoneId] || [];
-            acc[sample.zoneId].push(sample);
-            return acc;
-        }, {} as Record<string, Geosample[]>);
+        return geosamples.reduce(
+            (acc, sample) => {
+                acc[sample.zoneId] = acc[sample.zoneId] || [];
+                acc[sample.zoneId].push(sample);
+                return acc;
+            },
+            {} as Record<string, Geosample[]>,
+        );
     }, [geosamples]);
 
     const getSampleIcon = (sample: Geosample, index: number) => {
@@ -56,18 +62,18 @@ const SideBar = ({
             justifyContent: "center",
             color: "white",
             fontSize: "12px",
-            marginRight: "8px"
+            marginRight: "8px",
         };
 
         let shapeStyle = {};
         switch (sample.shape) {
-            case "square":
+            case "Square":
                 shapeStyle = { borderRadius: "0" };
                 break;
-            case "hexagon":
+            case "Hexagon":
                 shapeStyle = {
                     clipPath:
-                        "polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)"
+                        "polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)",
                 };
                 break;
             default:
@@ -83,8 +89,8 @@ const SideBar = ({
             <div className="sidebar-header">
                 <h3 className="sidebar-title">All Samples</h3>
                 <div className="icon-group">
-                    <Edit16Regular className="header-icon" />
-                    <Search16Regular className="header-icon" />
+                    <EditRegular className="header-icon" />
+                    <SearchRegular className="header-icon" />
                 </div>
             </div>
 
@@ -109,7 +115,7 @@ const SideBar = ({
                                             ? "selected"
                                             : ""
                                     }`}
-                                    onClick={() => onSelectSample(index)}
+                                    onClick={() => onSelectSample(sample)}
                                 >
                                     {getSampleIcon(sample, index)}
                                     <div className="sample-info">
@@ -121,9 +127,9 @@ const SideBar = ({
                                         </span>
                                     </div>
                                     {sample.starred ? (
-                                        <Star16Filled className="star-icon" />
+                                        <StarFilled className="star-icon" />
                                     ) : (
-                                        <Star16Regular className="star-icon" />
+                                        <StarRegular className="star-icon" />
                                     )}
                                 </li>
                             ))}
@@ -138,21 +144,21 @@ const SideBar = ({
                     <>
                         <div className="map-data-content">
                             <div className="map-data-row">
-                                <Location16Regular />
+                                <LocationRegular />
                                 <p className="data-text">
                                     <strong>Sample:</strong>
                                     {`Zone ${selectedSample.zoneId}, ${selectedSample.description}`}
                                 </p>
                             </div>
                             <div className="map-data-row">
-                                <Location16Regular />
+                                <LocationRegular />
                                 <p className="data-text">
                                     <strong>Location:</strong>{" "}
                                     {`${selectedSample.latitude}, ${selectedSample.longitude}`}
                                 </p>
                             </div>
                             <div className="map-data-row">
-                                <Clock16Regular />
+                                <ClockRegular />
                                 <p className="data-text">
                                     <strong>Collected Time:</strong>{" "}
                                     {selectedSample.datetime.split("T")[1]}
@@ -176,7 +182,7 @@ const SideBar = ({
                         </div>
 
                         <div className="map-data-row black-section">
-                            <Temperature16Regular />
+                            <TemperatureRegular />
                             <p className="data-text">Temperature: ?</p>
                         </div>
 
