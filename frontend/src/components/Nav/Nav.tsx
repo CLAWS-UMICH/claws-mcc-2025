@@ -8,7 +8,15 @@ import { WaypointType, type Waypoint } from './types.ts'
 
 const Nav = () => {
     const [isCollapsed, setIsCollapsed] = useState(false);
-    const [waypoints, setWaypoints] = useState<Waypoint[]>([]);
+    const [waypoints, setWaypoints] = useState<Waypoint[]>([
+        { waypoint_id: 1, location: { lat: 29.565369133556835, long: -95.0819529674787 }, type: WaypointType.GEO, title: "Top Left" },
+        { waypoint_id: 2, location: { lat: 29.56476723137908, long: -95.08149860397305 }, type: WaypointType.GEO, title: "Waypoint 2" },
+        { waypoint_id: 3, location: { lat: 29.565249461045536, long: -95.08134679492866 }, type: WaypointType.GEO, title: "Waypoint 1" },
+        { waypoint_id: 4, location: { lat: 29.56476723137908, long: -95.08149860397305 }, type: WaypointType.GEO, title: "Waypoint 2" },
+        { waypoint_id: 5, location: { lat: 29.565249461045536, long: -95.08134679492866 }, type: WaypointType.GEO, title: "Waypoint 1" },
+        { waypoint_id: 6, location: { lat: 29.56476723137908, long: -95.08149860397305 }, type: WaypointType.GEO, title: "Waypoint 2" },
+        { waypoint_id: 7, location: { lat: 29.56440830845782, long: -95.08071056957434 }, type: WaypointType.GEO, title: "Bottom Right" },
+    ]);
 
     const togglePanel = () => {
         setIsCollapsed(!isCollapsed);
@@ -35,7 +43,7 @@ const Nav = () => {
             <NavOptions waypoints={waypoints} setWaypoints={setWaypoints} />
             <div style={{ display: "flex" }}>
                 {/* <DefaultState waypoints={waypoints} setWaypoints={setWaypoints} /> */}
-                <DefaultState waypoints={waypointData} setWaypoints={setWaypoints} />
+                <DefaultState waypoints={waypoints} setWaypoints={setWaypoints} />
                 <Map waypoints={waypoints} setWaypoints={setWaypoints} />
             </div>
         </>

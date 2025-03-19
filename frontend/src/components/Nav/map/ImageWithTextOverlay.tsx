@@ -15,7 +15,7 @@ export default function ImageWithTextOverlay({ src, alt, text, point }) {
 
     const textStyle: React.CSSProperties = {
         position: 'absolute',
-        color: 'white', // You can change this to your desired text color
+        color: 'black', // You can change this to your desired text color
         fontSize: '10px', // Adjust font size as needed
         textAlign: 'center',
     };

@@ -1,19 +1,30 @@
 import React, { useEffect, useState } from 'react';
 import rockyardMapBorder from './rockyardMapBorders.png';
 import rockyardMap from './rockyardMap.png';
-import test from 'node:test';
-
-import type { Waypoint } from '../types.ts'
-
-// import useDynamicWebSocket from '../../hooks/useWebSocket';
 import WaypointMarkers from './WaypointMarkers';
-// import EVAMarkers from './EVAMarkers';
-// import RoverMarker from './RoverMarker';
-// import ImageWithTextOverlay from './ImageWithTextOverlay';
-// import { toLatLon } from 'utm';
+import ImageWithTextOverlay from './ImageWithTextOverlay';
+import { Waypoint } from '../types';
 
 
-export default function Map({ waypoints, setWaypoints }: { waypoints: Waypoint, setWaypoints: (waypoint: Waypoint) => void }) {
+export enum WaypointType {
+    // Blue
+    STATION,
+    // Pink
+    NAV,
+    // Green
+    GEO,
+    // Red
+    DANGER
+}
+export type BaseWaypoint = {
+    _id?: number; // server generated
+    waypoint_id: number; //sequential
+    location: { latitude: number, longitude: number };
+    type: WaypointType;
+    description: string;
+    author: number; //-1 if mission control created
+}
+export default function Map({ waypoints, setWaypoints }: { waypoints: Waypoint[]; setWaypoints: React.Dispatch<React.SetStateAction<Waypoint[]>>; }) {
     const SCALE = 0.16;
     const LARGE_WIDTH = 4251 * SCALE;
     const LARGE_HEIGHT = 3543 * SCALE;
@@ -31,14 +42,6 @@ export default function Map({ waypoints, setWaypoints }: { waypoints: Waypoint, 
     const bottomLeftSquare = { lat: 29.564939230058076, long: -95.08120752873609 };
     const topRightSquare = { lat: 29.565157705835315, long: -95.08070786870931 };
 
-    const testPoint = {
-        location: {
-            lat: 29.564360949786636, long: -95.08237721707329
-        }
-    }
-
-
-    console.log("waypoints", waypoints)
 
     const gridRows = 27;
     const gridCols = 33;
@@ -53,8 +56,7 @@ export default function Map({ waypoints, setWaypoints }: { waypoints: Waypoint, 
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        height: '100%',
-        width: '66%'
+        height: '100vh'
     };
 
     const relativeContainerStyle = {
@@ -92,26 +94,24 @@ export default function Map({ waypoints, setWaypoints }: { waypoints: Waypoint, 
 
     function plotPoint(lat, long, imageWidth, imageHeight) {
         const gridPos = latLongToGrid(lat, long);
+        // console.log("Grid position:", gridPos);
         return gridToPixel(gridPos.row, gridPos.col, imageWidth, imageHeight);
     }
 
-    // const [waypoints, setWaypoints] = useState<Array<BaseWaypoint>>([]);
-    // const [waypoints, setWaypoints] = useState([testPoint])
-    // const [EVALocations, setEVALocations] = useState<Array<object>>([
-    //     { name: "EVA1", lat: 0, long: 0 },
-    //     { name: "EVA2", lat: 0, long: 0 }
+    // const [waypoints, setWaypoints] = useState<Array<Waypoint>>([
+    //     {
+    //         waypoint_id: 1, title: "top left", location: topLeft, type: WaypointType.GEO
+    //     },
+    //     {
+    //         waypoint_id: 2, title: "bottom right", location: bottomRight, type: WaypointType.GEO
+    //     },
+    //     {
+    //         waypoint_id: 1, title: "top left square", location: bottomLeftSquare, type: WaypointType.GEO
+    //     },
+    //     {
+    //         waypoint_id: 2, title: "top right square", location: topRightSquare, type: WaypointType.GEO
+    //     }
     // ]);
-    // const [RoverLocation, setRoverLocation] = useState<Object>(
-    //     { lat: 0, long: 0, qr_id: 0 }
-    // );
-    // const [messageHistory, setMessageHistory] = useState<string[]>([]);
-    // const { sendMessage, lastMessage, readyState } = useDynamicWebSocket({
-    //     onOpen: () => sendMessage(JSON.stringify({ type: 'GET_WAYPOINTS', platform: 'FRONTEND' })),
-    //     type: 'WAYPOINTS'
-    // });
-    // const { sendMessage: sendMessageRover, lastMessage: lastMessageRover, readyState: readyStateRover } = useDynamicWebSocket({
-    //     type: 'ROVER'
-    // });
 
     function UTMtoLatLong(posx, posy) {
         let zoneNum = 15;
@@ -171,29 +171,6 @@ export default function Map({ waypoints, setWaypoints }: { waypoints: Waypoint, 
         }
     }
 
-    // useEffect(() => {
-    //     getWaypointsAndAstros();
-    // }, [lastMessage]);
-
-    // useEffect(() => {
-    //     if (lastMessageRover) {
-    //         setMessageHistory((prev) => prev.concat(lastMessageRover.data));
-    //         let data = JSON.parse(lastMessageRover.data);
-
-    //         let rover_posx = data?.rover?.posx;
-    //         let rover_posy = data?.rover?.posy;
-
-    //         let location = UTMtoLatLong(rover_posx, rover_posy);
-
-    //         let rover_location = {
-    //             lat: location.latitude,
-    //             long: location.longitude,
-    //             qr_id: data?.data?.rover?.qr_id
-    //         }
-
-    //         setRoverLocation(rover_location);
-    //     }
-    // }, [lastMessageRover]);
 
     return (
         <div style={containerStyle}>
@@ -214,8 +191,6 @@ export default function Map({ waypoints, setWaypoints }: { waypoints: Waypoint, 
                 />
                 <div style={{ ...absoluteImageStyle, top: (LARGE_HEIGHT - MAP_HEIGHT) / 2, left: (LARGE_WIDTH - MAP_WIDTH) / 2, width: MAP_WIDTH, height: MAP_HEIGHT, zIndex: 3 }}>
                     <WaypointMarkers waypoints={waypoints} MAP_WIDTH={MAP_WIDTH} MAP_HEIGHT={MAP_HEIGHT} plotPoint={plotPoint} />
-                    {/* <EVAMarkers EVALocations={EVALocations} MAP_WIDTH={MAP_WIDTH} MAP_HEIGHT={MAP_HEIGHT} plotPoint={plotPoint} />
-                    <RoverMarker RoverLocation={RoverLocation} MAP_WIDTH={MAP_WIDTH} MAP_HEIGHT={MAP_HEIGHT} plotPoint={plotPoint} /> */}
                 </div>
             </div>
         </div >
