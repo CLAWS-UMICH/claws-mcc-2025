@@ -1,29 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import rockyardMapBorder from './rockyardMapBorders.png';
 import rockyardMap from './rockyardMap.png';
 import WaypointMarkers from './WaypointMarkers';
-import ImageWithTextOverlay from './ImageWithTextOverlay';
 import { Waypoint } from '../types';
 
-
-export enum WaypointType {
-    // Blue
-    STATION,
-    // Pink
-    NAV,
-    // Green
-    GEO,
-    // Red
-    DANGER
-}
-export type BaseWaypoint = {
-    _id?: number; // server generated
-    waypoint_id: number; //sequential
-    location: { latitude: number, longitude: number };
-    type: WaypointType;
-    description: string;
-    author: number; //-1 if mission control created
-}
 export default function Map({ waypoints, setWaypoints }: { waypoints: Waypoint[]; setWaypoints: React.Dispatch<React.SetStateAction<Waypoint[]>>; }) {
     const SCALE = 0.16;
     const LARGE_WIDTH = 4251 * SCALE;
@@ -32,16 +12,10 @@ export default function Map({ waypoints, setWaypoints }: { waypoints: Waypoint[]
     const MAP_HEIGHT = 3069 * SCALE;
 
     // coords from google maps
-    // const topLeft = { lat: 29.565369133556835, long: -95.0819529674787 };
-    // const bottomRight = { lat: 29.56440830845782, long: -95.08071056957434 };
-    // const bottomLeftSquare = { lat: 29.564939230058076, long: -95.08120752873609 };
-    // const topRightSquare = { lat: 29.565157705835315,  long: -95.08070786870931;
-
     const topLeft = { lat: 29.565369133556835, long: -95.0819529674787 };
     const bottomRight = { lat: 29.56440830845782, long: -95.08071056957434 };
     const bottomLeftSquare = { lat: 29.564939230058076, long: -95.08120752873609 };
     const topRightSquare = { lat: 29.565157705835315, long: -95.08070786870931 };
-
 
     const gridRows = 27;
     const gridCols = 33;
@@ -77,8 +51,7 @@ export default function Map({ waypoints, setWaypoints }: { waypoints: Waypoint[]
     const bottom_left_square = plotPoint(bottomLeftSquare.lat, bottomLeftSquare.long, MAP_WIDTH, MAP_HEIGHT);
     const top_right_square = plotPoint(topRightSquare.lat, topRightSquare.long, MAP_WIDTH, MAP_HEIGHT);
 
-
-    function latLongToGrid(lat, long) {
+    function latLongToGrid(lat: number, long: number) {
         const latdiff = Math.abs(Math.abs(topLeft.lat) - Math.abs(lat));
         const longdiff = Math.abs(Math.abs(long) - Math.abs(topLeft.long));
         const row = latdiff / latPerGrid;
@@ -86,91 +59,16 @@ export default function Map({ waypoints, setWaypoints }: { waypoints: Waypoint[]
         return { row, col };
     }
 
-    function gridToPixel(gridRow, gridCol, imageWidth, imageHeight) {
+    function gridToPixel(gridRow: number, gridCol: number, imageWidth: number, imageHeight: number) {
         const pixelX = (gridCol / gridCols) * imageWidth;
         const pixelY = (gridRow / gridRows) * imageHeight;
         return { x: pixelX, y: pixelY };
     }
 
-    function plotPoint(lat, long, imageWidth, imageHeight) {
+    function plotPoint(lat: number, long: number, imageWidth: number, imageHeight: number) {
         const gridPos = latLongToGrid(lat, long);
-        // console.log("Grid position:", gridPos);
         return gridToPixel(gridPos.row, gridPos.col, imageWidth, imageHeight);
     }
-
-    // const [waypoints, setWaypoints] = useState<Array<Waypoint>>([
-    //     {
-    //         waypoint_id: 1, title: "top left", location: topLeft, type: WaypointType.GEO
-    //     },
-    //     {
-    //         waypoint_id: 2, title: "bottom right", location: bottomRight, type: WaypointType.GEO
-    //     },
-    //     {
-    //         waypoint_id: 1, title: "top left square", location: bottomLeftSquare, type: WaypointType.GEO
-    //     },
-    //     {
-    //         waypoint_id: 2, title: "top right square", location: topRightSquare, type: WaypointType.GEO
-    //     }
-    // ]);
-
-    function UTMtoLatLong(posx, posy) {
-        let zoneNum = 15;
-        let zoneLetter = `R`;
-        let northern = undefined;
-        let strict = true;
-        let latLong = {
-            latitude: 0,
-            longitude: 0
-        };
-        try {
-            latLong = toLatLon(posx, posy, zoneNum, zoneLetter, northern, strict);
-        } catch (e) {
-            console.error(e)
-        }
-        return latLong;
-    }
-
-    function getWaypointsAndAstros() {
-        if (lastMessage !== null) {
-            const data = JSON.parse(lastMessage.data);
-            if (data?.data?.data?.isLocation) {
-                console.log("eva data found")
-                // convert posx and posy from UTM to lat long
-                let eva1_posx = data?.data?.imu.eva1.posx;
-                let eva1_posy = data?.data?.imu.eva1.posy;
-
-                let eva2_posx = data?.data?.imu.eva2.posx;
-                let eva2_posy = data?.data?.imu.eva2.posy;
-
-                let eva_location_1 = UTMtoLatLong(eva1_posx, eva1_posy);
-                let eva_location_2 = UTMtoLatLong(eva2_posx, eva2_posy);
-
-                let eva1_lat = eva_location_1.latitude;
-                let eva1_long = eva_location_1.longitude;
-
-                let eva2_lat = eva_location_2.latitude;
-                let eva2_long = eva_location_2.longitude;
-
-                setEVALocations([
-                    {
-                        name: "EVA1",
-                        lat: eva1_lat,
-                        long: eva1_long,
-                    },
-                    {
-                        name: "EVA2",
-                        lat: eva2_lat,
-                        long: eva2_long,
-                    }
-                ])
-            } else {
-                setMessageHistory((prev) => prev.concat(lastMessage.data));
-                let data = JSON.parse(lastMessage.data).data;
-                setWaypoints(data);
-            }
-        }
-    }
-
 
     return (
         <div style={containerStyle}>
@@ -193,6 +91,6 @@ export default function Map({ waypoints, setWaypoints }: { waypoints: Waypoint[]
                     <WaypointMarkers waypoints={waypoints} MAP_WIDTH={MAP_WIDTH} MAP_HEIGHT={MAP_HEIGHT} plotPoint={plotPoint} />
                 </div>
             </div>
-        </div >
+        </div>
     );
 }

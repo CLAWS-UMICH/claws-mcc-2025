@@ -1,62 +1,58 @@
 import React from 'react';
-// import waypointImage from '../../assets/waypoint.png';
-// import bluewaypoint from '../../assets/bluewaypoint.png';
-// import greenwaypoint from '../../assets/greenwaypoint.png';
-// import redwaypoint from '../../assets/redwaypoint.png';
-// import pinkwaypoint from '../../assets/pinkwaypoint.png';
-// import rovermarker from '../../assets/rovermarker.png';
-import ImageWithTextOverlay from './ImageWithTextOverlay';
+import { Waypoint, WaypointType } from '../types';
 
-export enum WaypointType {
-    // Blue
-    STATION,
-    // Pink
-    NAV,
-    // Green
-    GEO,
-    // Red
-    DANGER
+interface WaypointMarkersProps {
+    waypoints: Waypoint[];
+    MAP_WIDTH: number;
+    MAP_HEIGHT: number;
+    plotPoint: (lat: number, long: number, width: number, height: number) => { x: number; y: number };
 }
 
-export type BaseWaypoint = {
-    _id?: number; // server generated
-    waypoint_id: number; //sequential
-    location: { latitude: number, longitude: number };
-    type: WaypointType;
-    description: string;
-    author: number; //-1 if mission control created
-}
+const WaypointMarkers: React.FC<WaypointMarkersProps> = ({ waypoints, MAP_WIDTH, MAP_HEIGHT, plotPoint }) => {
+    // Waypoint type to color mapping
+    const getMarkerColor = (type: WaypointType): string => {
+        switch (type) {
+            case WaypointType.STATION:
+                return 'blue';
+            case WaypointType.NAV:
+                return 'pink';
+            case WaypointType.GEO:
+                return 'green';
+            case WaypointType.DANGER:
+                return 'red';
+            default:
+                return 'white';
+        }
+    };
 
-// TODO: right click add waypoint
-export default function WaypointMarkers({ waypoints, MAP_WIDTH, MAP_HEIGHT, plotPoint }) {
     return (
         <>
-            {waypoints.map((waypoint, index) => {
-                console.log("waypoint marker, waypoint:", waypoint)
+            {waypoints.map((waypoint) => {
                 const point = plotPoint(waypoint.location.lat, waypoint.location.long, MAP_WIDTH, MAP_HEIGHT);
-                console.log("point: ", point)
-                // let type = waypoint.type;
-                let src_path = ""
-                // if (type === WaypointType.STATION)
-                //     src_path = bluewaypoint;
-                // else if (type === WaypointType.NAV)
-                //     src_path = pinkwaypoint;
-                // else if (type === WaypointType.GEO)
-                //     src_path = greenwaypoint;
-                // else if (type === WaypointType.DANGER)
-                //     src_path = redwaypoint;
                 return (
-                    <div key={index}>
-                        <ImageWithTextOverlay
-                            src={src_path}
-                            alt="Waypoint"
-                            // text={waypoint.waypoint_letter}
-                            text={waypoint.title}
-                            point={point}
-                        />
+                    <div
+                        key={waypoint.waypoint_id}
+                        style={{
+                            position: 'absolute',
+                            left: `${point.x}px`,
+                            top: `${point.y}px`,
+                            width: '12px',
+                            height: '12px',
+                            borderRadius: '50%',
+                            backgroundColor: getMarkerColor(waypoint.type),
+                            transform: 'translate(-50%, -50%)',
+                            cursor: 'pointer',
+                            zIndex: 4,
+                            fontSize: '12px'
+                        }}
+                        title={waypoint.title}
+                    >
+                        {waypoint.title}
                     </div>
                 );
             })}
         </>
-    )
-}
+    );
+};
+
+export default WaypointMarkers;

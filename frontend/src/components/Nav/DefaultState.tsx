@@ -3,6 +3,7 @@ import Select from 'react-select';
 import './DefaultStatePanel.css';
 import './Nav.css';
 import './Dropdown.css';
+import { Waypoint, WaypointType } from './types';
 
 import filterImage from './images/filter.png';
 import webAssetImage from './images/webAsset.png';
@@ -11,21 +12,57 @@ import downBtn from './images/downBtn.png';
 import location from './images/locationIcon.png';
 import samples from './images/samplesIcon.png';
 
+interface DefaultStateProps {
+    waypoints: Waypoint[];
+    setWaypoints: React.Dispatch<React.SetStateAction<Waypoint[]>>;
+}
 
-
-const DefaultState = ({ waypoints, setWaypoints }) => {
+const DefaultState: React.FC<DefaultStateProps> = ({ waypoints, setWaypoints }) => {
     const [stationsTab, setStationsTab] = useState(false);
     const [samplesTab, setSamplesTab] = useState(false);
+
+    const getWaypointTypeLabel = (type: WaypointType): string => {
+        switch (type) {
+            case WaypointType.STATION: return "Station";
+            case WaypointType.NAV: return "Navigation";
+            case WaypointType.GEO: return "Geographic";
+            case WaypointType.DANGER: return "Danger";
+            default: return "Unknown";
+        }
+    };
+
+    const getWaypointTypeColor = (type: WaypointType): string => {
+        switch (type) {
+            case WaypointType.STATION: return "#4287f5"; // Blue
+            case WaypointType.NAV: return "#f542e5"; // Pink
+            case WaypointType.GEO: return "#42f54b"; // Green
+            case WaypointType.DANGER: return "#f54242"; // Red
+            default: return "#ffffff"; // White
+        }
+    };
 
     const waypointComponents = waypoints.map((waypoint) => (
         <div className="station" key={waypoint.waypoint_id}>
             <h3>{waypoint.title}</h3>
-            <span className="station-location">
-                <img className="icon" src={location} alt="test" />
-                Latitude: {waypoint.location.latitude}, 
-                <br/>
-                Longitude: {waypoint.location.longitude}
-            </span>
+            <div className="station-details">
+                <div className="station-attribute">
+                    <span className="attribute-label">ID: </span>
+                    <span className="attribute-value">{waypoint.waypoint_id}</span>
+                </div>
+                <div className="station-attribute">
+                    <span className="attribute-label">Type: </span>
+                    <span className="attribute-value" style={{ color: getWaypointTypeColor(waypoint.type) }}>
+                        {getWaypointTypeLabel(waypoint.type)}
+                    </span>
+                </div>
+                <div className="station-attribute">
+                    <img className="icon" src={location} alt="location icon" />
+                    <span className="attribute-label">Coordinates: </span>
+                    <span className="attribute-value">
+                        {waypoint.location.lat.toFixed(6)}, {waypoint.location.long.toFixed(6)}
+                    </span>
+                </div>
+            </div>
         </div>
     ));
 
@@ -41,7 +78,7 @@ const DefaultState = ({ waypoints, setWaypoints }) => {
     ];
 
     const customStyles = {
-        control: (provided) => ({
+        control: (provided: any) => ({
             ...provided,
             backgroundColor: '#000', // Black background
             border: '1px solid #555', // Border color
@@ -49,30 +86,30 @@ const DefaultState = ({ waypoints, setWaypoints }) => {
             boxShadow: 'none',
             minHeight: '35px',
         }),
-        placeholder: (provided) => ({
+        placeholder: (provided: any) => ({
             ...provided,
             color: '#aaa', // Placeholder text color
         }),
-        singleValue: (provided) => ({
+        singleValue: (provided: any) => ({
             ...provided,
             display: 'flex',
             alignItems: 'center',
             color: '#fff', // White text color
         }),
-        multiValue: (provided) => ({
+        multiValue: (provided: any) => ({
             ...provided,
             backgroundColor: '#000', // Dark background for tags
             borderRadius: '8px', // Rounded corners for tags
             display: 'flex',
             alignItems: 'center',
         }),
-        multiValueLabel: (provided) => ({
+        multiValueLabel: (provided: any) => ({
             ...provided,
             color: '#fff', // White text for tag labels
             display: 'flex',
             alignItems: 'center',
         }),
-        multiValueRemove: (provided) => ({
+        multiValueRemove: (provided: any) => ({
             ...provided,
             color: '#fff', // White "X" color
             cursor: 'pointer',
@@ -81,36 +118,30 @@ const DefaultState = ({ waypoints, setWaypoints }) => {
                 backgroundColor: 'transparent',
             },
         }),
-        dropdownIndicator: (provided) => ({
+        dropdownIndicator: (provided: any) => ({
             ...provided,
             color: '#fff', // White dropdown arrow
             ':hover': {
                 color: '#aaa', // Lighter arrow on hover
             },
         }),
-        menu: (provided) => ({
+        menu: (provided: any) => ({
             ...provided,
             backgroundColor: '#222', // Dropdown menu background
         }),
-        option: (provided, state) => ({
+        option: (provided: any, state: any) => ({
             ...provided,
             backgroundColor: state.isFocused ? '#333' : '#222', // Highlighted option
             color: state.isSelected ? '#fff' : '#aaa', // Selected/Unselected text color
         }),
     };
 
-    const formatOptionLabel = ({ label, icon }) => (
+    const formatOptionLabel = ({ label, icon }: { label: string, icon: string }) => (
         <div style={{ display: 'flex', alignItems: 'center' }}>
             <span style={{ marginRight: 8 }}>{icon}</span> {/* Icon */}
             {label}
         </div>
     );
-
-    const handleStationsChange = ()  => {
-        setStationsTab(!stationsTab);
-    }
-
-    console.log(waypoints);
 
     return (
         <>
@@ -125,7 +156,7 @@ const DefaultState = ({ waypoints, setWaypoints }) => {
                         </div>
                         <div className="filter-section">
                             <span className="icon-header">
-                                <img className="icon" src={filterImage} alt="test" />
+                                <img className="icon" src={filterImage} alt="filter" />
                                 <b>Filter</b>
                             </span>
                             <div className="type-section">
@@ -153,7 +184,7 @@ const DefaultState = ({ waypoints, setWaypoints }) => {
                     <div className="stations-section">
                         <span className="stations-header">
                             <span className="icon-header">
-                                <img className="icon" src={webAssetImage} alt="test" />
+                                <img className="icon" src={webAssetImage} alt="stations" />
                                 <b>Stations</b>
                             </span>
                             <button
@@ -162,9 +193,9 @@ const DefaultState = ({ waypoints, setWaypoints }) => {
                                 onClick={() => setStationsTab(!stationsTab)}
                             >
                                 {!stationsTab ? (
-                                    <img className="icon" src={downBtn} alt="test" />
+                                    <img className="icon" src={downBtn} alt="expand" />
                                 ) : (
-                                    <img className="icon" src={upBtn} alt="test" />
+                                    <img className="icon" src={upBtn} alt="collapse" />
                                 )}
                             </button>
                         </span>
@@ -181,7 +212,7 @@ const DefaultState = ({ waypoints, setWaypoints }) => {
                     <div className="samples-section">
                         <span className="samples-header">
                             <span className="icon-header">
-                                <img className="icon" src={samples} alt="test" />
+                                <img className="icon" src={samples} alt="samples" />
                                 <b>Samples</b>
                             </span>
                             <button
@@ -190,16 +221,16 @@ const DefaultState = ({ waypoints, setWaypoints }) => {
                                 onClick={() => setSamplesTab(!samplesTab)}
                             >
                                 {!samplesTab ? (
-                                    <img className="icon" src={downBtn} alt="test" />
+                                    <img className="icon" src={downBtn} alt="expand" />
                                 ) : (
-                                    <img className="icon" src={upBtn} alt="test" />
+                                    <img className="icon" src={upBtn} alt="collapse" />
                                 )}
                             </button>
                         </span>
                         <div className="scrolling-container">
                             {samplesTab && (
                                 <>
-                                    {/* REPLACE WITH Sample Components */}
+                                    {/* Sample Components will go here */}
                                 </>
                             )}
                         </div>
