@@ -14,7 +14,7 @@ import uuid
 import random
 
 app = Flask(__name__)
-socketio = SocketIO(app, cors_allowed_origins="*")
+socketio = SocketIO(app, cors_allowed_origins="*", async_mode="threading")
 
 # set cors
 CORS(app)
@@ -188,18 +188,21 @@ def handle_send_message(_data):
     sent_to     = _data.get("sent_to", 0)
     message_txt = _data.get("message", "")
     from_id     = _data.get("from", 0)
-    timestamp = datetime.now().astimezone()
+    timestamp = datetime.now().astimezone().isoformat()
+
 
     # Store the message in the DB
     msg_doc = {
        "message_id": message_id,
+       "room": room,
        "sent_to":    sent_to,
        "message":    message_txt,
        "from":       from_id,
        "timestamp": timestamp
     }
     try:
-        g.db.messages.insert_one(msg_doc)
+        result = db.messages.insert_one(msg_doc)
+        msg_doc["_id"] = str(result.inserted_id)
         logging.info(f"Inserted message into DB: {msg_doc}")
     except Exception as e:
         logging.error(f"Error inserting message: {e}")
@@ -211,18 +214,30 @@ def handle_send_message(_data):
 
 @socketio.on('get_messages')
 def handle_get_messages(_data):
+    """
+    Expects a payload of:
+    {
+      "room": "MESSAGING",
+      "contact_id": 1  # or whichever ID you're targeting
+    }
+    """
     room = _data.get("room", "MESSAGING")
+    contact_id = _data.get("contact_id")
+
+    query = {"room": room}
+    if contact_id is not None:
+        query["sent_to"] = contact_id
+
     try:
-        messages_cursor = g.db.messages.find(
-            {"room": room},
-            {"_id": 0}
-        ).sort("timestamp", 1)
+        messages_cursor = db.messages.find(query).sort("timestamp", 1)
 
-        messages = list(messages_cursor)
-
-        # Send messages only to the requester
+        messages = []
+        for doc in messages_cursor:
+            doc["_id"] = str(doc["_id"])
+            messages.append(doc)
         emit("load_messages", {"messages": messages}, room=request.sid)
     except Exception as e:
+        logging.error(f"Error retrieving messages for room {room}, contact {contact_id}: {e}")
         emit("error", {"message": "Could not retrieve messages"}, room=request.sid)
 
 

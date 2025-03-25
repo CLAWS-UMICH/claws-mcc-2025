@@ -1,5 +1,10 @@
-import React, { useState, useRef } from "react";
 import "./Messages.css";
+import React, { useState, useRef, useEffect } from 'react';
+import { io, Socket } from 'socket.io-client';
+// import { toast, ToastContainer } from 'react-toastify';
+// import 'react-toastify/dist/ReactToastify.css';
+// import './styles/ToastStyles.css';
+
 interface Message {
   id: number;
   sender: string;
@@ -12,6 +17,7 @@ interface Message {
     type: string;
   };
 }
+
 interface Contact {
   id: number;
   name: string;
@@ -21,8 +27,11 @@ interface Contact {
   color?: string;
   messages: Message[];
 }
+
+const socket: Socket = io("http://localhost:8080");
+
 const Messages = () => {
-  const [selectedContact, setSelectedContact] = useState<Contact | null>(null);
+  const [selectedContactId, setSelectedContactId] = useState<number | null>(null);
   const [newMessage, setNewMessage] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
   // Sample contacts with their respective messages
@@ -61,67 +70,137 @@ const Messages = () => {
       ]
     },
   ]);
+
+  const selectedContact = contacts.find((contact) => contact.id === selectedContactId) || null;
+
+  useEffect(() => {
+
+    // Default room
+    socket.emit("join_room", { room: "MESSAGING" });
+    
+    // Listen for new messages from the server
+    socket.on("new_message", (msgDoc: any) => {
+      setContacts((prevContacts) =>
+        prevContacts.map((contact) => {
+          if (contact.id === msgDoc.sent_to) {
+            const date = new Date(msgDoc.timestamp);
+            const shortTime = date.toLocaleTimeString("en-US", {
+            hour: "numeric",
+            minute: "2-digit",
+          });
+
+            const newId = contact.messages.length + 1;
+            const newMsg: Message = {
+              id: newId,
+              sender: msgDoc.from,
+              content: msgDoc.message,
+              timestamp: shortTime,
+            };
+            return {
+              ...contact,
+              messages: [...contact.messages, newMsg],
+              lastMessage: newMsg.content,
+              timestamp: shortTime,
+            };
+          }
+          return contact;
+        })
+      );
+    });
+
+    socket.on("load_messages", (data: any) => {
+      const loadedMessages = data.messages;
+      setContacts((prevContacts) =>
+        prevContacts.map((contact) => {
+          if (contact.id === selectedContactId) {
+            const newMessages: Message[] = loadedMessages.map((doc: any, index: number) => {
+              const date = new Date(doc.timestamp);
+              const shortTime = date.toLocaleTimeString("en-US", {
+                hour: "numeric",
+                minute: "2-digit",
+              });
+
+              return {
+                id: index + 1,
+                sender: doc.from,
+                content: doc.message,
+                timestamp: shortTime,
+              };
+            });
+
+            return {
+              ...contact,
+              messages: newMessages,
+              lastMessage: newMessages.length
+                ? newMessages[newMessages.length - 1].content
+                : contact.lastMessage,
+              timestamp: newMessages.length
+                ? newMessages[newMessages.length - 1].timestamp
+                : contact.timestamp,
+            };
+          }
+          return contact;
+        })
+      );
+    });
+
+    return () => {
+      socket.off("new_message");
+      socket.off("load_messages");
+    };
+  }, [selectedContactId]);
+
   const handleSelectContact = (contact: Contact) => {
-    setSelectedContact(contact);
+    setSelectedContactId(contact.id);
+    socket.emit("get_messages", {
+      room: "MESSAGING",
+      contact_id: contact.id,
+    });
   };
+
+
   const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       handleSendMessage(e);
     }
   };
+
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file && selectedContact) {
       // In a real app, you would upload the file to a server here
       // For now, we'll create a local URL
       const fileUrl = URL.createObjectURL(file);
-      const newMsg: Message = {
-        id: selectedContact.messages.length + 1,
-        sender: "You",
-        content: "Sent a file",
-        timestamp: new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' }),
-        file: {
-          name: file.name,
-          url: fileUrl,
-          type: file.type
-        }
-      };
-      updateContactWithNewMessage(newMsg);
+      socket.emit("send_message", {
+        room: "MESSAGING",
+        message_id: selectedContact.messages.length + 1,
+        sent_to: selectedContact.id,
+        message: "Sent a file",
+        from: "You",
+      });
+      setNewMessage("");
     }
   };
-  const updateContactWithNewMessage = (newMsg: Message) => {
-    if (!selectedContact) return;
-    const updatedContacts = contacts.map(contact => {
-      if (contact.id === selectedContact.id) {
-        return {
-          ...contact,
-          messages: [...contact.messages, newMsg],
-          lastMessage: newMsg.content,
-          timestamp: newMsg.timestamp
-        };
-      }
-      return contact;
-    });
-    setContacts(updatedContacts);
-    setSelectedContact(updatedContacts.find(c => c.id === selectedContact.id) || null);
-    setNewMessage("");
-  };
+
+
   const handleSendMessage = (e: React.FormEvent) => {
     e.preventDefault();
     if (newMessage.trim() && selectedContact) {
-      const newMsg: Message = {
-        id: selectedContact.messages.length + 1,
-        sender: "You",
-        content: newMessage.trim(),
-        timestamp: new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' }),
-      };
-      updateContactWithNewMessage(newMsg);
+      socket.emit("send_message", {
+        room: "MESSAGING",
+        message_id: selectedContact.messages.length + 1,
+        sent_to: selectedContact.id,
+        message: newMessage.trim(),
+        from: "You",
+      });
+      setNewMessage("");
     }
   };
+
   const renderMessageContent = (message: Message) => {
     if (message.file) {
-      if (message.file.type.startsWith('image/')) {
+      if (message.file.type.startsWith("image/")) {
         return (
           <div className="message-file">
             <img src={message.file.url} alt={message.file.name} className="message-image" />
@@ -142,6 +221,7 @@ const Messages = () => {
     }
     return <div className="message-text">{message.content}</div>;
   };
+
   return (
     <div className="messages-container">
       <div className="messages-header">
