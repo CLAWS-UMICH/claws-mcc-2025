@@ -1,4 +1,3 @@
-/* Messages.css */
 .messages-container {
   display: flex;
   flex-direction: column;
@@ -6,21 +5,12 @@
   height: 100%;
   border: 1px #4E4E4E solid;
 }
+
+/* Header area */
 .messages-header {
   display: flex;
   flex-direction: row;
   width: 100%;
-}
-.message-list {
-  display: flex;
-  flex-direction: column;
-  width: 320px;  /* Make sure this matches sidebar-header width */
-  max-height: 976px;
-  border-right: 1px #444444 solid;
-  padding: 12px 8px;
-  background-color: #141414;
-  gap: 0;
-  box-sizing: border-box;  /* Add this to include padding in width calculation */
 }
 .sidebar-header {
   display: flex;
@@ -28,54 +18,56 @@
   border-right: 1px #4E4E4E solid;
   border-bottom: 1px #4E4E4E solid;
   padding: 14px 20px;
-  width: 320px;  /* Make sure this matches message-list width */
+  width: 320px;
   height: 60px;
   color: white;
   background-color: #141414;
   align-items: center;
-  box-sizing: border-box;  /* Add this to include padding in width calculation */
+  box-sizing: border-box;
 }
 .message-name-header {
-  display: flex;
-  flex-direction: row;
+  flex-grow: 1;
   border-bottom: 1px #4E4E4E solid;
   padding: 14px 20px;
   height: 60px;
-  width: calc(100% - 320px); /* Adjust to match the remaining space */
-  box-sizing: border-box;
   color: white;
   background-color: #141414;
   align-items: center;
+  display: flex;
+  box-sizing: border-box;
 }
-/* Styling for the messages list and message body bottom half */
+
+/* The main content with left sidebar + right chat */
 .messages-content {
-  max-height: 1036px;
-  border-left: 1px #444444 solid;
+  flex-grow: 1;
   display: flex;
   flex-direction: row;
-  flex-grow: 1;
   width: 100%;
+  background-color: #181818;
 }
+
+/* LEFT SIDEBAR */
 .message-list {
-  display: flex;
-  flex-direction: column;
   width: 320px;
-  max-height: 976px;
   border-right: 1px #444444 solid;
   padding: 12px 8px;
   background-color: #141414;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
   gap: 0;
 }
-/* Individual message contact in the messages list styling */
+
+/* One contact row in the sidebar */
 .message-contact {
-  padding: 2px 8px;
-  margin: 0;
-  cursor: pointer;
   display: flex;
   flex-direction: row;
   height: 64px;
-  color: white;
   align-items: center;
+  color: white;
+  padding: 2px 8px;
+  margin: 0;
+  cursor: pointer;
 }
 .message-contact:hover {
   background-color: rgba(255, 255, 255, 0.1);
@@ -89,60 +81,71 @@
   background-color: #0078D4;
   color: white;
   font-weight: 500;
+  font-size: 14px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.2);
   display: flex;
   justify-content: center;
   align-items: center;
-  border-radius: 50%;
-  margin: 14px 14px 14px 12px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  font-size: 14px;
+  flex-shrink: 0;
+  margin-right: 12px;
 }
+
+/* Container with name + timestamp on one line + preview below */
 .message-details {
-  flex-grow: 1;
   display: flex;
   flex-direction: column;
-  gap: 2px;
-  padding: 8px 0;
+  flex-grow: 1;
+  overflow: hidden;
 }
-.message-name {
-  font-size: 16px;
+.contact-header-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between; /* name left, timestamp right */
+  align-items: center;
+  margin-bottom: 2px;
+}
+
+/* The contact name in the sidebar */
+.contact-name {
+  font-size: 15px;
   font-weight: 500;
   color: white;
   margin: 0;
-  line-height: 22px;
+  line-height: 20px;
 }
+
+/* The contact's timestamp on same line as name */
+.contact-timestamp {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
+  margin-left: 8px;
+  flex-shrink: 0;
+}
+
+/* The one-line preview of the last message */
 .message-preview {
   font-size: 14px;
   color: rgba(255, 255, 255, 0.7);
-  margin: 0;
   line-height: 20px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+  max-width: 250px;
+  text-align: left;
 }
-.message-timestamp {
-  color: rgba(255, 255, 255, 0.7);
-  font-size: 12px;
-  margin: 3px 12px 0 0;
-  line-height: 16px;
-}
-/* Styling for the loaded message content if needed past integration */
-.message-body-content {
-  flex-grow: 1;
-  display: flex;
-  justify-content: center; /* Center horizontally */
-  align-items: center; /* Center vertically */
-  color: white;
-  background-color: #181818;
-  text-align: center;
-}
-/* Chat container styles */
+
+/* RIGHT CHAT AREA */
 .chat-container {
   flex-grow: 1;
   display: flex;
   flex-direction: column;
   background-color: #181818;
-  height: 100%;
-  width: calc(100% - 320px); /* Match the header width */
   box-sizing: border-box;
 }
+
+/* The messages inside the chat area */
 .chat-messages {
   flex-grow: 1;
   overflow-y: auto;
@@ -155,11 +158,9 @@
 }
 .chat-message {
   display: flex;
-  gap: 24px;
-  padding: 0;
+  gap: 16px;
   width: 100%;
   max-width: 913px;
-  height: 68px;
   margin: 0 auto;
 }
 .message-sender-icon {
@@ -168,23 +169,17 @@
   background-color: #0078D4;
   color: white;
   font-weight: 500;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  flex-shrink: 0;
   display: flex;
   justify-content: center;
   align-items: center;
-  border-radius: 50%;
-  flex-shrink: 0;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-}
-.chat-message.lmcc .message-sender-icon {
-  background-color: #A74109;
 }
 .message-content {
   display: flex;
   flex-direction: column;
   gap: 6px;
-  padding: 0;
-  background: none;
-  border-radius: 0;
 }
 .message-header {
   display: flex;
@@ -192,57 +187,26 @@
   align-items: center;
   height: 20px;
 }
-.message-pin {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-  color: #999999;
-  font-size: 12px;
-  line-height: 16px;
-}
-.message-pin svg {
-  width: 20px;
-  height: 20px;
-  color: #D6D6D6;
-}
-.message-info {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-}
 .message-sender {
   font-weight: 500;
-  margin: 0;
   font-size: 14px;
-  line-height: 20px;
   color: white;
+  margin: 0;
 }
 .message-time {
   font-size: 12px;
   color: #999999;
   margin: 0;
-  line-height: 16px;
 }
 .message-text {
   font-size: 14px;
   line-height: 20px;
   color: white;
   margin: 0;
+  text-align: left;
 }
-.message-delivery {
-  display: flex;
-  gap: 4px;
-  align-items: center;
-  color: #C50F1F;
-  font-size: 12px;
-  line-height: 16px;
-  margin-top: 6px;
-}
-.message-delivery svg {
-  width: 16px;
-  height: 16px;
-}
-/* Message input container */
+
+/* MESSAGE INPUT AREA */
 .message-input-container {
   display: flex;
   flex-direction: column;
@@ -253,46 +217,6 @@
   align-items: center;
   width: 100%;
   box-sizing: border-box;
-}
-.button-bar {
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-  max-width: 921px;
-  height: 32px;
-  gap: 16px;
-  margin: 0 auto;
-}
-.button-bar-left {
-  display: flex;
-  flex-direction: row;
-  gap: 16px;
-  align-items: center;
-}
-.button-bar-right {
-  display: flex;
-  flex-direction: row;
-  gap: 16px;
-  margin-left: auto;
-}
-.button-bar-button {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  height: 32px;
-  padding: 0 12px;
-  background: transparent;
-  border: 1px solid #666666;
-  border-radius: 4px;
-  color: #D6D6D6;
-  cursor: pointer;
-}
-.button-bar-button:hover {
-  background-color: rgba(255, 255, 255, 0.1);
-}
-.button-bar-button svg {
-  width: 20px;
-  height: 20px;
 }
 .action-buttons {
   display: flex;
@@ -314,20 +238,23 @@
 .action-button:hover {
   color: white;
 }
+.message-input-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 921px;
+  margin: 0 auto;
+}
 .message-input {
-  flex-grow: 1;
+  width: 100%;
+  height: 40px;
   background-color: #292929;
   border: 1px solid #666666;
   border-radius: 4px;
   padding: 9px 12px;
   color: white;
   font-size: 14px;
-  height: 40px;
-  resize: none;
-  width: 100%;
-  max-width: 921px;
-  margin: 0 auto;
   box-sizing: border-box;
+  padding-right: 36px; /* space for send button */
 }
 .message-input::placeholder {
   color: #999999;
@@ -337,11 +264,15 @@
   border-color: #0078D4;
 }
 .send-button {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
   width: 20px;
   height: 20px;
   padding: 0;
-  background: none;
   border: none;
+  background: none;
   cursor: pointer;
   color: #D6D6D6;
   display: flex;
@@ -351,49 +282,18 @@
 .send-button:hover {
   color: white;
 }
-.message-file {
-  margin-top: 8px;
-}
-.message-image {
-  max-width: 300px;
-  max-height: 200px;
+
+/* The small floating emoji picker */
+.emoji-picker {
+  position: absolute;
+  bottom: 50px;
+  left: 0;
+  background-color: #333;
+  padding: 8px;
+  border: 1px solid #666;
   border-radius: 4px;
-  margin-bottom: 4px;
-}
-.file-name {
-  font-size: 12px;
-  color: rgba(255, 255, 255, 0.7);
-}
-.file-download {
-  display: flex;
-  align-items: center;
+  z-index: 999;
+  display: grid;
+  grid-template-columns: repeat(3, min-content);
   gap: 8px;
-  color: #0078D4;
-  text-decoration: none;
-  font-size: 14px;
-}
-.file-download:hover {
-  text-decoration: underline;
-}
-.file-download svg {
-  flex-shrink: 0;
-}
-.button-bar-action {
-  width: 24px;
-  height: 24px;
-  background: none;
-  border: none;
-  padding: 0;
-  cursor: pointer;
-  color: #D6D6D6;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.button-bar-action:hover {
-  color: white;
-}
-.button-bar-action svg {
-  width: 20px;
-  height: 20px;
 }
