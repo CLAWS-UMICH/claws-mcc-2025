@@ -113,7 +113,7 @@ const Messages = () => {
       setContacts((prevContacts) =>
         prevContacts.map((contact) => {
           if (contact.id === selectedContactId) {
-            const newMessages: Message[] = loadedMessages.map((doc: any, index: number) => {
+            const loadedAsMessages = loadedMessages.map((doc: any, index: number) => {
               const date = new Date(doc.timestamp);
               const shortTime = date.toLocaleTimeString("en-US", {
                 hour: "numeric",
@@ -128,15 +128,17 @@ const Messages = () => {
               };
             });
 
+            const mergedMessages = [...contact.messages, ...loadedAsMessages];
+            const finalLastMsg =
+              mergedMessages.length > 0
+                ? mergedMessages[mergedMessages.length - 1]
+                : null;
+
             return {
               ...contact,
-              messages: newMessages,
-              lastMessage: newMessages.length
-                ? newMessages[newMessages.length - 1].content
-                : contact.lastMessage,
-              timestamp: newMessages.length
-                ? newMessages[newMessages.length - 1].timestamp
-                : contact.timestamp,
+              messages: mergedMessages,
+              lastMessage: finalLastMsg ? finalLastMsg.content : contact.lastMessage,
+              timestamp: finalLastMsg ? finalLastMsg.timestamp : contact.timestamp,
             };
           }
           return contact;
