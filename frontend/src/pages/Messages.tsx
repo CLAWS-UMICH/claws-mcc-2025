@@ -25,6 +25,7 @@ interface Contact {
   timestamp: string;
   initials?: string;
   color?: string;
+  fetched: boolean; 
   messages: Message[];
 }
 
@@ -43,6 +44,7 @@ const Messages = () => {
       timestamp: "7:20 PM",
       initials: "S",
       color: "#0078D4",
+      fetched: false,
       messages: [
         { id: 1, sender: "Steve", content: "Hey, how's the mission going?", timestamp: "7:20 PM" },
       ]
@@ -54,6 +56,7 @@ const Messages = () => {
       timestamp: "7:28 PM",
       initials: "A",
       color: "#009688",
+      fetched: false,
       messages: [
         { id: 1, sender: "Alex", content: "Where should I go next?", timestamp: "7:28 PM" },
       ]
@@ -65,6 +68,7 @@ const Messages = () => {
       timestamp: "7:22 PM",
       initials: "L",
       color: "#333333",
+      fetched: false,
       messages: [
         { id: 1, sender: "LMCC", content: "Mission control standing by.", timestamp: "7:22 PM", isLMCC: true },
       ]
@@ -78,24 +82,24 @@ const Messages = () => {
     // Default room
     socket.emit("join_room", { room: "MESSAGING" });
     
-    // Listen for new messages from the server
+    // Listen for newly sent messages (real-time)
     socket.on("new_message", (msgDoc: any) => {
       setContacts((prevContacts) =>
         prevContacts.map((contact) => {
           if (contact.id === msgDoc.sent_to) {
             const date = new Date(msgDoc.timestamp);
             const shortTime = date.toLocaleTimeString("en-US", {
-            hour: "numeric",
-            minute: "2-digit",
-          });
+              hour: "numeric",
+              minute: "2-digit",
+            });
 
-            const newId = contact.messages.length + 1;
             const newMsg: Message = {
-              id: newId,
+              id: contact.messages.length + 1,
               sender: msgDoc.from,
               content: msgDoc.message,
               timestamp: shortTime,
             };
+
             return {
               ...contact,
               messages: [...contact.messages, newMsg],
@@ -108,34 +112,38 @@ const Messages = () => {
       );
     });
 
+    // Listen for older messages loaded from DB
     socket.on("load_messages", (data: any) => {
-      const loadedMessages = data.messages;
+      const loadedMessages = data.messages || [];
       setContacts((prevContacts) =>
         prevContacts.map((contact) => {
           if (contact.id === selectedContactId) {
             const loadedAsMessages = loadedMessages.map((doc: any, index: number) => {
-              const date = new Date(doc.timestamp);
-              const shortTime = date.toLocaleTimeString("en-US", {
+              const dateObj = new Date(doc.timestamp);
+              const shortTime = dateObj.toLocaleTimeString("en-US", {
                 hour: "numeric",
                 minute: "2-digit",
               });
-
               return {
-                id: index + 1,
+                id: contact.messages.length + index + 1,
                 sender: doc.from,
                 content: doc.message,
                 timestamp: shortTime,
               };
             });
 
+            // Merge or append the loaded messages
             const mergedMessages = [...contact.messages, ...loadedAsMessages];
+
             const finalLastMsg =
               mergedMessages.length > 0
                 ? mergedMessages[mergedMessages.length - 1]
                 : null;
 
+            // Mark this contact as fetched so we don't fetch again
             return {
               ...contact,
+              fetched: true,
               messages: mergedMessages,
               lastMessage: finalLastMsg ? finalLastMsg.content : contact.lastMessage,
               timestamp: finalLastMsg ? finalLastMsg.timestamp : contact.timestamp,
@@ -146,6 +154,7 @@ const Messages = () => {
       );
     });
 
+
     return () => {
       socket.off("new_message");
       socket.off("load_messages");
@@ -154,10 +163,12 @@ const Messages = () => {
 
   const handleSelectContact = (contact: Contact) => {
     setSelectedContactId(contact.id);
-    socket.emit("get_messages", {
-      room: "MESSAGING",
-      contact_id: contact.id,
-    });
+    if (!contact.fetched) {
+      socket.emit("get_messages", {
+        room: "MESSAGING",
+        contact_id: contact.id,
+      });
+    }
   };
 
 
