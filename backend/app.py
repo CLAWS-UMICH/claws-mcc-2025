@@ -137,7 +137,7 @@ def handle_send_to_hololens(_data):
 
 @socketio.on('join_room')
 def handle_join_room(_data):
-    room = _data['room']  # Room name to join
+    room = _data['room']  # Room name to join { room: "NAV" }
     join_room(room)
     active_rooms.add(room)
     logging.info(f"Client {request.sid} joined room: {room}")
@@ -213,6 +213,21 @@ def handle_send_to_room(_data):
             }
         }
         data = mock_data
+    elif room == "NAV":
+        mock_waypoint = {
+          "room": "NAV",
+          "use": "PUT",
+          "data" : {
+            "id": 1,
+            "location": {
+              "lat": 123,
+              "long": 123
+            },
+            "type": 1,
+            "author": 1
+          }
+        }
+        data = _data
     logging.info(f"Sent message to room {room}: {data}")
     emit('room_data', {'data': data}, room=room)
 

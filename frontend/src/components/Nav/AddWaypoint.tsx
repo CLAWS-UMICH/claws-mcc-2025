@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import './AddWaypoint.css';
-import { Waypoint, WaypointType } from './types';
+import { Waypoint, WaypointType, AuthorType } from './types';
 
 interface AddWaypointProps {
   waypoints: Waypoint[];
   setWaypoints: React.Dispatch<React.SetStateAction<Waypoint[]>>;
+  sendWaypoint: ( waypoint : Waypoint ) => void;
 }
 
-const AddWaypoint: React.FC<AddWaypointProps> = ({ waypoints, setWaypoints }) => {
+const AddWaypoint: React.FC<AddWaypointProps> = ({ waypoints, setWaypoints, sendWaypoint }) => {
   const [showModal, setShowModal] = useState(false);
   const [formData, setFormData] = useState<{
     title: string;
@@ -40,11 +41,18 @@ const AddWaypoint: React.FC<AddWaypointProps> = ({ waypoints, setWaypoints }) =>
         lat: parseFloat(formData.lat),
         long: parseFloat(formData.long)
       },
-      type: formData.type
+      type: formData.type,
+      author: AuthorType.LMCC // In LMCC form, so assume LMCC
     };
 
     // Add the new waypoint to the list
     setWaypoints([...waypoints, newWaypoint]);
+    
+    console.log("Sending waypoint", newWaypoint)
+    console.log(typeof(newWaypoint))
+    console.log(typeof(sendWaypoint))
+    // Send the new waypoint to AR
+    sendWaypoint(newWaypoint);
 
     // Reset form and close modal
     setFormData({
