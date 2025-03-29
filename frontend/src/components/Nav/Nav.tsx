@@ -56,7 +56,7 @@ const Nav: React.FC = () => {
         }
       }
 
-      socket.emit("send_to_room", { room: "NAV", ar_waypoint });
+      socket.emit("send_to_room", ar_waypoint );
       console.log("Waypoint sent:", ar_waypoint);
   };
 
