@@ -2,7 +2,6 @@ from dotenv import load_dotenv
 from routes.api import api_routes
 from routes.home import home_routes
 from flask import Flask, g, request
-
 from flask_cors import CORS
 from pymongo import MongoClient, errors
 from flask_socketio import SocketIO, join_room, leave_room, emit
@@ -10,6 +9,7 @@ import os
 import logging
 import json
 import uuid
+
 
 app = Flask(__name__)
 socketio = SocketIO(app, cors_allowed_origins="*")
@@ -26,7 +26,6 @@ logging.basicConfig(level=logging.INFO, format='%(levelname)s - %(message)s')
 # Register the routes
 home_routes(app)
 api_routes(app)
-
 
 # load env
 load_dotenv()
