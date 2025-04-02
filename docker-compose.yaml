@@ -7,9 +7,11 @@ services:
       - "5173:5173"
     volumes:
       - ./frontend:/app
-    command: sh -c "echo \"Starting MCC!\" && npm install && npm run dev"
+    command: sh -c "echo \"Starting MCC!\" && npm install && npm run dev -- --host 0.0.0.0"
     depends_on:
       - backend
+    networks:
+      - claws-network
 
   backend:
     build:
@@ -21,3 +23,10 @@ services:
       - "8080:8080"
     environment:
       - PYTHONUNBUFFERED=1
+      - MONGO_URI=mongodb://localhost:27017/
+    networks:
+      - claws-network
+
+networks:
+  claws-network:
+    driver: bridge

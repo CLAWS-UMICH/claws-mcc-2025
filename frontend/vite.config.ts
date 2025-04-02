@@ -12,5 +12,12 @@ export default defineConfig({
       port: 5173,
       protocol: 'ws',
     },
+    proxy: {
+      '/socket.io': {
+        target: 'http://backend:8080',
+        changeOrigin: true,
+        ws: true,
+      }
+    },
   },
 })

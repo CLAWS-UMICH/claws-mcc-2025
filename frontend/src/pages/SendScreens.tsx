@@ -48,8 +48,11 @@ function SendScreens() {
     console.log(`Connecting to send image "${title}" to astronaut ${astronaut_id}...`);
 
     try {
-      // Connect to WebSocket server
-      const socket = io('http://backend:8080');
+      // Connect to WebSocket server using the same origin as the page
+      // This will route through the browser to the backend via the Docker port mapping
+      const socketUrl = window.location.protocol + '//' + window.location.host;
+      console.log(`Connecting to socket at: ${socketUrl}`);
+      const socket = io(socketUrl);
 
       // Wait for the connection to establish
       socket.on('connect', async () => {
