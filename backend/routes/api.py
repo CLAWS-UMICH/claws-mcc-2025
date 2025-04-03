@@ -27,12 +27,10 @@ def api_routes(app):
 
         notifs = notifications.find()
         notifs = list(notifs)
-    
 
     # click mark as done
     @app.route('/notifications/mark_done', methods=['POST'])
     def mark_notifications():
-
         # mark all notifs as read this is pseudocode rn
         result = db.notifications.update_one(
             {"$set": {"read": True}}
@@ -43,4 +41,5 @@ def api_routes(app):
     def respond():
         data = request.get_json()
         response = data.get("response")
+        # idk...
         # lol this is wrong
