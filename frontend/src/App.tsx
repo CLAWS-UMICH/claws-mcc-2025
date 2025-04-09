@@ -4,6 +4,7 @@ import { io } from 'socket.io-client';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Vitals from './components/vitals/Vitals.tsx';
 import BackendDemo from './pages/BackendDemo';
+import PRScreen from './pages/PRScreen';
 import './App.css';
 import './components/vitals/Vitals.css';
 
@@ -40,6 +41,7 @@ function App() {
           <Route path="/" element={<BackendDemo />} />
           <Route path="/vitals" element={<Vitals />} />
           <Route path="/sendscreens" element={<SendScreens />} />
+          <Route path="/prscreen" element={<PRScreen />} />
         </Routes>
       </Router>
     </>

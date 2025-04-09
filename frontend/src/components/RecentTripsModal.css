@@ -1,0 +1,271 @@
+/* Recent Trips Modal Styles */
+.modal-overlay {
+    position: fixed; /* Sit on top */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7); /* Dim background */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000; /* Ensure it's above everything else */
+    backdrop-filter: blur(5px); /* Optional blur effect */
+}
+
+.modal-content {
+    background-color: #101010; /* Dark background like cards */
+    color: #e0e0e0;
+    border-radius: 10px;
+    border: 1px solid #444;
+    padding: 25px 30px;
+    width: 90%;
+    max-width: 800px; /* Limit maximum width */
+    max-height: 85vh; /* Limit maximum height */
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.4);
+    overflow: hidden; /* Prevent content breaking out */
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #383838;
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+}
+
+.modal-header h2 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: #f0f0f0;
+}
+
+.close-modal-btn {
+    background: none;
+    border: none;
+    color: #aaa;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 0 5px;
+    line-height: 1;
+}
+.close-modal-btn:hover {
+    color: #fff;
+}
+
+.modal-body {
+    flex-grow: 1; /* Allow body to take available space */
+    overflow-y: auto; /* Enable scrolling for trip list */
+     /* Custom scrollbar for modal body */
+    scrollbar-width: thin;
+    scrollbar-color: #555 #222;
+}
+.modal-body::-webkit-scrollbar { width: 8px; }
+.modal-body::-webkit-scrollbar-track { background: #222; border-radius: 4px;}
+.modal-body::-webkit-scrollbar-thumb { background-color: #555; border-radius: 4px; border: 2px solid #222; }
+.modal-body::-webkit-scrollbar-thumb:hover { background-color: #777; }
+
+.modal-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 10px 15px; /* Add some padding */
+    background-color: #181818; /* Slightly different background for actions */
+    border-radius: 6px;
+}
+
+.select-all-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    color: #ccc;
+    cursor: pointer;
+}
+
+.delete-selected-btn {
+    background-color: #d9534f; /* Red delete button */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 8px 15px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.delete-selected-btn:hover:not(:disabled) {
+    background-color: #c9302c; /* Darker red on hover */
+}
+.delete-selected-btn:disabled {
+    background-color: #555;
+    color: #999;
+    cursor: not-allowed;
+}
+.delete-selected-btn .delete-icon {
+    color: white; /* Ensure icon matches text */
+}
+
+
+.modal-trip-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.modal-trip-item {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 15px;
+    border-bottom: 1px solid #2a2a2a; /* Separator line */
+    transition: background-color 0.15s ease;
+}
+.modal-trip-item:last-child {
+    border-bottom: none;
+}
+.modal-trip-item.selected {
+    background-color: rgba(0, 170, 255, 0.1); /* Light blue highlight */
+}
+.modal-trip-item:hover {
+    background-color: #202020; /* Hover effect */
+}
+
+
+.trip-checkbox {
+    /* Style checkboxes to look better */
+    appearance: none;
+    -webkit-appearance: none;
+    background-color: #252525;
+    border: 1px solid #555;
+    padding: 8px; /* Size of the checkbox */
+    border-radius: 3px;
+    display: inline-block;
+    position: relative;
+    cursor: pointer;
+    flex-shrink: 0; /* Prevent shrinking */
+}
+.trip-checkbox:checked {
+    background-color: #00aaff; /* Checkbox checked color */
+    border-color: #0088cc;
+}
+/* Checkmark */
+.trip-checkbox:checked::after {
+    content: '\2714'; /* Checkmark character */
+    font-size: 12px;
+    font-weight: bold;
+    color: #fff;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+/* Indeterminate state for Select All */
+.trip-checkbox:indeterminate {
+    background-color: #00aaff;
+    border-color: #0088cc;
+}
+/* Minus sign for indeterminate */
+.trip-checkbox:indeterminate::after {
+     content: '';
+     width: 10px;
+     height: 2px;
+     background-color: white;
+     position: absolute;
+     left: 50%;
+     top: 50%;
+     transform: translate(-50%, -50%);
+}
+
+
+.trip-checkbox.large-checkbox {
+    padding: 10px; /* Slightly larger for 'Select All' */
+}
+
+.trip-info {
+    flex-grow: 1; /* Take remaining space */
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.trip-info-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: #aaaaaa;
+}
+.trip-info-header span:first-child {
+    font-weight: 500;
+    color: #ccc;
+}
+
+.trip-info-stats {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+}
+
+.trip-info-stats > div {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    flex-basis: 0;
+    flex-grow: 1;
+}
+
+.trip-info-stats label {
+    font-size: 10px;
+    color: #999999;
+    text-transform: uppercase;
+}
+
+.trip-info-stats span {
+    font-size: 13px;
+    font-weight: 500;
+    color: #e0e0e0;
+}
+
+.delete-trip-btn {
+    background: none;
+    border: none;
+    color: #888;
+    cursor: pointer;
+    font-size: 18px; /* Icon size */
+    padding: 5px;
+    line-height: 1;
+    transition: color 0.2s ease;
+    flex-shrink: 0; /* Prevent shrinking */
+}
+.delete-trip-btn:hover {
+    color: #d9534f; /* Red on hover */
+}
+.delete-trip-btn .delete-icon {
+    color: inherit; /* Inherit color from button */
+    font-size: 16px; /* Adjust icon size if needed */
+}
+
+.no-trips-message {
+    text-align: center;
+    color: #888;
+    padding: 30px;
+    font-style: italic;
+}
+
+/* Optional Footer Styles */
+/* .modal-footer {
+    border-top: 1px solid #383838;
+    padding-top: 15px;
+    margin-top: 20px;
+    text-align: right;
+} */
