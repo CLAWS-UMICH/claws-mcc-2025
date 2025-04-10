@@ -1,0 +1,125 @@
+/* notifications-settings.css */
+.notifications-settings {
+    background-color: #1e1e1e;
+    color: #ffffff;
+    width: 280px;
+    padding: 16px;
+    border-radius: 8px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  }
+  
+  .settings-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .settings-header h2 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+  }
+  
+  .close-button {
+    background: none;
+    border: none;
+    color: #999;
+    font-size: 20px;
+    cursor: pointer;
+  }
+  
+  .setting-item {
+    display: flex;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  .settings-group .setting-item:last-child {
+    border-bottom: none;
+  }
+  
+  .setting-icon {
+    margin-right: 12px;
+    color: #aaa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .setting-content {
+    flex: 1;
+  }
+  
+  .setting-label {
+    font-size: 14px;
+    margin-bottom: 2px;
+  }
+  
+  .setting-description {
+    font-size: 12px;
+    color: #999;
+    line-height: 1.3;
+  }
+  
+  .settings-section {
+    margin: 16px 0;
+  }
+  
+  .section-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+  
+  .section-title-text {
+    font-size: 14px;
+    font-weight: 500;
+    color: #fff;
+  }
+  
+  .section-description {
+    font-size: 12px;
+    color: #999;
+    margin-top: 2px;
+  }
+  
+  .settings-group {
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 6px;
+    margin: 8px 0;
+    padding: 4px 8px;
+  }
+  
+  /* Toggle switch styling */
+  .toggle {
+    position: relative;
+    width: 36px;
+    height: 20px;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  
+  .toggle.on {
+    background-color: #4a69ff;
+  }
+  
+  .toggle-slider {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 16px;
+    height: 16px;
+    background-color: white;
+    border-radius: 50%;
+    transition: transform 0.2s;
+  }
+  
+  .toggle.on .toggle-slider {
+    transform: translateX(16px);
+  }
+  

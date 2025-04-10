@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { io } from 'socket.io-client';
 import './App.css';
+import NotificationsSettings from './components/NotificationsSettings';
 
 function App() {
   useEffect(() => {
@@ -29,9 +30,9 @@ function App() {
   }, []);
 
   return (
-    <>
-      <h1>Emma Rocks!</h1>
-    </>
+    <div className="app">
+      <NotificationsSettings />
+    </div>
   );
 }
 
