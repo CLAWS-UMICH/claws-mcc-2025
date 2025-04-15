@@ -171,3 +171,32 @@
 .settings-button:hover {
   opacity: 1;
 }
+
+/* Layout the image and text side-by-side */
+.notification-item.with-thumbnail {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+/* Thumbnail image styling */
+.notification-thumbnail {
+  width: 74px;
+  height: 96px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+/* Ensure message + actions stack vertically */
+.notification-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Buttons arranged horizontally */
+.notification-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}

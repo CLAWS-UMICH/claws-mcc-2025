@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import './NotificationPanel.css';
 import NotificationsSettings from './NotificationsSettings';
+import sampleImage from './image.png';
+
 
 // Define the Notification type
 export interface Notification {
@@ -46,14 +48,12 @@ const NotificationPanel: React.FC<NotificationPanelProps> = ({
   const combinedNotifications = [...localNotifications, ...notifications];
 
   const handleMarkAllAsRead = () => {
-    // Mark all local notifications as read
     const updatedLocal = localNotifications.map((n) => ({
       ...n,
       isUnread: false,
     }));
     setLocalNotifications(updatedLocal);
   
-    // Call the external callback if provided
     onMarkAllAsRead?.();
   };
   
@@ -137,16 +137,20 @@ const NotificationPanel: React.FC<NotificationPanelProps> = ({
                         </span>
                       </div>
                       {items.map((notif) => (
-                        <div key={notif.id} className="notification-item">
+                        <div key={notif.id} className="notification-item with-thumbnail">
+                        <img src={sampleImage} alt="Sample" className="notification-thumbnail" />
+                        <div className="notification-content">
                           <p className="notification-message">{notif.message}</p>
                           {category === 'Vitals' && (
-                            <div style={{ display: 'flex', gap: '8px' }}>
+                            <div className="notification-actions">
                               <button className="action-button">Open</button>
                               <button className="action-button">Share</button>
                             </div>
                           )}
                         </div>
+                      </div>                      
                       ))}
+
                     </div>
                   )
                 )}
