@@ -1,0 +1,38 @@
+.notifications-button {
+  position: fixed;
+  top: 20px;
+  right: 70px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #a7a9b5;
+  border: none;
+  color: white;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s, background-color 0.2s;
+  padding: 0;
+}
+
+.notifications-button:hover {
+  transform: scale(1.1);
+  background-color: #5a79ff;
+}
+
+.notifications-button:active {
+  transform: scale(0.95);
+}
+
+.notification-badge {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  width: 12px;
+  height: 12px;
+  background-color: #ff4a4a;
+  border-radius: 50%;
+  border: 2px solid #1e1e1e;
+} 

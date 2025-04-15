@@ -1,0 +1,28 @@
+
+.settings-button {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #a7a9b5;
+    border: none;
+    color: white;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s, background-color 0.2s;
+    padding: 0;
+  }
+  
+  .settings-button:hover {
+    transform: scale(1.1);
+    background-color: #5a79ff;
+  }
+  
+  .settings-button:active {
+    transform: scale(0.95);
+  }

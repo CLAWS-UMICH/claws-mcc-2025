@@ -1,9 +1,16 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { io } from 'socket.io-client';
 import './App.css';
 import NotificationsSettings from './components/NotificationsSettings';
+import SettingsButton from './components/SettingsButton';
+import NotificationsButton from './components/NotificationsButton';
+import NotificationsPanel from './components/NotificationsPanel';
 
 function App() {
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
+  const [hasUnreadNotifications, setHasUnreadNotifications] = useState(false);
+
   useEffect(() => {
     // Connect to the Socket.IO server
     const socket = io('http://localhost:8080');
@@ -19,7 +26,8 @@ function App() {
     // Listen for messages sent to the VITALS room
     socket.on('room_data', (data) => {
       console.log('Message received in VITALS room:', data);
-      // Handle the data received, like updating state or UI
+      // When receiving a notification, set hasUnreadNotifications to true
+      setHasUnreadNotifications(true);
     });
 
     // Clean up connection on component unmount
@@ -31,7 +39,22 @@ function App() {
 
   return (
     <div className="app">
-      <NotificationsSettings />
+      <NotificationsButton 
+        onClick={() => setIsNotificationsOpen(true)}
+        hasUnread={hasUnreadNotifications}
+      />
+      <SettingsButton onClick={() => setIsSettingsOpen(true)} />
+      <NotificationsPanel 
+        isOpen={isNotificationsOpen}
+        onClose={() => {
+          setIsNotificationsOpen(false);
+          setHasUnreadNotifications(false);
+        }}
+      />
+      <NotificationsSettings 
+        isOpen={isSettingsOpen}
+        onClose={() => setIsSettingsOpen(false)}
+      />
     </div>
   );
 }
