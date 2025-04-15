@@ -1,15 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { io } from 'socket.io-client';
 import './App.css';
-import NotificationsSettings from './components/NotificationsSettings';
-import SettingsButton from './components/SettingsButton';
-import NotificationsButton from './components/NotificationsButton';
-import NotificationsPanel from './components/NotificationsPanel';
+import NotificationPanel from './components/Notification/NotificationPanel';
+import { Notification } from './components/Notification/NotificationPanel';
 
 function App() {
-  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
-  const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
-  const [hasUnreadNotifications, setHasUnreadNotifications] = useState(false);
+  const [notifications, setNotifications] = useState<Notification[]>([]);
+  const [showPanel, setShowPanel] = useState(true);
 
   useEffect(() => {
     // Connect to the Socket.IO server
@@ -26,8 +23,15 @@ function App() {
     // Listen for messages sent to the VITALS room
     socket.on('room_data', (data) => {
       console.log('Message received in VITALS room:', data);
-      // When receiving a notification, set hasUnreadNotifications to true
-      setHasUnreadNotifications(true);
+      // Handle the data received, like updating state or UI
+
+      const newNotification: Notification = {
+        id: Date.now(),
+        category: 'Vitals',
+        message: data.message,
+        isUnread: true,
+      };
+      setNotifications((prev) => [...prev, newNotification]);
     });
 
     // Clean up connection on component unmount
@@ -37,24 +41,22 @@ function App() {
     };
   }, []);
 
+  // "Mark all as read" logic
+  const handleMarkAllAsRead = () => {
+    setNotifications((prev) =>
+      prev.map((n) => ({ ...n, isUnread: false }))
+    );
+  };
+
   return (
     <div className="app">
-      <NotificationsButton 
-        onClick={() => setIsNotificationsOpen(true)}
-        hasUnread={hasUnreadNotifications}
-      />
-      <SettingsButton onClick={() => setIsSettingsOpen(true)} />
-      <NotificationsPanel 
-        isOpen={isNotificationsOpen}
-        onClose={() => {
-          setIsNotificationsOpen(false);
-          setHasUnreadNotifications(false);
-        }}
-      />
-      <NotificationsSettings 
-        isOpen={isSettingsOpen}
-        onClose={() => setIsSettingsOpen(false)}
-      />
+      {showPanel && (
+        <NotificationPanel
+          notifications={notifications}
+          onClose={() => setShowPanel(false)}
+          onMarkAllAsRead={handleMarkAllAsRead}
+        />
+      )}
     </div>
   );
 }

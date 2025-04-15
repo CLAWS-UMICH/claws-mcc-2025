@@ -13,9 +13,6 @@ const SoundIcon = () => <svg viewBox="0 0 24 24" width="20" height="20" fill="cu
 const EmergencyIcon = () => <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>;
 const AlertsIcon = () => <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M10.01 21.01c0 1.1.89 1.99 1.99 1.99s1.99-.89 1.99-1.99h-3.98zm8.87-4.19V11c0-3.25-2.25-5.97-5.29-6.69v-.72C13.59 2.71 12.88 2 12 2s-1.59.71-1.59 1.59v.72C7.37 5.03 5.12 7.75 5.12 11v5.82L3 18.94V20h18v-1.06l-2.12-2.12zM16 13.01h-3v3h-2v-3H8V11h3V8h2v3h3v2.01z"/></svg>;
 const AllNotificationsIcon = () => <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>;
-const SystemIcon = () => <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M15 9H9v6h6V9zm-2 4h-2v-2h2v2zm8-2V9h-2V7c0-1.1-.9-2-2-2h-2V3h-2v2h-2V3H9v2H7c-1.1 0-2 .9-2 2v2H3v2h2v2H3v2h2v2c0 1.1.9 2 2 2h2v2h2v-2h2v2h2v-2h2c1.1 0 2-.9 2-2v-2h2v-2h-2v-2h2zm-4 6H7V7h10v10z"/></svg>;
-const LockIcon = () => <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>;
-const GroupIcon = () => <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"/></svg>;
 
 // Types
 interface NotificationSettings {
@@ -54,8 +51,12 @@ interface SettingSectionProps {
   children: React.ReactNode;
 }
 
+<<<<<<< HEAD:frontend/src/components/NotificationsSettings.tsx
 interface NotificationSettingsProps {
   isOpen: boolean;
+=======
+interface NotificationsSettingsProps {
+>>>>>>> 7adc2193c0bc2d7a554a4a10082ae75ab3e7c7de:frontend/src/components/Notification/NotificationsSettings.tsx
   onClose: () => void;
 }
 
@@ -108,7 +109,11 @@ const SettingSection: React.FC<SettingSectionProps> = ({
 };
 
 // Main Notifications Settings Component
+<<<<<<< HEAD:frontend/src/components/NotificationsSettings.tsx
 const NotificationsSettings: React.FC<NotificationSettingsProps> = ({ isOpen, onClose }) => {
+=======
+const NotificationsSettings: React.FC<NotificationsSettingsProps> = ({ onClose }) => {
+>>>>>>> 7adc2193c0bc2d7a554a4a10082ae75ab3e7c7de:frontend/src/components/Notification/NotificationsSettings.tsx
   // State for notification settings
   const [settings, setSettings] = useState<NotificationSettings>({
     appNotifications: false,
@@ -129,11 +134,26 @@ const NotificationsSettings: React.FC<NotificationSettingsProps> = ({ isOpen, on
 
   // Toggle handler
   const handleToggle = (setting: keyof NotificationSettings) => {
-    setSettings({
-      ...settings,
-      [setting]: !settings[setting]
-    });
+    if (setting === 'appNotifications') {
+      const newValue = !settings.appNotifications;
+      setSettings({
+        ...settings,
+        appNotifications: newValue,
+        tasks: newValue,
+        navigation: newValue,
+        vitals: newValue,
+        samples: newValue,
+        screenSending: newValue,
+        remoteConnect: newValue,
+      });
+    } else {
+      setSettings({
+        ...settings,
+        [setting]: !settings[setting],
+      });
+    }
   };
+  
 
   // Load settings from localStorage on mount
   useEffect(() => {
@@ -148,6 +168,7 @@ const NotificationsSettings: React.FC<NotificationSettingsProps> = ({ isOpen, on
     localStorage.setItem('notificationSettings', JSON.stringify(settings));
   }, [settings]);
 
+<<<<<<< HEAD:frontend/src/components/NotificationsSettings.tsx
   // Close panel handler
   const handleClose = () => {
     onClose();
@@ -258,6 +279,82 @@ const NotificationsSettings: React.FC<NotificationSettingsProps> = ({ isOpen, on
           onChange={() => handleToggle('groupNotifications')}
         />
       </div>
+=======
+  return (
+    <div className="notifications-settings">
+      
+      <SettingItem 
+        icon={<BellIcon />}
+        label="App Notifications" 
+        description="Get notifications from all apps and all users"
+        value={settings.appNotifications}
+        onChange={() => handleToggle('appNotifications')}
+      />
+      
+      <SettingSection>
+        <SettingItem 
+          icon={<TasksIcon />}
+          label="Tasks" 
+          value={settings.tasks}
+          onChange={() => handleToggle('tasks')}
+        />
+        <SettingItem 
+          icon={<NavigationIcon />}
+          label="Navigation" 
+          value={settings.navigation}
+          onChange={() => handleToggle('navigation')}
+        />
+        <SettingItem 
+          icon={<VitalsIcon />}
+          label="Vitals" 
+          value={settings.vitals}
+          onChange={() => handleToggle('vitals')}
+        />
+        <SettingItem 
+          icon={<SamplesIcon />}
+          label="Samples" 
+          value={settings.samples}
+          onChange={() => handleToggle('samples')}
+        />
+        <SettingItem 
+          icon={<ScreenIcon />}
+          label="Screen Sending" 
+          value={settings.screenSending}
+          onChange={() => handleToggle('screenSending')}
+        />
+        <SettingItem 
+          icon={<RemoteIcon />}
+          label="Remote Connect" 
+          value={settings.remoteConnect}
+          onChange={() => handleToggle('remoteConnect')}
+        />
+      </SettingSection>
+      
+      <SettingSection 
+        title="Notification Sounds" 
+        description="Adjust the sound settings for different types of notifications"
+      >
+        <SettingItem 
+          icon={<EmergencyIcon />}
+          label="Emergency" 
+          value={settings.emergency}
+          onChange={() => handleToggle('emergency')}
+        />
+        <SettingItem 
+          icon={<AlertsIcon />}
+          label="Alerts" 
+          value={settings.alerts}
+          onChange={() => handleToggle('alerts')}
+        />
+        <SettingItem 
+          icon={<AllNotificationsIcon />}
+          label="All Notifications" 
+          value={settings.allNotifications}
+          onChange={() => handleToggle('allNotifications')}
+        />
+      </SettingSection>
+      
+>>>>>>> 7adc2193c0bc2d7a554a4a10082ae75ab3e7c7de:frontend/src/components/Notification/NotificationsSettings.tsx
     </div>
   );
 };
