@@ -51,12 +51,7 @@ interface SettingSectionProps {
   children: React.ReactNode;
 }
 
-<<<<<<< HEAD:frontend/src/components/NotificationsSettings.tsx
-interface NotificationSettingsProps {
-  isOpen: boolean;
-=======
 interface NotificationsSettingsProps {
->>>>>>> 7adc2193c0bc2d7a554a4a10082ae75ab3e7c7de:frontend/src/components/Notification/NotificationsSettings.tsx
   onClose: () => void;
 }
 
@@ -109,11 +104,7 @@ const SettingSection: React.FC<SettingSectionProps> = ({
 };
 
 // Main Notifications Settings Component
-<<<<<<< HEAD:frontend/src/components/NotificationsSettings.tsx
-const NotificationsSettings: React.FC<NotificationSettingsProps> = ({ isOpen, onClose }) => {
-=======
 const NotificationsSettings: React.FC<NotificationsSettingsProps> = ({ onClose }) => {
->>>>>>> 7adc2193c0bc2d7a554a4a10082ae75ab3e7c7de:frontend/src/components/Notification/NotificationsSettings.tsx
   // State for notification settings
   const [settings, setSettings] = useState<NotificationSettings>({
     appNotifications: false,
@@ -168,118 +159,6 @@ const NotificationsSettings: React.FC<NotificationsSettingsProps> = ({ onClose }
     localStorage.setItem('notificationSettings', JSON.stringify(settings));
   }, [settings]);
 
-<<<<<<< HEAD:frontend/src/components/NotificationsSettings.tsx
-  // Close panel handler
-  const handleClose = () => {
-    onClose();
-  };
-
-  if (!isOpen) return null;
-
-  return (
-    <div className="notifications-settings-modal">
-      <div className="notifications-settings">
-        <div className="settings-header">
-          <h2>Notifications Settings</h2>
-          <button className="close-button" onClick={handleClose}>×</button>
-        </div>
-        
-        <SettingItem 
-          icon={<BellIcon />}
-          label="App Notifications" 
-          description="Get notifications from all apps and all users"
-          value={settings.appNotifications}
-          onChange={() => handleToggle('appNotifications')}
-        />
-        
-        <SettingSection>
-          <SettingItem 
-            icon={<TasksIcon />}
-            label="Tasks" 
-            value={settings.tasks}
-            onChange={() => handleToggle('tasks')}
-          />
-          <SettingItem 
-            icon={<NavigationIcon />}
-            label="Navigation" 
-            value={settings.navigation}
-            onChange={() => handleToggle('navigation')}
-          />
-          <SettingItem 
-            icon={<VitalsIcon />}
-            label="Vitals" 
-            value={settings.vitals}
-            onChange={() => handleToggle('vitals')}
-          />
-          <SettingItem 
-            icon={<SamplesIcon />}
-            label="Samples" 
-            value={settings.samples}
-            onChange={() => handleToggle('samples')}
-          />
-          <SettingItem 
-            icon={<ScreenIcon />}
-            label="Screen Sending" 
-            value={settings.screenSending}
-            onChange={() => handleToggle('screenSending')}
-          />
-          <SettingItem 
-            icon={<RemoteIcon />}
-            label="Remote Connect" 
-            value={settings.remoteConnect}
-            onChange={() => handleToggle('remoteConnect')}
-          />
-        </SettingSection>
-        
-        <SettingSection 
-          title="Notification Sounds" 
-          description="Adjust the sound settings for different types of notifications"
-        >
-          <SettingItem 
-            icon={<EmergencyIcon />}
-            label="Emergency" 
-            value={settings.emergency}
-            onChange={() => handleToggle('emergency')}
-          />
-          <SettingItem 
-            icon={<AlertsIcon />}
-            label="Alerts" 
-            value={settings.alerts}
-            onChange={() => handleToggle('alerts')}
-          />
-          <SettingItem 
-            icon={<AllNotificationsIcon />}
-            label="All Notifications" 
-            value={settings.allNotifications}
-            onChange={() => handleToggle('allNotifications')}
-          />
-        </SettingSection>
-        
-        <SettingItem 
-          icon={<SystemIcon />}
-          label="System Diagnostics" 
-          description="Get notified when there are software issues in LMCC systems"
-          value={settings.systemDiagnostics}
-          onChange={() => handleToggle('systemDiagnostics')}
-        />
-        
-        <SettingItem 
-          icon={<LockIcon />}
-          label="Show on Lock Screen" 
-          description="View notifications on screen saver or locked screen mode"
-          value={settings.showOnLockScreen}
-          onChange={() => handleToggle('showOnLockScreen')}
-        />
-        
-        <SettingItem 
-          icon={<GroupIcon />}
-          label="Group notifications" 
-          description="Notifications from the same app are grouped"
-          value={settings.groupNotifications}
-          onChange={() => handleToggle('groupNotifications')}
-        />
-      </div>
-=======
   return (
     <div className="notifications-settings">
       
@@ -354,7 +233,6 @@ const NotificationsSettings: React.FC<NotificationsSettingsProps> = ({ onClose }
         />
       </SettingSection>
       
->>>>>>> 7adc2193c0bc2d7a554a4a10082ae75ab3e7c7de:frontend/src/components/Notification/NotificationsSettings.tsx
     </div>
   );
 };

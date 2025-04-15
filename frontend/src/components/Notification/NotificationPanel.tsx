@@ -2,15 +2,18 @@ import React, { useState } from 'react';
 import './NotificationPanel.css';
 import NotificationsSettings from './NotificationsSettings';
 import sampleImage from './image.png';
+import { 
+  Notification,
+  NotificationSeverity,
+  NotificationType
+} from '../../types/notifications';
 
-
-// Define the Notification type
-export interface Notification {
-  id: string | number;
-  category: string;
-  message: string;
-  isUnread: boolean;
-}
+// Icons for different severities
+const SEVERITY_ICONS = {
+  [NotificationSeverity.EMERGENCY]: '⚠️',
+  [NotificationSeverity.ALERT]: '🔔',
+  [NotificationSeverity.LOW]: 'ℹ️'
+};
 
 // Props
 interface NotificationPanelProps {
@@ -34,16 +37,25 @@ const NotificationPanel: React.FC<NotificationPanelProps> = ({
       category: 'Vitals',
       message: 'New Geosample waypoint added by Roger',
       isUnread: true,
+      severity: NotificationSeverity.ALERT,
+      type: NotificationType.ACTION,
+      persistence: 'PERSISTENT',
+      timestamp: new Date(),
+      metadata: { subcategory: 'Waypoints' }
     },
     {
       id: 'static-2',
       category: 'Vitals',
       message: 'New Geosample waypoint added by Roger',
       isUnread: true,
+      severity: NotificationSeverity.LOW,
+      type: NotificationType.ACTION,
+      persistence: 'PERSISTENT',
+      timestamp: new Date(),
+      metadata: { subcategory: 'Waypoints' }
     },
   ]);
   
-
   // Merge hardcoded + backend
   const combinedNotifications = [...localNotifications, ...notifications];
 
@@ -57,12 +69,13 @@ const NotificationPanel: React.FC<NotificationPanelProps> = ({
     onMarkAllAsRead?.();
   };
   
-
-
   const unreadNotifications = combinedNotifications.filter((n) => n.isUnread);
   const pastNotifications = combinedNotifications.filter((n) => !n.isUnread);
   const activeNotifications =
     activeTab === 'unread' ? unreadNotifications : pastNotifications;
+
+  // Format timestamp
+  const formatTime = () => 'now';
 
   return (
     <div className="notification-panel">
@@ -81,38 +94,20 @@ const NotificationPanel: React.FC<NotificationPanelProps> = ({
             )}
           </div>
 
-          {/* Tabs + Gear Icon */}
+          {/* Tabs */}
           <div className="notification-tabs-wrapper">
-            <div className="notification-panel-tabs-with-settings">
-              <div className="notification-panel-tabs">
-                <button
-                  className={`tab-button ${activeTab === 'unread' ? 'active' : ''}`}
-                  onClick={() => setActiveTab('unread')}
-                >
-                  Unread
-                </button>
-                <button
-                  className={`tab-button ${activeTab === 'past' ? 'active' : ''}`}
-                  onClick={() => setActiveTab('past')}
-                >
-                  Past
-                </button>
-              </div>
-
+            <div className="notification-panel-tabs">
               <button
-                className="settings-button"
-                onClick={() => setViewMode('settings')}
-                aria-label="Settings"
+                className={`tab-button ${activeTab === 'unread' ? 'active' : ''}`}
+                onClick={() => setActiveTab('unread')}
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
-                  fill="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path d="M19.14,12.94a7.48,7.48,0,0,0,.05-1l1.65-1.28a.5.5,0,0,0,.12-.66l-1.57-2.72a.5.5,0,0,0-.61-.22l-1.94.78a6.9,6.9,0,0,0-1.67-.97L14.5,4.6A.5.5,0,0,0,14,4H10a.5.5,0,0,0-.5.6L9.53,7.09a6.9,6.9,0,0,0-1.67.97L5.92,7.28a.5.5,0,0,0-.61.22L3.74,10.22a.5.5,0,0,0,.12.66l1.65,1.28a7.48,7.48,0,0,0,0,2l-1.65,1.28a.5.5,0,0,0-.12.66l1.57,2.72a.5.5,0,0,0,.61.22l1.94-.78a6.9,6.9,0,0,0,1.67.97l.06,2.49A.5.5,0,0,0,10,20h4a.5.5,0,0,0,.5-.6l-.06-2.49a6.9,6.9,0,0,0,1.67-.97l1.94.78a.5.5,0,0,0,.61-.22l1.57-2.72a.5.5,0,0,0-.12-.66ZM12,15.5A3.5,3.5,0,1,1,15.5,12,3.5,3.5,0,0,1,12,15.5Z" />
-                </svg>
+                Unread
+              </button>
+              <button
+                className={`tab-button ${activeTab === 'past' ? 'active' : ''}`}
+                onClick={() => setActiveTab('past')}
+              >
+                Past
               </button>
             </div>
           </div>
@@ -137,20 +132,42 @@ const NotificationPanel: React.FC<NotificationPanelProps> = ({
                         </span>
                       </div>
                       {items.map((notif) => (
-                        <div key={notif.id} className="notification-item with-thumbnail">
-                        <img src={sampleImage} alt="Sample" className="notification-thumbnail" />
-                        <div className="notification-content">
-                          <p className="notification-message">{notif.message}</p>
-                          {category === 'Vitals' && (
-                            <div className="notification-actions">
-                              <button className="action-button">Open</button>
-                              <button className="action-button">Share</button>
+                        <div 
+                          key={notif.id} 
+                          className={`notification-item with-thumbnail`}
+                        >
+                          <img src={sampleImage} alt="" className="notification-thumbnail" />
+                          <div className="notification-content">
+                            <p className="notification-message">{notif.message}</p>
+                            <div className="notification-meta">
+                              {notif.metadata?.subcategory && (
+                                <>
+                                  <span>{notif.metadata.subcategory}</span>
+                                  <span className="dot-separator">•</span>
+                                </>
+                              )}
+                              <span>{formatTime()}</span>
                             </div>
-                          )}
-                        </div>
-                      </div>                      
+                            {notif.type === NotificationType.ACTION && (
+                              <div className="notification-actions">
+                                <button className="action-button">
+                                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M14,3V5H17.59L7.76,14.83L9.17,16.24L19,6.41V10H21V3M19,19H5V5H12V3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V12H19V19Z" />
+                                  </svg>
+                                  Open
+                                </button>
+                                <button className="action-button">
+                                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M18,16.08C17.24,16.08 16.56,16.38 16.04,16.85L8.91,12.7C8.96,12.47 9,12.24 9,12C9,11.76 8.96,11.53 8.91,11.3L15.96,7.19C16.5,7.69 17.21,8 18,8A3,3 0 0,0 21,5A3,3 0 0,0 18,2A3,3 0 0,0 15,5C15,5.24 15.04,5.47 15.09,5.7L8.04,9.81C7.5,9.31 6.79,9 6,9A3,3 0 0,0 3,12A3,3 0 0,0 6,15C6.79,15 7.5,14.69 8.04,14.19L15.16,18.34C15.11,18.55 15.08,18.77 15.08,19C15.08,20.61 16.39,21.91 18,21.91C19.61,21.91 20.92,20.61 20.92,19A2.92,2.92 0 0,0 18,16.08Z" />
+                                  </svg>
+                                  Share
+                                </button>
+                              </div>
+                            )}
+                          </div>
+                          <button className="notification-menu" title="More options">⋯</button>
+                        </div>                      
                       ))}
-
                     </div>
                   )
                 )}
