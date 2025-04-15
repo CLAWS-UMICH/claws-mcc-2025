@@ -13,9 +13,6 @@ const SoundIcon = () => <svg viewBox="0 0 24 24" width="20" height="20" fill="cu
 const EmergencyIcon = () => <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>;
 const AlertsIcon = () => <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M10.01 21.01c0 1.1.89 1.99 1.99 1.99s1.99-.89 1.99-1.99h-3.98zm8.87-4.19V11c0-3.25-2.25-5.97-5.29-6.69v-.72C13.59 2.71 12.88 2 12 2s-1.59.71-1.59 1.59v.72C7.37 5.03 5.12 7.75 5.12 11v5.82L3 18.94V20h18v-1.06l-2.12-2.12zM16 13.01h-3v3h-2v-3H8V11h3V8h2v3h3v2.01z"/></svg>;
 const AllNotificationsIcon = () => <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>;
-const SystemIcon = () => <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M15 9H9v6h6V9zm-2 4h-2v-2h2v2zm8-2V9h-2V7c0-1.1-.9-2-2-2h-2V3h-2v2h-2V3H9v2H7c-1.1 0-2 .9-2 2v2H3v2h2v2H3v2h2v2c0 1.1.9 2 2 2h2v2h2v-2h2v2h2v-2h2c1.1 0 2-.9 2-2v-2h2v-2h-2v-2h2zm-4 6H7V7h10v10z"/></svg>;
-const LockIcon = () => <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>;
-const GroupIcon = () => <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"/></svg>;
 
 // Types
 interface NotificationSettings {
@@ -52,6 +49,10 @@ interface SettingSectionProps {
   title?: string;
   description?: string;
   children: React.ReactNode;
+}
+
+interface NotificationsSettingsProps {
+  onClose: () => void;
 }
 
 // Toggle Component
@@ -103,7 +104,7 @@ const SettingSection: React.FC<SettingSectionProps> = ({
 };
 
 // Main Notifications Settings Component
-const NotificationsSettings: React.FC = () => {
+const NotificationsSettings: React.FC<NotificationsSettingsProps> = ({ onClose }) => {
   // State for notification settings
   const [settings, setSettings] = useState<NotificationSettings>({
     appNotifications: false,
@@ -124,11 +125,26 @@ const NotificationsSettings: React.FC = () => {
 
   // Toggle handler
   const handleToggle = (setting: keyof NotificationSettings) => {
-    setSettings({
-      ...settings,
-      [setting]: !settings[setting]
-    });
+    if (setting === 'appNotifications') {
+      const newValue = !settings.appNotifications;
+      setSettings({
+        ...settings,
+        appNotifications: newValue,
+        tasks: newValue,
+        navigation: newValue,
+        vitals: newValue,
+        samples: newValue,
+        screenSending: newValue,
+        remoteConnect: newValue,
+      });
+    } else {
+      setSettings({
+        ...settings,
+        [setting]: !settings[setting],
+      });
+    }
   };
+  
 
   // Load settings from localStorage on mount
   useEffect(() => {
@@ -143,18 +159,8 @@ const NotificationsSettings: React.FC = () => {
     localStorage.setItem('notificationSettings', JSON.stringify(settings));
   }, [settings]);
 
-  // Close panel handler
-  const handleClose = () => {
-    // Implement your close logic here
-    console.log('Close panel');
-  };
-
   return (
     <div className="notifications-settings">
-      <div className="settings-header">
-        <h2>Notifications Settings</h2>
-        <button className="close-button" onClick={handleClose}>×</button>
-      </div>
       
       <SettingItem 
         icon={<BellIcon />}
@@ -227,29 +233,6 @@ const NotificationsSettings: React.FC = () => {
         />
       </SettingSection>
       
-      <SettingItem 
-        icon={<SystemIcon />}
-        label="System Diagnostics" 
-        description="Get notified when there are software issues in LMCC systems"
-        value={settings.systemDiagnostics}
-        onChange={() => handleToggle('systemDiagnostics')}
-      />
-      
-      <SettingItem 
-        icon={<LockIcon />}
-        label="Show on Lock Screen" 
-        description="View notifications on screen saver or locked screen mode"
-        value={settings.showOnLockScreen}
-        onChange={() => handleToggle('showOnLockScreen')}
-      />
-      
-      <SettingItem 
-        icon={<GroupIcon />}
-        label="Group notifications" 
-        description="Notifications from the same app are grouped"
-        value={settings.groupNotifications}
-        onChange={() => handleToggle('groupNotifications')}
-      />
     </div>
   );
 };
