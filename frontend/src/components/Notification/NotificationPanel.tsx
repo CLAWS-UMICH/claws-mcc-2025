@@ -84,30 +84,50 @@ const NotificationPanel: React.FC<NotificationPanelProps> = ({
           {/* Header */}
           <div className="notification-panel-header">
             <h2>Notifications</h2>
-            <button className="mark-all" onClick={handleMarkAllAsRead}>
-              Mark all as read
-            </button>
-            {onClose && (
-              <button className="close-button" onClick={onClose}>
-                ✕
+            <div className="header-actions">
+              <button className="mark-all" onClick={handleMarkAllAsRead}>
+                Mark all as read
               </button>
-            )}
+              {onClose && (
+                <button className="close-button" onClick={onClose}>
+                  ✕
+                </button>
+              )}
+            </div>
           </div>
 
           {/* Tabs */}
           <div className="notification-tabs-wrapper">
-            <div className="notification-panel-tabs">
+            <div className="notification-panel-tabs-with-settings">
+              <div className="notification-panel-tabs">
+                <button
+                  className={`tab-button ${activeTab === 'unread' ? 'active' : ''}`}
+                  onClick={() => setActiveTab('unread')}
+                >
+                  Unread
+                </button>
+                <button
+                  className={`tab-button ${activeTab === 'past' ? 'active' : ''}`}
+                  onClick={() => setActiveTab('past')}
+                >
+                  Past
+                </button>
+              </div>
+              
               <button
-                className={`tab-button ${activeTab === 'unread' ? 'active' : ''}`}
-                onClick={() => setActiveTab('unread')}
+                className="settings-button"
+                onClick={() => setViewMode('settings')}
+                aria-label="Settings"
               >
-                Unread
-              </button>
-              <button
-                className={`tab-button ${activeTab === 'past' ? 'active' : ''}`}
-                onClick={() => setActiveTab('past')}
-              >
-                Past
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M19.14,12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l1.92-1.46c.17-.13.23-.36.14-.55l-1.82-3.16c-.09-.19-.3-.26-.5-.18l-2.26.91c-.47-.35-.98-.63-1.52-.83L14.54,3c-.3-.03-.41-.17-.41-.34V1.88c0-.19-.16-.34-.35-.34h-3.63c-.19 0-.35.16-.35.34v1.56c0 .17-.12.31-.31.34l-.57.14c-.62.21-1.17.49-1.67.85l-2.26-.91c-.2-.08-.41 0-.5.18L2.68,7.2c-.09.19-.03.42.14.55l1.92,1.46c-.05.3-.07.62-.07.94s.02.64.07.94l-1.92,1.46c-.17.13-.23.36-.14.55l1.82,3.16c.09.19.3.26.5.18l2.26-.91c.47.35.98.63 1.52.83l.57,2.73c.03.17.14.3.31.34l3.72.7c.17.04.34-.07.37-.24l.55-2.63c.52-.21 1.02-.48 1.47-.83l2.26.91c.2.08.41 0 .5-.18l1.82-3.16c.09-.19.03-.42-.14-.55l-1.92-1.46zm-7.14,2.56c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z" />
+                </svg>
               </button>
             </div>
           </div>
