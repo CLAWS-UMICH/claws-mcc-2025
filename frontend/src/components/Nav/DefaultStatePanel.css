@@ -1,0 +1,142 @@
+/* Panel Container */
+.panel {
+    background-color: black;
+    z-index: 1000;
+    height: 100vh;
+}
+
+.panel-container {
+    background-color: black;
+    height: 100vh;
+    color: white;
+    width: 33%;
+}
+
+.panel-contents {
+    margin-left: 5%;
+    margin-right: 5%;
+}
+
+/* Search Bar */
+.search-bar-section {
+    padding-bottom: 3.5%;
+}
+
+.search-bar {
+    display: flex;
+    align-items: center;
+    border: 1px solid #555;
+    margin-top: 5%;
+    margin-bottom: 1.25%;
+}
+
+.search-bar input {
+    flex-grow: 1;
+    padding: 8px;
+    background-color: black;
+    border: 1px solid #555;
+}
+
+.search-bar input:focus {
+    border: 1px solid #555;
+}
+
+.close-btn {
+    position: absolute;
+    top: 0%;
+    right: -3%;
+    background-color: transparent;
+    color: white;
+    border: none;
+    font-size: 16px;
+    font-weight: normal;
+}
+
+.close-btn:active {
+    border: transparent;
+}
+
+.icon {
+    width: 24px;
+    height: auto;
+}
+
+.icon-header {
+    display: flex;
+    gap: 3px;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.filter-section {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    margin-bottom: 2.5%;
+}
+
+.filter-section text {
+    font-size: 20px;
+}
+
+.type-section {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.type-section label {
+    font-size: 18px;
+}
+
+.distance-section {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.distance-section label {
+    font-size: 18px;
+}
+
+.scrolling-container {
+    overflow-y: auto;
+    max-height: 35vh;
+}
+
+.stations-section {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    margin-top: 5%;
+}
+
+
+
+.scrolling-container text {
+    font-size: 20px;
+}
+
+.stations-header, .samples-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.station {
+    border: 1px solid #4F4F4F;
+    border-radius: 15px;
+    padding-left: 3%;
+    padding-bottom: 5%;
+}
+
+.station-location {
+    display: flex;
+    align-items: center;
+}
+
+.tag {
+    background-color: #333;
+    padding: 4px 8px;
+    border-radius: 12px;
+}

@@ -1,4 +1,4 @@
-import './styles/SuitAtmosphere.css';
+import './styles/suitAtmosphere.css';
 import Dcu from './DCU';
 import SuitTemperature from './SuitTemperature';
 import PersonalData from './PersonalData';

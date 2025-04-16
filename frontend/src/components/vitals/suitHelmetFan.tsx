@@ -1,7 +1,7 @@
 import React from "react";
 import "./styles/suitHelmetFan.css";
 import fanIcon from "../../../public/mode_fan.png";
-import './styles/SuitAtmosphere.css';
+import './styles/suitAtmosphere.css';
 
 const getImageIndex = (rpm) => {
   const minRPM = 20000;

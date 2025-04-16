@@ -2,6 +2,7 @@ import SendScreens from './pages/SendScreens.tsx'
 import React, { useEffect } from 'react';
 import { io } from 'socket.io-client';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import Nav from './components/Nav/Nav.tsx';
 import Vitals from './components/vitals/Vitals.tsx';
 import BackendDemo from './pages/BackendDemo';
 import './App.css';
@@ -44,6 +45,7 @@ function App() {
           <Route path="/" element={<BackendDemo />} />
           <Route path="/vitals" element={<Vitals />} />
           <Route path="/sendscreens" element={<SendScreens />} />
+          <Route path="/nav" element={<Nav />} />
           <Route path="/messaging" element={<Messaging />} />"
         </Routes>
       </Router>
