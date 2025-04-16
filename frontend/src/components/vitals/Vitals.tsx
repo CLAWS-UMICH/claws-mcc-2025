@@ -75,7 +75,7 @@ const Vitals = ({ }) => {
           <div>
             <div className="toast-header">
               <span className="toast-icon">⚠️</span>
-              <span className="toast-text">Time Left for {printAlerts[alert.vital]} is Low</span>
+              <span className="toast-text">Time Left for {printAlerts[alert.vital as keyof typeof printAlerts]} is Low</span>
             </div>
             <div className="toast-body">
             </div>

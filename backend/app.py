@@ -37,7 +37,7 @@ mongo_uri = os.environ.get('MONGO_URI')
 client = MongoClient(mongo_uri)
 
 # Store connected HoloLens clients with unique IDs
-next_hololens_id = 0
+next_hololens_id = 1
 available_ids = set()  # set of disconnected available IDs for future hololens
 hololens_clients = {}  # client ID -> hololens unique ID
 
