@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { io, Socket } from 'socket.io-client';
 
-// Define an interface for the data structure
+// Define the interface for messages
 interface MessagingData {
   room: string;
   use: string;
@@ -15,118 +15,134 @@ interface MessagingData {
 
 const Messaging: React.FC = () => {
   const [socket, setSocket] = useState<Socket | null>(null);
-  const [message, setMessage] = useState<string>('');
+  const [message, setMessage] = useState('');
   const [receivedData, setReceivedData] = useState<MessagingData | null>(null);
-
-  // Message counters for each group
-  const [messageIdA1, setMessageIdA1] = useState<number>(1);
-  const [messageIdA2, setMessageIdA2] = useState<number>(1);
-  const [messageIdGroup, setMessageIdGroup] = useState<number>(1);
+  const [messageIdA1, setMessageIdA1] = useState(1);
+  const [messageIdA2, setMessageIdA2] = useState(1);
+  const [messageIdGroup, setMessageIdGroup] = useState(1);
 
   useEffect(() => {
-    // Connect to the Socket.IO server
     const newSocket = io(document.location.origin + '/');
     setSocket(newSocket);
 
-    // Join the MESSAGING room on connection
     newSocket.on('connect', () => {
       console.log('Connected to server');
       newSocket.emit('join_room', { room: 'MESSAGING' });
     });
 
-    // Listen for messages sent to the MESSAGING room
     newSocket.on('room_data', (data: MessagingData) => {
       console.log(`Message received in room ${data.room}:`, data);
-
-      // Switch on the `from` field to handle messages
-      switch (data.data.from) {
-        case 1:
-          console.log('Message from Astronaut 1:', data.data.message);
-          break;
-        case 2:
-          console.log('Message from Astronaut 2:', data.data.message);
-          break;
-        case 4:
-          console.log('Message from Group Chat:', data.data.message);
-          break;
-        default:
-          console.log('Unknown sender:', data.data.message);
-      }
-
-      setReceivedData(data); // Update state with received data
+      setReceivedData(data);
     });
 
-    // Clean up connection on component unmount
     return () => {
       newSocket.emit('leave_room', { room: 'MESSAGING' });
       newSocket.disconnect();
     };
   }, []);
 
-  // Function to send data to a HoloLens
   const sendToHoloLens = (hololensId: string, from: number) => {
-    if (socket) {
-      // Increment message_id based on the group
-      let messageId = 0;
-      if (from === 1) {
-        messageId = messageIdA1;
-        setMessageIdA1((prev) => prev + 1);
-      } else if (from === 2) {
-        messageId = messageIdA2;
-        setMessageIdA2((prev) => prev + 1);
-      } else if (from === 4) {
-        messageId = messageIdGroup;
-        setMessageIdGroup((prev) => prev + 1);
-      }
+    if (!socket) return;
 
-      const dataToSend: MessagingData = {
-        room: "MESSAGING", // Target HoloLens room ID
-        use: "SEND", // Example use case
-        data: {
-          message_id: messageId,
-          sent_to: parseInt(hololensId.replace('hololens_', '')), // Extract numeric ID
-          message: message,
-          from: 3
-        },
-      };
-
-      socket.emit('send_to_hololens', dataToSend);
-      console.log(`Data sent to ${hololensId} (from ${from}):`, dataToSend);
+    let messageId = 0;
+    if (from === 1) {
+      messageId = messageIdA1;
+      setMessageIdA1((prev) => prev + 1);
+    } else if (from === 2) {
+      messageId = messageIdA2;
+      setMessageIdA2((prev) => prev + 1);
+    } else if (from === 4) {
+      messageId = messageIdGroup;
+      setMessageIdGroup((prev) => prev + 1);
     }
+
+    const dataToSend: MessagingData = {
+      room: 'MESSAGING',
+      use: 'SEND',
+      data: {
+        message_id: messageId,
+        sent_to: parseInt(hololensId.replace('hololens_', '')) || 4,
+        message,
+        from: 3,
+      },
+    };
+
+    socket.emit('send_to_hololens', JSON.stringify(dataToSend));
+    console.log(`Sent to ${hololensId}:`, dataToSend);
   };
 
   return (
-    <div>
-      <h1>Messaging Room</h1>
-      <div>
-        <h2>Send Messages</h2>
+    <div style={{ backgroundColor: '#121212', color: 'white', minHeight: '100vh', padding: '2rem', fontFamily: 'sans-serif' }}>
+      <h1 style={{ textAlign: 'center', marginBottom: '2rem' }}>Messaging Room</h1>
+
+      <div style={{ maxWidth: '600px', margin: '0 auto' }}>
+        <h2>Send a Message</h2>
         <input
+          style={{
+            width: '100%',
+            padding: '0.75rem',
+            marginBottom: '1rem',
+            borderRadius: '4px',
+            border: '1px solid #444',
+            backgroundColor: '#1e1e1e',
+            color: 'white',
+          }}
           type="text"
           value={message}
           onChange={(e) => setMessage(e.target.value)}
-          placeholder="Enter message"
+          placeholder="Type your message here..."
         />
-        <button onClick={() => sendToHoloLens('hololens_1', 1)}>Send to Astronaut 1</button>
-        <button onClick={() => sendToHoloLens('hololens_2', 2)}>Send to Astronaut 2</button>
-        <button onClick={() => sendToHoloLens('groupchat', 4)}>Send to Group Chat</button>
-      </div>
-      <div>
-        <h2>Received Data</h2>
-        {receivedData ? (
-          <div>
-            <p>Room: {receivedData.room}</p>
-            <p>Use: {receivedData.use}</p>
-            <p>Message ID: {receivedData.data.message_id}</p>
-            <p>Sent To: {receivedData.data.sent_to}</p>
-            <p>Message: {receivedData.data.message}</p>
-            <p>From: {receivedData.data.from}</p>
-          </div>
-        ) : (
-          <p>No data received yet.</p>
-        )}
+        <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+          <button
+            style={buttonStyle}
+            onClick={() => sendToHoloLens('hololens_1', 1)}
+          >
+            Send to Astronaut 1
+          </button>
+          <button
+            style={buttonStyle}
+            onClick={() => sendToHoloLens('hololens_2', 2)}
+          >
+            Send to Astronaut 2
+          </button>
+          <button
+            style={buttonStyle}
+            onClick={() => sendToHoloLens('groupchat', 4)}
+          >
+            Send to Group Chat
+          </button>
+        </div>
+
+        <h2 style={{ marginTop: '2rem' }}>Received Message</h2>
+        <div style={{ backgroundColor: '#1e1e1e', padding: '1rem', borderRadius: '8px', marginTop: '1rem' }}>
+          {receivedData ? (
+            <>
+              <p><strong>Room:</strong> {receivedData.room}</p>
+              <p><strong>Use:</strong> {receivedData.use}</p>
+              <p><strong>Message ID:</strong> {receivedData.data.message_id}</p>
+              <p><strong>Sent To:</strong> {receivedData.data.sent_to}</p>
+              <p><strong>Message:</strong> {receivedData.data.message}</p>
+              <p><strong>From:</strong> {receivedData.data.from}</p>
+            </>
+          ) : (
+            <p style={{ color: '#888' }}>No messages received yet.</p>
+          )}
+        </div>
       </div>
     </div>
   );
+};
+
+const buttonStyle: React.CSSProperties = {
+  backgroundColor: '#0066ff',
+  color: 'white',
+  padding: '0.75rem 1rem',
+  border: 'none',
+  borderRadius: '4px',
+  cursor: 'pointer',
+  flex: '1',
+  minWidth: '150px',
+  transition: 'background-color 0.2s ease',
 };
 
 export default Messaging;

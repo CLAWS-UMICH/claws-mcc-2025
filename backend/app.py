@@ -112,18 +112,14 @@ def handle_hololens_connect():
 # Send data to a specific HoloLens by unique ID
 @socketio.on('send_to_hololens')
 def handle_send_to_hololens(_data):
-    target_room = _data['room']  # ID of the HoloLens to target
-    data = _data['data']  # Data to send to the HoloLens
-
-    # Parse the JSON string to remove escape characters
-    try:
-        parsed_data = json.loads(data)  # Parse the data to get a proper JSON object
-    except json.JSONDecodeError as e:
-        logging.error(f"Failed to parse data for {target_room}: {e}")
-        return
+    if isinstance(_data, str):
+        parsed_data = json.loads(_data)  # Parse the data if it's a JSON string
+    else:
+        parsed_data = _data  # Use the data directly if it's already a dictionary
+    target_room = parsed_data['room']
 
     # Send the parsed data to the target HoloLens
-    emit('hololens_data', {'data': parsed_data}, room=target_room)
+    emit('hololens_data', {'data': parsed_data}, room="hololens_1")
     logging.info(f"Sent message to hololens {target_room}: {parsed_data}")
 
 """
@@ -166,8 +162,11 @@ def ran(range_from, range_to):
 
 @socketio.on('send_to_room')
 def handle_send_to_room(_data):
-    room = _data['room']  # Room name to send the message to
-    # data = _data['message']  # Message to send
+    if isinstance(_data, str):
+        parsed_data = json.loads(_data)  # Parse the data if it's a JSON string
+    else:
+        parsed_data = _data  # Use the data directly if it's already a dictionary
+    room = parsed_data['room']  # Room name to send the message to
     # add mock data here
     if room == "VITALS":
         mock_data = {
@@ -212,9 +211,9 @@ def handle_send_to_room(_data):
                 ]
             }
         }
-        data = mock_data
-    logging.info(f"Sent message to room {room}: {data}")
-    emit('room_data', {'data': data}, room=room)
+        parsed_data = mock_data
+    logging.info(f"Sent message to room {room}: {parsed_data}")
+    emit('room_data', {'data': parsed_data}, room=room)
 
 
 if __name__ == '__main__':
