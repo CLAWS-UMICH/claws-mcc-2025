@@ -1,0 +1,80 @@
+.geosample-container {
+    padding: 16px;
+    background-color: #1e1e1e;
+    color: #fff;
+    border-radius: 8px;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header h3 {
+    margin: 0;
+}
+
+.status {
+    background-color: #00ff00;
+    color: #000;
+    padding: 4px 8px;
+    border-radius: 4px;
+}
+
+.info-row, .attributes-row {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 8px;
+}
+
+.photo-description {
+    display: flex;
+    gap: 16px;
+    margin-top: 16px;
+}
+
+.photo {
+    width: 300px;
+    height: auto;
+    border-radius: 8px;
+}
+
+.description-box {
+    flex-grow: 1;
+    background-color: #333333;
+    color: #fff;
+    border-radius: 8px;
+    padding: 8px;
+}
+
+.composition-bar {
+    display: flex;
+    margin-top: 16px;
+}
+
+.composition-item {
+    text-align: center;
+    padding: 4px;
+}
+
+.actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+}
+
+.export-button, .delete-button {
+    padding: 8px 16px;
+    border-radius: 4px;
+}
+
+.export-button {
+    background-color: #0078d4;
+    color: #fff;
+}
+
+.delete-button {
+    background-color: #d83b01;
+    color: #fff;
+}

@@ -7,6 +7,7 @@ import Vitals from './components/vitals/Vitals.tsx';
 import BackendDemo from './pages/BackendDemo';
 import './App.css';
 import './components/vitals/Vitals.css';
+import Geosamples from './components/geosamples/Geosamples.tsx';
 
 function App() {
   useEffect(() => {
@@ -14,11 +15,11 @@ function App() {
     const socket = io(document.location.origin + '/');
 
     // Join the VITALS room on connection
-    socket.on('connect', () => {
-      console.log('Connected to server');
+    socket.on("connect", () => {
+      console.log("Connected to server");
 
       // Join VITALS room
-      socket.emit('join_room', { room: 'VITALS' });
+      socket.emit("join_room", { room: "VITALS" });
     });
 
     // Listen for messages sent to the VITALS room
@@ -29,7 +30,7 @@ function App() {
 
     // Clean up connection on component unmount
     return () => {
-      socket.emit('leave_room', { room: 'VITALS' });
+      socket.emit("leave_room", { room: "VITALS" });
       socket.disconnect();
     };
   }, []);
@@ -42,6 +43,7 @@ function App() {
           <Route path="/vitals" element={<Vitals />} />
           <Route path="/sendscreens" element={<SendScreens />} />
           <Route path="/nav" element={<Nav />} />
+          <Route path="/geosamples" element={<Geosamples />} />
         </Routes>
       </Router>
     </>

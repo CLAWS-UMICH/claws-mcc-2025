@@ -27,3 +27,6 @@ dist-ssr
 cheat-sheet.txt
 
 backend/env
+
+__pycache__/
+*.pyc

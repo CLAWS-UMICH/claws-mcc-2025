@@ -5,17 +5,18 @@ import { fileURLToPath } from 'url'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
+import tailwindcss from "@tailwindcss/vite";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react()],
+  plugins: [react(), tailwindcss()],
   server: {
-    host: '0.0.0.0',
+    host: "0.0.0.0",
     port: 5173,
     hmr: {
-      host: 'localhost',
+      host: "localhost",
       port: 5173,
-      protocol: 'ws',
+      protocol: "ws",
     },
     proxy: {
       '/socket.io': {
@@ -32,4 +33,9 @@ export default defineConfig({
       ]
     },
   },
-})
+  resolve: {
+    alias: {
+      assets: path.resolve(__dirname, "./src/assets"),
+    },
+  },
+});
