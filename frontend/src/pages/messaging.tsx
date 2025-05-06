@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import { io, Socket } from 'socket.io-client';
+import React, { useState, useEffect } from 'react';
+import socket from '../socket';
 
 // Define the interface for messages
 interface MessagingData {
+  client: string;
   room: string;
-  use: string;
   data: {
     message_id: number;
     sent_to: number;
@@ -14,61 +14,68 @@ interface MessagingData {
 }
 
 const Messaging: React.FC = () => {
-  const [socket, setSocket] = useState<Socket | null>(null);
   const [message, setMessage] = useState('');
   const [receivedData, setReceivedData] = useState<MessagingData | null>(null);
-  const [messageIdA1, setMessageIdA1] = useState(1);
-  const [messageIdA2, setMessageIdA2] = useState(1);
-  const [messageIdGroup, setMessageIdGroup] = useState(1);
+  const [messageIdEV1, setMessageIdEV1] = useState(1);
+  const [messageIdEV2, setMessageIdEV2] = useState(1);
+  const [messageIdPR, setMessageIdPR] = useState(1);
 
   useEffect(() => {
-    const newSocket = io(document.location.origin + '/');
-    setSocket(newSocket);
+    // Join the MESSAGING room on component mount
+    socket.emit('join_room', { room: 'MESSAGING' });
 
-    newSocket.on('connect', () => {
-      console.log('Connected to server');
-      newSocket.emit('join_room', { room: 'MESSAGING' });
-    });
-
-    newSocket.on('room_data', (data: MessagingData) => {
+    // Listen for room data
+    socket.on('room_data', (data: MessagingData) => {
       console.log(`Message received in room ${data.room}:`, data);
       setReceivedData(data);
     });
 
+    // Clean up on component unmount
     return () => {
-      newSocket.emit('leave_room', { room: 'MESSAGING' });
-      newSocket.disconnect();
+      socket.emit('leave_room', { room: 'MESSAGING' });
+      socket.off('room_data');
     };
   }, []);
 
-  const sendToHoloLens = (hololensId: string, from: number) => {
+  const sendToClient = (clientId: number) => {
     if (!socket) return;
 
     let messageId = 0;
-    if (from === 1) {
-      messageId = messageIdA1;
-      setMessageIdA1((prev) => prev + 1);
-    } else if (from === 2) {
-      messageId = messageIdA2;
-      setMessageIdA2((prev) => prev + 1);
-    } else if (from === 4) {
-      messageId = messageIdGroup;
-      setMessageIdGroup((prev) => prev + 1);
+    let targetClient = '';
+
+    // Determine the target client and message ID
+    if (clientId === 1) {
+      targetClient = 'hololens_1'; // EV1
+      messageId = messageIdEV1;
+      setMessageIdEV1((prev) => prev + 1);
+    } else if (clientId === 2) {
+      targetClient = 'hololens_2'; // EV2
+      messageId = messageIdEV2;
+      setMessageIdEV2((prev) => prev + 1);
+    } else if (clientId === 3) {
+      targetClient = 'pr_client'; // PR
+      messageId = messageIdPR;
+      setMessageIdPR((prev) => prev + 1);
     }
 
     const dataToSend: MessagingData = {
+      client: targetClient,
       room: 'MESSAGING',
-      use: 'SEND',
       data: {
         message_id: messageId,
-        sent_to: parseInt(hololensId.replace('hololens_', '')) || 4,
+        sent_to: clientId,
         message,
-        from: 3,
+        from: 4, // 4 == LMCC
       },
     };
 
-    socket.emit('send_to_hololens', JSON.stringify(dataToSend));
-    console.log(`Sent to ${hololensId}:`, dataToSend);
+    // Emit the appropriate event
+    const eventName = clientId === 3 ? 'send_to_pr' : 'send_to_hololens';
+    socket.emit(eventName, JSON.stringify(dataToSend));
+    console.log(`Sent to ${targetClient}:`, dataToSend);
+
+    // Clear the input field after sending
+    setMessage('');
   };
 
   return (
@@ -95,21 +102,21 @@ const Messaging: React.FC = () => {
         <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
           <button
             style={buttonStyle}
-            onClick={() => sendToHoloLens('hololens_1', 1)}
+            onClick={() => sendToClient(1)}
           >
-            Send to Astronaut 1
+            Send to EV1
           </button>
           <button
             style={buttonStyle}
-            onClick={() => sendToHoloLens('hololens_2', 2)}
+            onClick={() => sendToClient(2)}
           >
-            Send to Astronaut 2
+            Send to EV2
           </button>
           <button
             style={buttonStyle}
-            onClick={() => sendToHoloLens('groupchat', 4)}
+            onClick={() => sendToClient(3)}
           >
-            Send to Group Chat
+            Send to PR
           </button>
         </div>
 
@@ -117,8 +124,8 @@ const Messaging: React.FC = () => {
         <div style={{ backgroundColor: '#1e1e1e', padding: '1rem', borderRadius: '8px', marginTop: '1rem' }}>
           {receivedData ? (
             <>
+              <p><strong>Client To:</strong> {receivedData.client}</p>
               <p><strong>Room:</strong> {receivedData.room}</p>
-              <p><strong>Use:</strong> {receivedData.use}</p>
               <p><strong>Message ID:</strong> {receivedData.data.message_id}</p>
               <p><strong>Sent To:</strong> {receivedData.data.sent_to}</p>
               <p><strong>Message:</strong> {receivedData.data.message}</p>
