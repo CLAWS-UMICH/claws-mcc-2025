@@ -1,15 +1,13 @@
 import React, {useEffect} from 'react';
 import { io } from 'socket.io-client';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import './App.css';
 
 // Import components
-import Messaging from './pages/messaging';
-import Dashboard from './pages/Dashboard';
-import Navigation from './pages/Nav/Nav';
-import VideoStream from './pages/VideoStream';
 import Messages from './pages/Messages';
-import Vitals from './pages/vitals/Vitals.tsx'
+import Vitals from './pages/vitals/Vitals';
+import Navigation from './pages/Navigation';
+import MainLayout from './components/MainLayout';
 
 function App() {
   useEffect(() => {
@@ -39,15 +37,22 @@ function App() {
 
   return (
     <Router>
-      <Routes>
-        <Route path="/" element={<Dashboard />} />
-        <Route path="/navigation" element={<Navigation />} />
-        <Route path="/vitals" element={<Vitals />} />
-        <Route path="/messaging" element={<Messaging />} />
-        <Route path="/messages" element={<Messages />} />
-        <Route path="/video-stream" element={<VideoStream />} />
-        <Route path="/video-stream" element={<VideoStream />} />
-      </Routes>
+      <div style={{ 
+        backgroundColor: '#121212', 
+        color: 'white', 
+        minHeight: '100vh', 
+        display: 'flex',
+        flexDirection: 'column'
+      }}>
+        <Navigation />
+        <MainLayout>
+          <Routes>
+            <Route path="/" element={<Navigate to="/vitals" replace />} />
+            <Route path="/vitals" element={<Vitals />} />
+            <Route path="/messages" element={<Messages />} />
+          </Routes>
+        </MainLayout>
+      </div>
     </Router>
   );
 }
