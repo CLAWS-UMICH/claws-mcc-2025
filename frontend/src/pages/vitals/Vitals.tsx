@@ -30,7 +30,7 @@ const Vitals = () => {
     // handle incoming telemetry
     socket.on('tss_update', (data: any) => {
       console.log('TSS Update:', data);
-      const telemetry = data.vitals.telemetry;
+      const telemetry = data.telemetry;
       // pick the EVA you want (here, eva1) and merge eva_time
       const payload = {
         ...telemetry.eva1,
