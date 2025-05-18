@@ -9,13 +9,26 @@ import { io, Socket } from 'socket.io-client';
 const Nav: React.FC = () => {
     const [isCollapsed, setIsCollapsed] = useState(false);
     const [waypoints, setWaypoints] = useState<Waypoint[]>([
-        { waypoint_id: 1, location: { lat: 29.565369133556835, long: -95.0819529674787 }, type: WaypointType.GEO, title: "Top Left" },
-        { waypoint_id: 2, location: { lat: 29.56476723137908, long: -95.08149860397305 }, type: WaypointType.NAV, title: "Waypoint 2" },
-        { waypoint_id: 3, location: { lat: 29.565249461045536, long: -95.08134679492866 }, type: WaypointType.STATION, title: "Waypoint 3" },
-        { waypoint_id: 4, location: { lat: 29.564939230058076, long: -95.08120752873609 }, type: WaypointType.DANGER, title: "Waypoint 4" },
-        { waypoint_id: 5, location: { lat: 29.565157705835315, long: -95.08070786870931 }, type: WaypointType.GEO, title: "Waypoint 5" },
-        { waypoint_id: 6, location: { lat: 29.564850123456789, long: -95.08100123456789 }, type: WaypointType.NAV, title: "Waypoint 6" },
-        { waypoint_id: 7, location: { lat: 29.56440830845782, long: -95.08071056957434 }, type: WaypointType.GEO, title: "Bottom Right" },
+        // { waypoint_id: 1, location: { lat: 29.565369133556835, long: -95.0819529674787 }, type: WaypointType.GEO, title: "Top Left" },
+        // { waypoint_id: 2, location: { lat: 29.56476723137908, long: -95.08149860397305 }, type: WaypointType.NAV, title: "Waypoint 2" },
+        // { waypoint_id: 3, location: { lat: 29.565249461045536, long: -95.08134679492866 }, type: WaypointType.STATION, title: "Waypoint 3" },
+        // { waypoint_id: 4, location: { lat: 29.564939230058076, long: -95.08120752873609 }, type: WaypointType.DANGER, title: "Waypoint 4" },
+        // { waypoint_id: 5, location: { lat: 29.565157705835315, long: -95.08070786870931 }, type: WaypointType.GEO, title: "Waypoint 5" },
+        // { waypoint_id: 6, location: { lat: 29.564850123456789, long: -95.08100123456789 }, type: WaypointType.NAV, title: "Waypoint 6" },
+        // { waypoint_id: 7, location: { lat: 29.56440830845782, long: -95.08071056957434 }, type: WaypointType.GEO, title: "Bottom Right" },
+        // { waypoint_id: 1, location: { lat: -5660, long: -9950 }, type: WaypointType.GEO, title: "TSS sample" },
+        {
+            waypoint_id: -1, // eva1 waypoint
+            location: { lat: -5660, long: -9980 },
+            type: WaypointType.GEO, // Using NAV type for EVAs
+            title: "EVA 1"
+        },
+        {
+            waypoint_id: -2, // eva2 waypoint
+            location: { lat: -5660, long: -9990 },
+            type: WaypointType.DANGER, // Using NAV type for EVAs
+            title: "EVA 2"
+        }
     ]);
 
     // TSS state
@@ -25,6 +38,7 @@ const Nav: React.FC = () => {
 
     // Initialize socket connection and TSS room
     useEffect(() => {
+
         // Create socket connection
         socketRef.current = io("http://localhost:8080");
         const socket = socketRef.current;
@@ -59,32 +73,71 @@ const Nav: React.FC = () => {
         };
     }, []);
 
+
     // Process TSS data - customize this function based on your needs
     const processTssData = (data) => {
-        if (!data) return;
+        if (!data || !data.imu) return;
 
-        // Example processing - adjust according to your needs
-        // This is where you could update waypoints, map data, etc. based on TSS input
+        // Process EVA1 data
+        if (data.imu.eva1) {
+            const { posx, posy } = data.imu.eva1;
+            console.log("EVA1 posx: ", posx);
+            console.log("EVA1 posy: ", posy);
+            // Convert IMU coordinates to lat/long
+            // const location = UTMtoLatLong(posx, posy);
+            const location = {
+                lat: posx,
+                long: posy
+            }
 
-        // Example: If the TSS data contains location information, you could update a specific waypoint
-        // This is just a hypothetical example and should be customized for your actual data format
-        /* 
-        if (data.values && data.values.length >= 2) {
-            const newLocation = {
-                lat: data.values[0],
-                long: data.values[1]
-            };
-            
-            // Update a specific waypoint (e.g., a vehicle position)
+            // Update EVA1 waypoint in waypoints array
             setWaypoints(prevWaypoints => {
-                // Find and update a specific waypoint (e.g., ID 1 for a vehicle)
-                return prevWaypoints.map(wp => 
-                    wp.waypoint_id === 1 ? {...wp, location: newLocation} : wp
-                );
+                const updatedWaypoints = prevWaypoints.map(waypoint => {
+                    if (waypoint.waypoint_id === -1) { // Assuming -1 is the ID for EVA1
+                        return {
+                            ...waypoint,
+                            location
+                        };
+                    }
+                    return waypoint;
+                });
+                return updatedWaypoints;
             });
         }
-        */
+
+        // Process EVA2 data
+        if (data.imu.eva2) {
+            const { posx, posy } = data.imu.eva2;
+            console.log("EVA2 posx: ", posx);
+            console.log("EVA2 posy: ", posy);
+            // Convert IMU coordinates to lat/long
+            // const location = UTMtoLatLong(posx, posy);
+            const location = {
+                lat: posx,
+                long: posy
+            }
+
+            // Update EVA2 waypoint in waypoints array
+            setWaypoints(prevWaypoints => {
+                const updatedWaypoints = prevWaypoints.map(waypoint => {
+                    if (waypoint.waypoint_id === -2) { // Assuming -2 is the ID for EVA2
+                        return {
+                            ...waypoint,
+                            location
+                        };
+                    }
+                    return waypoint;
+                });
+                return updatedWaypoints;
+            }
+            );
+
+        }
+
+        console.log("Updated waypoints: ", waypoints);
+
     };
+
 
     const togglePanel = () => {
         setIsCollapsed(!isCollapsed);
