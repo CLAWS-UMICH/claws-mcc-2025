@@ -5,7 +5,7 @@ import './App.css';
 // Import components
 import Messaging from './pages/Messaging';
 import Dashboard from './pages/Dashboard';
-import Navigation from './pages/Navigation';
+import Navigation from './pages/Nav/Nav';
 import VideoStream from './pages/VideoStream';
 
 function App() {

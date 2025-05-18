@@ -179,6 +179,51 @@ def handle_send_to_room(data):
     logging.info(f"Message broadcasted to room {room}: {message}")
 
 
+import socket
+import struct
+
+# Server IP and Port
+SERVER_IP = '10.0.0.4'  # replace with actual IP or '127.0.0.1' if local
+SERVER_PORT = 14141          # as used in your server code
+
+# Set up the UDP socket
+sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+sock.settimeout(1.0)  # optional timeout
+
+# Prepare the request buffer
+# Format: [4 bytes: time][4 bytes: command][4 bytes: data (optional, can be 0s)]
+
+# Send GET command 172 (e.g., for LIDAR)
+time = 0               # You can set a dummy time or real one
+command = 172          # This is your GET command
+data = 0               # optional data
+
+# Convert to big-endian bytes
+request = struct.pack('>III', time, command, data)
+
+# Send the request
+sock.sendto(request, (SERVER_IP, SERVER_PORT))
+
+try:
+    # Receive the response
+    response, addr = sock.recvfrom(4096)  # increase size if needed
+    print(f"Received {len(response)} bytes from {addr}")
+
+    # First 8 bytes: time (4) and command (4)
+    recv_time, recv_command = struct.unpack('>II', response[:8])
+    print(f"Time: {recv_time}, Command: {recv_command}")
+
+    # Rest is data — depends on the type (e.g., float[], etc.)
+    data_bytes = response[8:]
+
+    # Example: parse as list of floats
+    floats = struct.iter_unpack('>f', data_bytes)
+    values = [f[0] for f in floats]
+    print("Parsed float data:", values)
+
+except socket.timeout:
+    print("No response from server.")
+
 if __name__ == '__main__':
     socketio.run(app, host='0.0.0.0', port=8080,
                  debug=True, allow_unsafe_werkzeug=True)
