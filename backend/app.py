@@ -13,7 +13,7 @@ import uuid
 import random
 
 app = Flask(__name__)
-socketio = SocketIO(app, cors_allowed_origins="*")
+socketio = SocketIO(app, cors_allowed_origins="*", async_mode='threading')
 
 # set cors
 CORS(app)
@@ -178,51 +178,144 @@ def handle_send_to_room(data):
     emit('room_data', {'room': room, 'message': message}, room=room)
     logging.info(f"Message broadcasted to room {room}: {message}")
 
-
+import threading
+import time
 import socket
 import struct
+from flask_socketio import emit, join_room, leave_room
 
-# Server IP and Port
-SERVER_IP = '10.0.0.4'  # replace with actual IP or '127.0.0.1' if local
-SERVER_PORT = 14141          # as used in your server code
+# TSS Server configuration
+TSS_SERVER_IP = '10.0.0.4'  # Your TSS server IP
+TSS_SERVER_PORT = 14141     # Your TSS server port
+TSS_ROOM = 'tss_room'       # Name of the TSS room
+TSS_POLL_INTERVAL = 2.0     # Poll interval in seconds
 
-# Set up the UDP socket
-sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-sock.settimeout(1.0)  # optional timeout
+# Initialize the UDP socket for TSS communication
+tss_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+tss_sock.settimeout(TSS_POLL_INTERVAL)  # 1 second timeout
 
-# Prepare the request buffer
-# Format: [4 bytes: time][4 bytes: command][4 bytes: data (optional, can be 0s)]
+# Flag to control the background thread
+tss_polling_active = False
+tss_polling_thread = None
 
-# Send GET command 172 (e.g., for LIDAR)
-time = 0               # You can set a dummy time or real one
-command = 172          # This is your GET command
-data = 0               # optional data
+def poll_tss_server():
+    """Background task to poll the TSS server and broadcast data to the TSS room"""
+    global tss_polling_active
+    
+    logging.info("Starting TSS polling thread")
+    while tss_polling_active:
+        try:
+            # Prepare the TSS request (same as your example)
+            time_value = int(time.time())  # Use current time
+            command = 172                  # Your TSS command
+            data = 0                       # Optional data
+            
+            # Pack the request
+            request = struct.pack('>III', time_value, command, data)
+            
+            # Send the request to TSS server
+            tss_sock.sendto(request, (TSS_SERVER_IP, TSS_SERVER_PORT))
+            
+            # Receive the response
+            response, _ = tss_sock.recvfrom(4096)
+            
+            # Process the response
+            recv_time, recv_command = struct.unpack('>II', response[:8])
+            data_bytes = response[8:]
+            
+            # Parse as list of floats (adjust according to your data format)
+            floats = struct.iter_unpack('>f', data_bytes)
+            values = [f[0] for f in floats]
+            
+            # Prepare data for clients
+            tss_data = {
+                'timestamp': recv_time,
+                'command': recv_command,
+                'values': values
+            }
+            
+            # Broadcast to all clients in the TSS room
+            socketio.emit('tss_update', tss_data, room=TSS_ROOM)
+            logging.info(f"Broadcasted TSS update to {TSS_ROOM}: command={recv_command}, data_length={len(values)}")
+            
+        except socket.timeout:
+            logging.warning("TSS server did not respond")
+        except Exception as e:
+            logging.error(f"Error polling TSS server: {e}")
+        
+        # Wait until next poll interval
+        time.sleep(TSS_POLL_INTERVAL)
+    
+    logging.info("TSS polling thread stopped")
 
-# Convert to big-endian bytes
-request = struct.pack('>III', time, command, data)
+# Start the TSS polling thread
+def start_tss_polling():
+    global tss_polling_active, tss_polling_thread
+    
+    if not tss_polling_active:
+        tss_polling_active = True
+        tss_polling_thread = threading.Thread(target=poll_tss_server)
+        tss_polling_thread.daemon = True  # Thread will exit when main thread exits
+        tss_polling_thread.start()
+        logging.info("TSS polling started")
 
-# Send the request
-sock.sendto(request, (SERVER_IP, SERVER_PORT))
+# Stop the TSS polling thread
+def stop_tss_polling():
+    global tss_polling_active
+    
+    if tss_polling_active:
+        tss_polling_active = False
+        if tss_polling_thread:
+            tss_polling_thread.join(timeout=2.0)  # Wait for thread to finish
+        logging.info("TSS polling stopped")
 
-try:
-    # Receive the response
-    response, addr = sock.recvfrom(4096)  # increase size if needed
-    print(f"Received {len(response)} bytes from {addr}")
+# Socket events for TSS room
+@socketio.on('join_tss_room')
+def handle_join_tss_room():
+    """Handle client request to join the TSS room"""
+    sid = request.sid
+    join_room(TSS_ROOM)
+    
+    # Track this room in the client's rooms
+    if sid not in client_rooms:
+        client_rooms[sid] = set()
+    client_rooms[sid].add(TSS_ROOM)
+    
+    # Start polling if this is the first client
+    if len(client_rooms) == 1:
+        start_tss_polling()
+    
+    logging.info(f"Client {sid} joined TSS room")
+    emit('join_response', {'status': 'success', 'room': TSS_ROOM})
 
-    # First 8 bytes: time (4) and command (4)
-    recv_time, recv_command = struct.unpack('>II', response[:8])
-    print(f"Time: {recv_time}, Command: {recv_command}")
+@socketio.on('leave_tss_room')
+def handle_leave_tss_room():
+    """Handle client request to leave the TSS room"""
+    sid = request.sid
+    leave_room(TSS_ROOM)
+    
+    # Update room tracking
+    if sid in client_rooms and TSS_ROOM in client_rooms[sid]:
+        client_rooms[sid].remove(TSS_ROOM)
+    
+    # Check if we should stop polling (no clients left)
+    has_tss_clients = any(TSS_ROOM in rooms for rooms in client_rooms.values())
+    if not has_tss_clients:
+        stop_tss_polling()
+    
+    logging.info(f"Client {sid} left TSS room")
+    emit('leave_response', {'status': 'success', 'room': TSS_ROOM})
 
-    # Rest is data — depends on the type (e.g., float[], etc.)
-    data_bytes = response[8:]
-
-    # Example: parse as list of floats
-    floats = struct.iter_unpack('>f', data_bytes)
-    values = [f[0] for f in floats]
-    print("Parsed float data:", values)
-
-except socket.timeout:
-    print("No response from server.")
+# Initialize TSS functionality when the application starts
+@app.before_request
+def initialize_tss():
+    # Configure the TSS server from environment variables if available
+    global TSS_SERVER_IP, TSS_SERVER_PORT
+    
+    TSS_SERVER_IP = os.environ.get('TSS_SERVER_IP', TSS_SERVER_IP)
+    TSS_SERVER_PORT = int(os.environ.get('TSS_SERVER_PORT', TSS_SERVER_PORT))
+    
+    logging.info(f"TSS Server configured at {TSS_SERVER_IP}:{TSS_SERVER_PORT}")
 
 if __name__ == '__main__':
     socketio.run(app, host='0.0.0.0', port=8080,

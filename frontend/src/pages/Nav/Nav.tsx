@@ -1,19 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './Nav.css';
 import NavOptions from './NavOptions';
 import DefaultState from './DefaultState';
 import Map from './map/Map';
 import { WaypointType, Waypoint } from './types';
-import { io } from 'socket.io-client';
-
-// Connect to the SocketIO server
-const socket = io('http://localhost:8080');
-
-// Listen for TSS data
-socket.on('tss_data', (data: any) => {
-    console.log('Received TSS data:', data);
-    // Update your UI based on the data
-});
+import { io, Socket } from 'socket.io-client';
 
 const Nav: React.FC = () => {
     const [isCollapsed, setIsCollapsed] = useState(false);
@@ -27,20 +18,104 @@ const Nav: React.FC = () => {
         { waypoint_id: 7, location: { lat: 29.56440830845782, long: -95.08071056957434 }, type: WaypointType.GEO, title: "Bottom Right" },
     ]);
 
+    // TSS state
+    const [tssData, setTssData] = useState(null);
+    const [isTssConnected, setIsTssConnected] = useState(false);
+    const socketRef = useRef<Socket | null>(null);
+
+    // Initialize socket connection and TSS room
+    useEffect(() => {
+        // Create socket connection
+        socketRef.current = io("http://localhost:8080");
+        const socket = socketRef.current;
+
+        // Join TSS room when component mounts
+        socket.emit('join_tss_room');
+
+        // Set up event listeners
+        socket.on('join_response', (response) => {
+            console.log(`Joined room: ${response.room}`);
+            setIsTssConnected(true);
+        });
+
+        socket.on('leave_response', (response) => {
+            console.log(`Left room: ${response.room}`);
+            setIsTssConnected(false);
+        });
+
+        socket.on('tss_update', (data) => {
+            console.log('Received TSS update:', data);
+            setTssData(data);
+            // You might want to process the TSS data here or in another effect
+            processTssData(data);
+        });
+
+        // Clean up on unmount
+        return () => {
+            if (socket) {
+                socket.emit('leave_tss_room');
+                socket.disconnect();
+            }
+        };
+    }, []);
+
+    // Process TSS data - customize this function based on your needs
+    const processTssData = (data) => {
+        if (!data) return;
+
+        // Example processing - adjust according to your needs
+        // This is where you could update waypoints, map data, etc. based on TSS input
+
+        // Example: If the TSS data contains location information, you could update a specific waypoint
+        // This is just a hypothetical example and should be customized for your actual data format
+        /* 
+        if (data.values && data.values.length >= 2) {
+            const newLocation = {
+                lat: data.values[0],
+                long: data.values[1]
+            };
+            
+            // Update a specific waypoint (e.g., a vehicle position)
+            setWaypoints(prevWaypoints => {
+                // Find and update a specific waypoint (e.g., ID 1 for a vehicle)
+                return prevWaypoints.map(wp => 
+                    wp.waypoint_id === 1 ? {...wp, location: newLocation} : wp
+                );
+            });
+        }
+        */
+    };
+
     const togglePanel = () => {
         setIsCollapsed(!isCollapsed);
     };
 
     return (
         <>
-            <NavOptions waypoints={waypoints} setWaypoints={setWaypoints} />
+            <NavOptions
+                waypoints={waypoints}
+                setWaypoints={setWaypoints}
+                tssConnected={isTssConnected}  // Pass TSS connection status if needed
+            />
             <div style={{ display: "flex" }}>
-                <DefaultState waypoints={waypoints} setWaypoints={setWaypoints} />
-                <Map waypoints={waypoints} setWaypoints={setWaypoints} />
+                <DefaultState
+                    waypoints={waypoints}
+                    setWaypoints={setWaypoints}
+                    tssData={tssData}  // Pass TSS data to components that need it
+                />
+                <Map
+                    waypoints={waypoints}
+                    setWaypoints={setWaypoints}
+                    tssData={tssData}  // Pass TSS data to Map component
+                />
+            </div>
+
+            {/* Optional: TSS Status Indicator */}
+            <div className="tss-status">
+                TSS Status: {isTssConnected ? 'Connected' : 'Disconnected'}
             </div>
         </>
     );
 };
 
 export default Nav;
-
