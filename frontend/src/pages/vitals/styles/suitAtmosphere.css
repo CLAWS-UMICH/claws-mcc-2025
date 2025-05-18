@@ -1,0 +1,66 @@
+.suit-atmosphere-panel {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+}
+
+.panel-1 {
+    display: flex;
+    gap: 1.2rem;
+    border-radius: 0.5rem;
+}
+
+.personal-data {
+    flex: 133;
+}
+
+.data-section {
+    flex: 249;
+    width: 100%;
+    flex-direction: column;
+    gap: 0;
+    position: relative;
+    padding-left: 0.5rem;
+}
+
+.rounded-border {
+    display: flex;
+    padding: 1.25rem;
+    align-items: flex-start;
+    gap: 1.25rem;
+    border-radius: 0.75rem;
+    border: 1px solid #4F4F4F;
+}
+
+.temperature-dcu-container {
+    display: flex;
+    gap: 1rem;
+}
+
+.suit-temperature {
+    width: 35%;
+}
+
+.suit-pressure {
+    flex: 1;
+}
+
+.dcu {
+    flex: 1;
+}
+
+.horizontal-line {
+    width: 100%;
+    height: 0.10rem;
+    background-color: rgba(255, 255, 255, 0.2);
+    border: none;
+    margin-top: 0.75rem;
+    margin-bottom: 0.75rem;
+}
+
+.error-message {
+    color: red;
+    font-size: 14px;
+    margin-top: 8px;
+}
