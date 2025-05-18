@@ -14,6 +14,9 @@ const Dashboard: React.FC = () => {
           <Link to="/messaging" style={linkStyle}>
             Go to Messaging
           </Link>
+          <Link to="/video-stream" style={linkStyle}>
+            Go to Video Stream
+          </Link>
         </div>
       </div>
     </div>
