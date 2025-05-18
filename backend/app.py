@@ -198,51 +198,116 @@ tss_sock.settimeout(TSS_POLL_INTERVAL)  # 1 second timeout
 tss_polling_active = False
 tss_polling_thread = None
 
-def poll_tss_server():
-    """Background task to poll the TSS server and broadcast data to the TSS room"""
-    global tss_polling_active
+# gets the EVA.json file from TSS
+def get_eva():
+    pass
+# gets the ROVER_TELEMETRY.json file from TSS
+def get_rover_telemetry():
+    pass
+# gets the TELEMETRY.json file from TSS
+def get_telemetry():
+    pass
+# gets the IMU.json file from TSS
+def get_imu(tss_data):
+    # commands 17-19 for eva1
+    # commands 20-22 for eva2
+
+    # create the tss_data dictionary if it doesn't exist
+    if 'DCU' not in tss_data:
+        tss_data['DCU'] = {}
+    if 'eva1' not in tss_data['DCU']:
+        tss_data['DCU']['eva1'] = {}
+    if 'eva2' not in tss_data['DCU']:
+        tss_data['DCU']['eva2'] = {}
+        
+
+    logging.info("Getting IMU eva1 data from TSS server")
     
-    logging.info("Starting TSS polling thread")
-    while tss_polling_active:
+    # get eva1
+    keys = ["posx", "posy", "heading"]
+    for command in range(17, 20):
         try:
-            # Prepare the TSS request (same as your example)
-            time_value = int(time.time())  # Use current time
-            command = 172                  # Your TSS command
-            data = 0                       # Optional data
-            
-            # Pack the request
-            request = struct.pack('>III', time_value, command, data)
-            
-            # Send the request to TSS server
-            tss_sock.sendto(request, (TSS_SERVER_IP, TSS_SERVER_PORT))
-            
-            # Receive the response
-            response, _ = tss_sock.recvfrom(4096)
-            
-            # Process the response
-            recv_time, recv_command = struct.unpack('>II', response[:8])
-            data_bytes = response[8:]
-            
-            # Parse as list of floats (adjust according to your data format)
-            floats = struct.iter_unpack('>f', data_bytes)
-            values = [f[0] for f in floats]
-            
-            # Prepare data for clients
-            tss_data = {
-                'timestamp': recv_time,
-                'command': recv_command,
-                'values': values
-            }
-            
-            # Broadcast to all clients in the TSS room
-            socketio.emit('tss_update', tss_data, room=TSS_ROOM)
-            logging.info(f"Broadcasted TSS update to {TSS_ROOM}: command={recv_command}, data_length={len(values)}")
-            
+            values = get_tss_command(command)
+            logging.info(f"Command {command} returned values: {values}")
+            logging.info(f"Keys: {keys[command - 17]}")
+
+            # Append the values to the list for the corresponding key
+            if isinstance(values, list):
+                tss_data['DCU']['eva1'][keys[command - 17]] = values
+            else:
+                tss_data['DCU']['eva1'][keys[command - 17]] = values
         except socket.timeout:
             logging.warning("TSS server did not respond")
         except Exception as e:
-            logging.error(f"Error polling TSS server: {e}")
+            logging.error(f"Error polling TSS server for eva1: {e}")
+
+    logging.info("Getting IMU eva2 data from TSS server")
+    # get eva2
+    for command in range(20, 23):
+        try:
+            values = get_tss_command(command)
+            logging.info(f"Command {command} returned values: {values}")
+            logging.info(f"Keys: {keys[command - 17]}")
+
+
+            # Append the values to the list for the corresponding key
+            if isinstance(values, list):
+                tss_data['DCU']['eva2'][keys[command - 17]] = values
+            else:
+                tss_data['DCU']['eva2'][keys[command - 17]] = values
+        except socket.timeout:
+            logging.warning("TSS server did not respond")
+        except Exception as e:
+            logging.error(f"Error polling TSS server for eva2: {e}")
+
+def get_tss_command(command: int):
+    """
+    Sends a command to the TSS server and returns the response.
+    :param command: The command to send to the TSS server.
+    :return: The response from the TSS server.
+    """
+    logging.info(f"Sending command {command} to TSS server")
+    # Prepare the TSS request (same as your example)
+    time_value = int(time.time())  # Use current time
+    command = 172                  # Your TSS command
+    data = 0                       # Optional data
+    
+    # Pack the request
+    request = struct.pack('>III', time_value, command, data)
+    
+    # Send the request to TSS server
+    tss_sock.sendto(request, (TSS_SERVER_IP, TSS_SERVER_PORT))
+    
+    # Receive the response
+    response, _ = tss_sock.recvfrom(4096)
+    
+    # Process the response
+    recv_time, recv_command = struct.unpack('>II', response[:8])
+    data_bytes = response[8:]
+    
+    # Parse as list of floats (adjust according to your data format)
+    floats = struct.iter_unpack('>f', data_bytes)
+    values = [f[0] for f in floats]
+
+    logging.info(f"Received response from TSS server: {recv_time}, {recv_command}, {values}")
+
+    return values[0] if len(values) == 1 else values
+ 
+
+def poll_tss_server():
+    """Background task to poll the TSS server and broadcast data to the TSS room"""
+    global tss_polling_active
+    tss_data = {}
+    
+    logging.info("Starting TSS polling thread")
+    while tss_polling_active:
+        logging.info("Polling TSS server")
+        get_imu(tss_data)
         
+        # Broadcast to all clients in the TSS room
+        socketio.emit('tss_update', tss_data, room=TSS_ROOM)
+        logging.info(f"Broadcasted TSS update")
+
         # Wait until next poll interval
         time.sleep(TSS_POLL_INTERVAL)
     
