@@ -11,6 +11,7 @@ import logging
 import json
 import uuid
 import random
+import requests
 
 app = Flask(__name__)
 socketio = SocketIO(app, cors_allowed_origins="*", async_mode='threading')
@@ -198,115 +199,77 @@ tss_sock.settimeout(TSS_POLL_INTERVAL)  # 1 second timeout
 tss_polling_active = False
 tss_polling_thread = None
 
-# gets the EVA.json file from TSS
-def get_eva():
-    pass
-# gets the ROVER_TELEMETRY.json file from TSS
-def get_rover_telemetry():
-    pass
-# gets the TELEMETRY.json file from TSS
-def get_telemetry():
-    pass
-# gets the IMU.json file from TSS
-def get_imu(tss_data):
-    # commands 17-19 for eva1
-    # commands 20-22 for eva2
+def request_tss_data(file_path):
+    # use requests library to send a request to the TSS server
+    url = f'http://{TSS_SERVER_IP}:{TSS_SERVER_PORT}/'
+    url += file_path
+    try:
+        # Send a GET request to the TSS server
+        print(f"Requesting data from TSS server at {url}")
+        response = requests.get(url)
+        if response.status_code == 200:
+            # Parse the JSON response
+            print(f"Received data from TSS server: {response.json()}")
+            return response.json()
+        else:
+            logging.error(f"Failed to get data from TSS server: {response.status_code}")
+            return None
+    except requests.exceptions.RequestException as e:
+        logging.error(f"Request to TSS server at file path {file_path} failed: {e}")
+        return None
 
-    # create the tss_data dictionary if it doesn't exist
-    if 'DCU' not in tss_data:
-        tss_data['DCU'] = {}
-    if 'eva1' not in tss_data['DCU']:
-        tss_data['DCU']['eva1'] = {}
-    if 'eva2' not in tss_data['DCU']:
-        tss_data['DCU']['eva2'] = {}
-        
 
-    logging.info("Getting IMU eva1 data from TSS server")
+def create_file_paths():
+    base_file_paths = ['COMM.json', 'COMPLETED_ROVER_TELEMETRY.json', 'DCU.json', 'ERROR.json', 'IMU.json', 'ROVER_TELEMETRY.json', 'ROVER.json', 'SPEC.json', 'TEAMS.json', 'UIA.json']
+    team_number = 0
+    team_file_paths = ['Completed_EVA.json', 'COMPLETED_ROVER_TELEMETRY.json', 'Completed_TELEMETRY.json', 'EVA.json', 'ROVER_TELEMETRY.json', 'TELEMETRY.json']
     
-    # get eva1
-    keys = ["posx", "posy", "heading"]
-    for command in range(17, 20):
-        try:
-            values = get_tss_command(command)
-            logging.info(f"Command {command} returned values: {values}")
-            logging.info(f"Keys: {keys[command - 17]}")
-
-            # Append the values to the list for the corresponding key
-            if isinstance(values, list):
-                tss_data['DCU']['eva1'][keys[command - 17]] = values
-            else:
-                tss_data['DCU']['eva1'][keys[command - 17]] = values
-        except socket.timeout:
-            logging.warning("TSS server did not respond")
-        except Exception as e:
-            logging.error(f"Error polling TSS server for eva1: {e}")
-
-    logging.info("Getting IMU eva2 data from TSS server")
-    # get eva2
-    for command in range(20, 23):
-        try:
-            values = get_tss_command(command)
-            logging.info(f"Command {command} returned values: {values}")
-            logging.info(f"Keys: {keys[command - 17]}")
-
-
-            # Append the values to the list for the corresponding key
-            if isinstance(values, list):
-                tss_data['DCU']['eva2'][keys[command - 17]] = values
-            else:
-                tss_data['DCU']['eva2'][keys[command - 17]] = values
-        except socket.timeout:
-            logging.warning("TSS server did not respond")
-        except Exception as e:
-            logging.error(f"Error polling TSS server for eva2: {e}")
-
-def get_tss_command(command: int):
-    """
-    Sends a command to the TSS server and returns the response.
-    :param command: The command to send to the TSS server.
-    :return: The response from the TSS server.
-    """
-    logging.info(f"Sending command {command} to TSS server")
-    # Prepare the TSS request (same as your example)
-    time_value = int(time.time())  # Use current time
-    command = 172                  # Your TSS command
-    data = 0                       # Optional data
+    # prepend team number to team file paths
+    for i in range(1, len(team_file_paths) + 1):
+        team_file_paths[i - 1] = f'teams/{team_number}/{team_file_paths[i - 1]}'
     
-    # Pack the request
-    request = struct.pack('>III', time_value, command, data)
-    
-    # Send the request to TSS server
-    tss_sock.sendto(request, (TSS_SERVER_IP, TSS_SERVER_PORT))
-    
-    # Receive the response
-    response, _ = tss_sock.recvfrom(4096)
-    
-    # Process the response
-    recv_time, recv_command = struct.unpack('>II', response[:8])
-    data_bytes = response[8:]
-    
-    # Parse as list of floats (adjust according to your data format)
-    floats = struct.iter_unpack('>f', data_bytes)
-    values = [f[0] for f in floats]
+    # merge base and team file paths
+    file_paths = base_file_paths + team_file_paths
+    # prepend base file path to all file paths
+    for i in range(len(file_paths)):
+        file_paths[i] = f'json_data/{file_paths[i]}'
 
-    logging.info(f"Received response from TSS server: {recv_time}, {recv_command}, {values}")
+    print(f"File paths: {file_paths}")
 
-    return values[0] if len(values) == 1 else values
- 
+    return file_paths
+
+def get_tss_data(tss_data):
+    file_paths = create_file_paths()
+    for file_path in file_paths:
+        # Request data from TSS server
+        data = request_tss_data(file_path)
+        if data is not None:
+            # get first_key in data
+            first_key = list(data.keys())[0]
+            # get first value in data
+            first_value = data[first_key]
+
+            tss_data[first_key] = first_value  
+        else:
+            logging.error(f"Failed to get data from TSS server for file path: {file_path}")
+
+    
 
 def poll_tss_server():
     """Background task to poll the TSS server and broadcast data to the TSS room"""
     global tss_polling_active
-    tss_data = {}
     
     logging.info("Starting TSS polling thread")
     while tss_polling_active:
         logging.info("Polling TSS server")
-        get_imu(tss_data)
-        
+        tss_data = {}
+
+        # get data from TSS server
+        get_tss_data(tss_data)
+
         # Broadcast to all clients in the TSS room
         socketio.emit('tss_update', tss_data, room=TSS_ROOM)
-        logging.info(f"Broadcasted TSS update")
+        logging.info(f"Broadcasted TSS update: {tss_data}")
 
         # Wait until next poll interval
         time.sleep(TSS_POLL_INTERVAL)
