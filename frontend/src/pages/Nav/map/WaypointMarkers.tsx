@@ -36,18 +36,19 @@ const WaypointMarkers: React.FC<WaypointMarkersProps> = ({ waypoints, MAP_WIDTH,
                             position: 'absolute',
                             left: `${point.x}px`,
                             top: `${point.y}px`,
-                            width: '12px',
-                            height: '12px',
+                            width: '16px',
+                            height: '16px',
                             borderRadius: '50%',
                             backgroundColor: getMarkerColor(waypoint.type),
                             transform: 'translate(-50%, -50%)',
                             cursor: 'pointer',
                             zIndex: 4,
-                            fontSize: '12px'
+                            fontSize: '12px',
                         }}
                         title={waypoint.title}
                     >
-                        {waypoint.title}
+                        <h1 style={{ fontSize: '14px' }}>{waypoint.title}</h1>
+                        {/* {waypoint.title} */}
                     </div>
                 );
             })}

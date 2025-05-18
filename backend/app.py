@@ -209,7 +209,7 @@ def request_tss_data(file_path):
         response = requests.get(url)
         if response.status_code == 200:
             # Parse the JSON response
-            print(f"Received data from TSS server: {response.json()}")
+            # print(f"Received data from TSS server: {response.json()}")
             return response.json()
         else:
             logging.error(f"Failed to get data from TSS server: {response.status_code}")
@@ -269,7 +269,8 @@ def poll_tss_server():
 
         # Broadcast to all clients in the TSS room
         socketio.emit('tss_update', tss_data, room=TSS_ROOM)
-        logging.info(f"Broadcasted TSS update: {tss_data}")
+        # logging.info(f"Broadcasted TSS update: {tss_data}")
+        logging.info(f"Broadcasted TSS update IMU: {tss_data['imu']}")
 
         # Wait until next poll interval
         time.sleep(TSS_POLL_INTERVAL)
