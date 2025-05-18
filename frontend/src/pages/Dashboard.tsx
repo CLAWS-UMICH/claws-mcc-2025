@@ -11,6 +11,9 @@ const Dashboard: React.FC = () => {
           <Link to="/vitals" style={linkStyle}>
             Go to Vitals
           </Link>
+          <Link to="/messages" style={linkStyle}>
+            Go to Messages
+          </Link>
           <Link to="/messaging" style={linkStyle}>
             Go to Messaging
           </Link>
