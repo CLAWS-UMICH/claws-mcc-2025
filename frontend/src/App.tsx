@@ -1,7 +1,5 @@
 import React, {useEffect} from 'react';
 import { io } from 'socket.io-client';
-import React, {useEffect} from 'react';
-import { io } from 'socket.io-client';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import './App.css';
 
@@ -10,7 +8,6 @@ import Messaging from './pages/Messaging';
 import Dashboard from './pages/Dashboard';
 import Navigation from './pages/Nav/Nav';
 import VideoStream from './pages/VideoStream';
-import Vitals from './pages/vitals/Vitals.tsx'
 import Vitals from './pages/vitals/Vitals.tsx'
 
 function App() {

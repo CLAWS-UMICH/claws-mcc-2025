@@ -30,7 +30,7 @@ const Vitals = () => {
     // handle incoming telemetry
     socket.on('tss_update', (data: any) => {
       console.log('TSS Update:', data);
-      const telemetry = data.telemetry;
+      const telemetry = data.vitals.telemetry;
       // pick the EVA you want (here, eva1) and merge eva_time
       const payload = {
         ...telemetry.eva1,
@@ -50,31 +50,30 @@ const Vitals = () => {
 
   useEffect(() => {
     if (suitData) {
-      const printAlerts: Record<string, string> = {
-        batt_time_left: 'Battery Time Left',
-        oxy_pri_storage: 'Primary Oxygen Storage',
-        // …etc
-      };
-
-      suitData.alerts.AllAlerts.forEach(alert => {
-        toast.error(
-          <div>
-            <div className="toast-header">
-              <span className="toast-icon">⚠️</span>
-              <span className="toast-text">
-                Time Left for {printAlerts[alert.vital] ?? alert.vital} is Low
-              </span>
-            </div>
-          </div>,
-          {
-            className: 'custom-toast',
-            closeButton: true,
-            autoClose: 5000,
-            hideProgressBar: true,
-            position: 'top-right',
-          }
-        );
-      });
+      // const printAlerts: Record<string, string> = {
+      //   batt_time_left: 'Battery Time Left',
+      //   oxy_pri_storage: 'Primary Oxygen Storage',
+      //   // …etc
+      // };
+      // suitData.alerts.AllAlerts.forEach(alert => {
+      //   toast.error(
+      //     <div>
+      //       <div className="toast-header">
+      //         <span className="toast-icon">⚠️</span>
+      //         <span className="toast-text">
+      //           Time Left for {printAlerts[alert.vital] ?? alert.vital} is Low
+      //         </span>
+      //       </div>
+      //     </div>,
+      //     {
+      //       className: 'custom-toast',
+      //       closeButton: true,
+      //       autoClose: 5000,
+      //       hideProgressBar: true,
+      //       position: 'top-right',
+      //     }
+      //   );
+      // });
     }
   }, [suitData]);
 

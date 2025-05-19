@@ -300,30 +300,30 @@ def poll_tss_server():
             tss_data = {
                 'vitals': { 
                     "telemetry": {
-                        "eva_time": 0,
+                        "eva_time": 2820,
                         "eva1": {
                             "batt_time_left": 5077.148926,
-                            "oxy_pri_storage": 23.755802,
-                            "oxy_sec_storage": 15.489529,
-                            "oxy_pri_pressure": 0.000000,
-                            "oxy_sec_pressure": 0.000000,
+                            "oxy_pri_storage": 23,
+                            "oxy_sec_storage": 15,
+                            "oxy_pri_pressure": 1000,
+                            "oxy_sec_pressure": 2500,
                             "oxy_time_left": 4238,
                             "heart_rate": 90.000000,
-                            "oxy_consumption": 0.000000,
-                            "co2_production": 0.000000,
+                            "oxy_consumption": 180,
+                            "co2_production": 100,
                             "suit_pressure_oxy": 3.072300,
                             "suit_pressure_co2": 0.005900,
                             "suit_pressure_other": 11.554200,
                             "suit_pressure_total": 14.632401,
-                            "fan_pri_rpm": 0.000000,
-                            "fan_sec_rpm": 0.000000,
-                            "helmet_pressure_co2": 0.000000,
-                            "scrubber_a_co2_storage": 0.000000,
+                            "fan_pri_rpm": 23000,
+                            "fan_sec_rpm": 30000,
+                            "helmet_pressure_co2": 0.1,
+                            "scrubber_a_co2_storage": 32,
                             "scrubber_b_co2_storage": 0.000000,
                             "temperature": 70.000000,
                             "coolant_ml": 20.508068,
                             "coolant_gas_pressure": 0.000000,
-                            "coolant_liquid_pressure": 0.000000
+                            "coolant_liquid_pressure": 400
                         },
                         "eva2": {
                             "batt_time_left": 3384.893799,
