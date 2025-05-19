@@ -9,15 +9,16 @@ import Vitals from './pages/vitals/Vitals';
 import Navigation from './pages/Navigation';
 import Nav from './pages/Nav/Nav';
 import MainLayout from './components/MainLayout';
+import PRScreen from './pages/PRScreen/PRScreen';
 
 function App() {
 
   return (
     <Router>
-      <div style={{ 
-        backgroundColor: '#121212', 
-        color: 'white', 
-        minHeight: '100vh', 
+      <div style={{
+        backgroundColor: '#121212',
+        color: 'white',
+        minHeight: '100vh',
         display: 'flex',
         flexDirection: 'column'
       }}>
@@ -28,6 +29,7 @@ function App() {
             <Route path="/vitals" element={<Vitals />} />
             <Route path="/messages" element={<Messages />} />
             <Route path="/nav" element={<Nav />} />
+            <Route path="/pr" element={<PRScreen />} />
           </Routes>
         </MainLayout>
       </div>

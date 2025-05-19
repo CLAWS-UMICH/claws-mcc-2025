@@ -48,7 +48,7 @@ const Navigation: React.FC = () => {
 
 	const activeLinkStyle = {
 		...linkStyle,
-		backgroundColor: '#333',
+		backgroundColor: '#007bff',
 		color: 'white'
 	};
 
@@ -58,23 +58,29 @@ const Navigation: React.FC = () => {
 				<Timer />
 			</div>
 			<div style={rightSectionStyle}>
-				<NavLink 
-					to="/vitals" 
-					style={({isActive}) => isActive ? activeLinkStyle : linkStyle}
+				<NavLink
+					to="/vitals"
+					style={({ isActive }) => isActive ? activeLinkStyle : linkStyle}
 				>
 					Vitals
 				</NavLink>
-				<NavLink 
-					to="/messages" 
-					style={({isActive}) => isActive ? activeLinkStyle : linkStyle}
+				<NavLink
+					to="/messages"
+					style={({ isActive }) => isActive ? activeLinkStyle : linkStyle}
 				>
 					Messages
 				</NavLink>
-				<NavLink 
-					to="/nav" 
-					style={({isActive}) => isActive ? activeLinkStyle : linkStyle}
+				<NavLink
+					to="/nav"
+					style={({ isActive }) => isActive ? activeLinkStyle : linkStyle}
 				>
 					Navigation
+				</NavLink>
+				<NavLink
+					to="/pr"
+					style={({ isActive }) => isActive ? activeLinkStyle : linkStyle}
+				>
+					PR
 				</NavLink>
 			</div>
 		</nav>

@@ -186,7 +186,7 @@ import struct
 from flask_socketio import emit, join_room, leave_room
 
 # TSS Server configuration
-TSS_SERVER_IP = '192.168.51.110'  # Your TSS server IP
+TSS_SERVER_IP = '10.0.0.4'  # Your TSS server IP
 TSS_SERVER_PORT = 14141     # Your TSS server port
 TSS_ROOM = 'tss_room'       # Name of the TSS room
 TSS_POLL_INTERVAL = 2.0     # Poll interval in seconds
@@ -327,7 +327,7 @@ def poll_tss_server():
         # Broadcast to all clients in the TSS room
         socketio.emit('tss_update', tss_data, room=TSS_ROOM)
         # logging.info(f"Broadcasted TSS update: {tss_data}")
-        logging.info(f"Broadcasted TSS update IMU: {tss_data['imu']}")
+        logging.info(f"Broadcasted TSS update telemetry: {tss_data['telemetry']}")
             
         # Wait until next poll interval
         time.sleep(TSS_POLL_INTERVAL)
