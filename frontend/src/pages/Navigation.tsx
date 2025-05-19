@@ -5,52 +5,74 @@
 
 import React from 'react';
 import { NavLink } from 'react-router-dom';
+import Timer from '../components/Timer';
 
 const Navigation: React.FC = () => {
 	const navStyle = {
-		backgroundColor: '#1E1E1E',
-		padding: '1rem',
+		backgroundColor: '#1a1a1a',
+		display: 'flex',
+		justifyContent: 'space-between',
+		borderBottom: '1px solid #333',
+		position: 'sticky' as const,
+		top: 0,
+		zIndex: 100
+	};
+
+	const leftSectionStyle = {
+		width: '33%',
 		display: 'flex',
 		justifyContent: 'center',
-		gap: '2rem',
-		borderBottom: '1px solid #333',
-		position: 'sticky',
-		top: 0,
-		zIndex: 1000
+		alignItems: 'center',
+		padding: '0.75rem 1rem',
+		borderRight: '1px solid #333'
+	};
+
+	const rightSectionStyle = {
+		width: '67%',
+		display: 'flex',
+		gap: '1rem',
+		padding: '0.75rem 1rem'
 	};
 
 	const linkStyle = {
-		color: 'white',
+		color: '#666',
 		textDecoration: 'none',
 		padding: '0.5rem 1rem',
 		borderRadius: '4px',
-		transition: 'background-color 0.2s ease',
+		transition: 'all 0.2s'
 	};
 
 	const activeLinkStyle = {
-		backgroundColor: '#0066ff',
+		...linkStyle,
+		backgroundColor: '#333',
+		color: 'white'
 	};
 
 	return (
 		<nav style={navStyle}>
-			<NavLink 
-				to="/vitals" 
-				style={({isActive}) => ({
-					...linkStyle,
-					...(isActive ? activeLinkStyle : {})
-				})}
-			>
-				Vitals
-			</NavLink>
-			<NavLink 
-				to="/messages" 
-				style={({isActive}) => ({
-					...linkStyle,
-					...(isActive ? activeLinkStyle : {})
-				})}
-			>
-				Messages
-			</NavLink>
+			<div style={leftSectionStyle}>
+				<Timer />
+			</div>
+			<div style={rightSectionStyle}>
+				<NavLink 
+					to="/vitals" 
+					style={({isActive}) => isActive ? activeLinkStyle : linkStyle}
+				>
+					Vitals
+				</NavLink>
+				<NavLink 
+					to="/messages" 
+					style={({isActive}) => isActive ? activeLinkStyle : linkStyle}
+				>
+					Messages
+				</NavLink>
+				<NavLink 
+					to="/nav" 
+					style={({isActive}) => isActive ? activeLinkStyle : linkStyle}
+				>
+					Navigation
+				</NavLink>
+			</div>
 		</nav>
 	);
 };
