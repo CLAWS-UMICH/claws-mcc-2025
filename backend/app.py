@@ -186,7 +186,7 @@ import struct
 from flask_socketio import emit, join_room, leave_room
 
 # TSS Server configuration
-TSS_SERVER_IP = '10.0.0.4'  # Your TSS server IP
+TSS_SERVER_IP = '192.168.51.110'  # Your TSS server IP
 TSS_SERVER_PORT = 14141     # Your TSS server port
 TSS_ROOM = 'tss_room'       # Name of the TSS room
 TSS_POLL_INTERVAL = 2.0     # Poll interval in seconds

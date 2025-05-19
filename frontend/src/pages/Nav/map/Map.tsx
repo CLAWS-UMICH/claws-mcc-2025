@@ -5,7 +5,7 @@ import WaypointMarkers from './WaypointMarkers';
 import { Waypoint } from '../../types';
 
 export default function Map({ waypoints, setWaypoints }: { waypoints: Waypoint[]; setWaypoints: React.Dispatch<React.SetStateAction<Waypoint[]>>; }) {
-    const SCALE = 0.4;
+    const SCALE = 0.48;
     const MAP_WIDTH = 2258 * SCALE;
     const MAP_HEIGHT = 1394 * SCALE;
 
