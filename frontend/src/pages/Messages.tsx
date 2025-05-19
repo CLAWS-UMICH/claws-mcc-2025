@@ -19,11 +19,6 @@ interface Contact {
   messages: Message[];
 }
 
-interface MessagesProps {
-  messages: any[];
-  setMessages: (messages: any[]) => void;
-}
-
 const socket: Socket = io("http://localhost:8080");
 
 const getSenderColor = (sender: string) => {
@@ -34,7 +29,7 @@ const getSenderColor = (sender: string) => {
   return "#333333";
 };
 
-const Messages: React.FC<MessagesProps> = ({ messages, setMessages }) => {
+const Messages = () => {
   // We define our "Contacts" so that ID 1 => EV1, ID 2 => EV2, ID 3 => PR
   const [contacts, setContacts] = useState<Contact[]>([
     {
