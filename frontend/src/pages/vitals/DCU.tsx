@@ -13,11 +13,8 @@ function Dcu({ suitData }) {
 
     return (
         <>
-            <span>
-                DCU
-            </span>
-
-            <div className="panel dcu-panel panel-header-padding">
+            <div className="dcu-panel panel-header-padding">
+            <span className="large-text">DCU</span>
                 <div className="dcu-container">
                     {/* Left Section */}
                     <div className="dcu-left">

@@ -45,7 +45,7 @@ const SuitPressure = ({ suitData }) => {
                         </span>
                         <div className="data-labels">
                             <span className="unit">PSI</span>
-                            <span className="label">Pressure Oxy</span>
+                            <span className="unit-label">Pressure Oxy</span>
                         </div>
                     </div>
                     {getAlertForVital('suit_pressure_oxy') && (
@@ -62,7 +62,7 @@ const SuitPressure = ({ suitData }) => {
                         </span>
                         <div className="data-labels">
                             <span className="unit">PSI</span>
-                            <span className="label">Pressure CO₂</span>
+                            <span className="unit-label">Pressure CO₂</span>
                         </div>
                     </div>
                     {getAlertForVital('suit_pressure_co2') && (
@@ -79,7 +79,7 @@ const SuitPressure = ({ suitData }) => {
                         </span>
                         <div className="data-labels">
                             <span className="unit">PSI</span>
-                            <span className="label">Pressure Other</span>
+                            <span className="unit-label">Pressure Other</span>
                         </div>
                     </div>
                     {getAlertForVital('suit_pressure_other') && (
@@ -97,7 +97,7 @@ const SuitPressure = ({ suitData }) => {
                         </span>
                         <div className="data-labels">
                             <span className="unit">PSI</span>
-                            <span className="label">Pressure Total</span>
+                            <span className="unit-label">Pressure Total</span>
                         </div>
                     </div>
                     {getAlertForVital('suit_pressure_total') && (
@@ -114,7 +114,7 @@ const SuitPressure = ({ suitData }) => {
                         </span>
                         <div className="data-labels">
                             <span className="unit">PSI</span>
-                            <span className="label">Helmet Pressure</span>
+                            <span className="unit-label">Helmet Pressure</span>
                         </div>
                     </div>
                     {getAlertForVital('helmet_pressure_co2') && (

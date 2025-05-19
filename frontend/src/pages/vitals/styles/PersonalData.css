@@ -26,7 +26,8 @@
 
 /* PANEL SHELL --------------------------------------------------------- */
 .personal-data-panel {
-    width: 200px;               /* ↓ ~45 px */
+    width: 200px;
+    height: 100%;               /* ↓ ~45 px */
     padding: 0.75rem;
     background: #000;
     border: 1px solid #222;
@@ -53,7 +54,8 @@
 .data-section {
     display: flex;
     flex-direction: column;
-    gap: 0.6rem;
+    justify-content: space-evenly;
+    gap: 1.5rem;
 }
 
 .data-row {
@@ -75,6 +77,6 @@
 }
 
 .unit  { font-size: 0.75rem; color: #888; }
-.label { font-size: 0.75rem; color: #c0c0c0; }
+.unit-label { font-size: .85rem; color: white; }
 
 .error-message { font-size: 0.7rem; color: #FF3B30; }

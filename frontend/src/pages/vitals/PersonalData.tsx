@@ -20,7 +20,7 @@ const PersonalData = ({ suitData }) => {
                     className="data-value"
                     style={{ color: isAlert ? 'red' : 'white' }}
                 >
-                    {value}
+                    {value.toFixed(1)}
                 </span>
                 <div className="error-message">
                     {/* {alert.vital} is Low: {alert.vital_val} */}
@@ -45,7 +45,7 @@ const PersonalData = ({ suitData }) => {
                         </span>
                         <div className="data-labels">
                             <span className="unit">BPM</span>
-                            <span className="label">Heart Rate</span>
+                            <span className="unit-label">Heart Rate</span>
                         </div>
                     </div>
                     {getAlertForVital('heart_rate') && (
@@ -62,7 +62,7 @@ const PersonalData = ({ suitData }) => {
                         </span>
                         <div className="data-labels">
                             <span className="unit">PSI/MIN</span>
-                            <span className="label">O₂ Consumption</span>
+                            <span className="unit-label">O₂ Consumption</span>
                         </div>
                     </div>
                     {getAlertForVital('oxy_consumption') && (
@@ -79,7 +79,7 @@ const PersonalData = ({ suitData }) => {
                         </span>
                         <div className="data-labels">
                             <span className="unit">PSI/MIN</span>
-                            <span className="label">CO₂ Production</span>
+                            <span className="unit-label">CO₂ Production</span>
                         </div>
                     </div>
                     {getAlertForVital('co2_production') && (
