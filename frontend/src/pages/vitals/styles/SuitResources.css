@@ -1,534 +1,474 @@
+/* Global and Resets */
 * {
-    font-family: "Segoe UI", sans-serif; /* Fallback to sans-serif if Segoe UI is unavailable */
+    font-family: "Segoe UI", sans-serif;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
+
 .suit-resources {
     display: flex;
     flex-direction: column;
-    width: 100%;
-    max-width: 800px;
-    margin: 0 auto;
-    margin-top: 0rem;
-  }
-  
+    width: 400px; /* Fixed width */
+    margin: 1rem auto;
+    padding: 1rem;
+    background-color: #1e1e1e; /* Slightly different background for main container */
+    border-radius: 0.5rem;
+}
+
 .suit-resources-title {
-    margin-bottom: 0rem;
+    margin-bottom: 1rem;
+    color: #e0e0e0;
+    text-align: center;
+    font-weight: 600;
+}
+
+.encasing-box {
+    padding: 0.75rem; /* Reduced padding */
+    border-radius: 0.5rem;
+    background: #232323;
+    border: 1px solid #4F4F4F;
+    display: flex;
+    flex-direction: column;
 }
 
 .resources-grid {
-display: grid;
-grid-template-columns: 110fr 79fr;
+    display: grid;
+    grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+    grid-template-areas:
+        "time coolant"
+        "storage storage"
+        "pressure pressure";
+    gap: 0.75rem;
+}
 
-grid-template-areas:
-    "time coolant"
-    "storage storage"
-    "pressure pressure";
-gap: 0.75rem;
+/* Common Box Header Style */
+.box-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #e0e0e0;
+    margin-bottom: 0.75rem; /* Unified margin */
+}
+
+.header-icon { /* For icons in headers like coolant, oxygen storage */
+    width: 20px;
+    height: 20px;
 }
 
 /* Time Left Box */
 .time-left {
-grid-area: time;
-display: flex;
-flex-direction: column;
-padding: 1rem;
-border-radius: 0.5rem;
-background: #232323;
-border: 0.063rem solid #4F4F4F;
-height: 10rem;
+    grid-area: time;
+    display: flex;
+    flex-direction: column;
+    padding: 0.75rem;
+    border-radius: 0.25rem;
+    background: #2c2c2c; /* Differentiating inner boxes slightly */
+    border: 1px solid #4a4a4a;
+    min-height: 9rem;
 }
-.box-header {
-display: flex;
-align-items: center;
-gap: 0.5rem;
-color: white;
-margin-bottom: 1.5rem;
-}
+
 .time-content {
-display: flex;
-flex-direction: column;
-gap: 40px;
-margin-top: -10px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem; /* Consistent gap */
+    flex-grow: 1;
+    justify-content: space-around;
 }
+
 .time-item {
-display: flex;
-flex-direction: column;
-position: relative;
+    display: flex;
+    flex-direction: column;
+    position: relative;
 }
+
 .time-row {
-display: flex;
-align-items: center;
-gap: 8px;
-color: white;
-height: 24px;
-margin-bottom: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #cccccc;
+    min-height: 24px;
+    position: relative; /* For progress bar and value positioning */
 }
+
+.time-icon {
+    width: 18px;
+    height: 18px;
+    margin-right: 0.25rem;
+}
+
 .progress-bar {
-position: absolute;
-left: 90px;
-width: 100px;
-height: 10px;
-background: #2A2A2A;
-border-radius: 0;
-overflow: hidden;
-top: 55%;
-transform: translateY(-50%);
+    position: absolute;
+    left: 75px;
+    right: 65px; /* Makes width flexible */
+    height: 10px;
+    background: #3a3a3a;
+    border-radius: 3px;
+    overflow: hidden;
+    top: 50%;
+    transform: translateY(-50%);
 }
+
 .progress-fill {
-height: 100%;
-background: #4169E1;
-border-radius: 0;
+    height: 100%;
+    background: #4169E1; /* Royal Blue */
+    border-radius: 3px; /* Match parent */
+    transition: background-color 0.3s ease, width 0.3s ease;
 }
+.progress-fill.warning {
+    background: #FF3B30; /* iOS Red for warning */
+}
+
 .time-value {
-position: absolute;
-left: 90px;
-width: 100px;
-text-align: center;
-color: white;
-font-size: 14px;
-top: 24px;
+    position: absolute;
+    right: 0px;
+    width: 60px;
+    text-align: right;
+    color: #e0e0e0;
+    font-size: 0.8rem;
+    top: 50%;
+    transform: translateY(-50%);
 }
+
 /* Coolant Box */
 .coolant {
-grid-area: coolant;
-display: flex;
-flex-direction: column;
-padding: 16px;
-border-radius: 8px;
-background: #232323;
-border: 1px solid #4F4F4F;
-height: 160px;
+    grid-area: coolant;
+    display: flex;
+    flex-direction: column;
+    padding: 0.75rem;
+    border-radius: 0.25rem;
+    background: #2c2c2c;
+    border: 1px solid #4a4a4a;
+    min-height: 12rem;
+    justify-content: space-between;
 }
-.header-text {
-display: flex;
-flex-direction: column;
+
+.coolant .box-header .header-text {
+    line-height: 1.1;
+    display: flex;
+    flex-direction: column;
 }
+
 .gauge-container {
-display: flex;
-flex-direction: column;
-align-items: center;
-margin-top: -15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 0.25rem;
+    flex-grow: 1;
+    justify-content: center;
 }
+
 .gauge-row {
-display: flex;
-align-items: center;
-gap: 12px;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
 }
-.gauge {
-width: 40px;
-height: 48px;
-background: #1A1A1A;
-border: 1px solid rgba(255, 255, 255, 0.2);
-overflow: hidden;
-position: relative;
+
+.gauge { /* For Coolant */
+    width: 30px;
+    height: 48px;
+    background: #1A1A1A;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    overflow: hidden;
+    position: relative;
+    border-radius: 2px;
 }
-.gauge-fill {
-position: absolute;
-bottom: 0;
-width: 100%;
-background: #1A1A1A;
+
+.gauge-fill { /* Common for coolant and storage */
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    background: #1A1A1A; /* Base for non-striped part if needed */
+    transition: background-color 0.3s ease, height 0.3s ease;
 }
-.coolant .percentage {
-margin-top: 10px;
-font-size: 20px;
-color: white;
+
+.gauge-fill .striped-background { /* Applied to a child div inside .gauge-fill */
+    width: 100%;
+    height: 100%;
+    background: repeating-linear-gradient(
+        -45deg,
+        #5c9ead, /* Teal-ish normal */
+        #5c9ead 3px,
+        #4a8a9b 3px,
+        #4a8a9b 6px
+    );
 }
+
+.gauge-fill.warning .striped-background {
+    background: repeating-linear-gradient(
+        -45deg,
+        #FF6B6B, /* Lighter red for warning stripes */
+        #FF6B6B 3px,
+        #E05252 3px,
+        #E05252 6px
+    );
+}
+/* Ensure .gauge-fill itself has a warning class for background if needed, but stripes handle it */
+.gauge-fill.warning {
+    /* background-color: #3d0000; Optional: if striped background isn't full */
+}
+
+
+.percentage {
+    margin-top: 0.35rem;
+    font-size: 1rem;
+    color: #e0e0e0;
+}
+
 /* Oxygen Storage Box */
 .oxygen-storage {
-grid-area: storage;
-padding: 16px;
-border-radius: 8px;
-background: #232323;
-border: 1px solid #4F4F4F;
-height: 180px;
-}
-.storage-content {
-display: flex;
-justify-content: space-around;
-margin-top: 24px;
-}
-.storage-item {
-display: flex;
-flex-direction: column;
-gap: 8px;
-margin-top: 8px;
-}
-.storage-item-container {
-display: flex;
-flex-direction: column;
-gap: 8px;
-}
-.storage-label {
-color: white;
-margin-bottom: 8px;
-text-align: left;
-margin-left: 0;
-}
-.storage-gauge-container {
-display: flex;
-align-items: center;
-gap: 12px;
-margin-bottom: 0;
-}
-.gauge-bar {
-width: 40px;
-height: 64px;
-background: #1A1A1A;
-border: 1px solid rgba(255, 255, 255, 0.2);
-overflow: hidden;
-position: relative;
-}
-.measurement {
-display: flex;
-flex-direction: column;
-justify-content: space-between;
-height: 64px;
-color: rgba(255, 255, 255, 0.4);
-font-size: 12px;
-margin-left: 4px;
+    grid-area: storage;
+    padding: 0.75rem;
+    border-radius: 0.25rem;
+    background: #2c2c2c;
+    border: 1px solid #4a4a4a;
+    min-height: 10rem;
 }
 
+.storage-content {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 0.75rem;
+    gap: 1rem;
+}
+
+.storage-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    align-items: center;
+}
+
+.storage-label {
+    color: #cccccc;
+    margin-bottom: 0.35rem;
+    text-align: center;
+}
+
+.storage-gauge-container {
+    display: flex;
+    align-items: flex-end; /* Align items to bottom for gauge + percentage text */
+    gap: 0.5rem;
+}
+
+.gauge-bar { /* For Oxygen Storage */
+    width: 30px;
+    height: 64px;
+    background: #1A1A1A;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    overflow: hidden;
+    position: relative;
+    border-radius: 2px;
+}
+.storage-percentage {
+    font-size: 0.9rem;
+    color: #e0e0e0;
+    margin-left: 0.25rem; /* Space from measurement numbers */
+}
+
+
+.measurement {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%; /* Relative to parent (.gauge or .gauge-bar) */
+    color: rgba(255, 255, 255, 0.3);
+    font-size: 0.65rem;
+    padding: 0.1rem 0; /* Small vertical padding for 100/0 */
+}
+.gauge-row .measurement { /* For coolant gauge */
+     height: 48px;
+}
+.storage-gauge-container .measurement { /* For storage gauges */
+    height: 64px;
+}
+
+
+/* Oxygen Pressure Box */
 .oxygen-pressure {
-grid-area: pressure;
-padding: 16px;
-border-radius: 8px;
-background: #232323;
-height: 210px;
-border: 1px solid #4F4F4F;
+    grid-area: pressure;
+    padding: 0.75rem;
+    border-radius: 0.25rem;
+    background: #2c2c2c;
+    border: 1px solid #4a4a4a;
+    min-height: 12rem;
 }
+
 .pressure-content {
-display: flex;
-justify-content: space-around;
-margin-top: 24px;
+    display: flex;
+    justify-content: space-around;
+    margin-top: 0.5rem; /* Reduced margin */
+    gap: 1rem;
 }
+
 .pressure-section {
-text-align: center;
-color: white;
+    text-align: center;
+    color: #e0e0e0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
+.pressure-section .small-text {
+    margin-bottom: 0.25rem;
+}
+
 .pressure-gauge {
-width: 140px;
-height: 140px;
-position: relative;
-margin: 12px auto;
+    width: 110px; /* Reduced size */
+    height: 110px;
+    position: relative;
+    margin: 0 auto; /* Center horizontally */
 }
+
 .gauge-marks {
-width: 100%;
-height: 100%;
-position: absolute;
-background-image: url('../assets/mask-group.svg');
-background-size: contain;
-background-repeat: no-repeat;
-clip-path: polygon(0 0, 100% 0, 100% 75%, 50% 75%, 0 75%);
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    background-image: url('../../assets/mask-group.svg'); /* Ensure path is correct from CSS file location */
+    background-size: contain;
+    background-repeat: no-repeat;
+    clip-path: polygon(0 0, 100% 0, 100% 75%, 50% 75%, 0 75%); /* This defines the visible arc */
 }
+
 .needle {
     position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 1.5px;
-    height: 22px;
-    background: white;
-    transform-origin: 50% 50%;
-    transform: translate(-50%, -100%) rotate(var(--rotation-angle));
-    transition: background-color 0.3s ease;
-}
-
-  
-.pressure-value {
-position: absolute;
-left: 50%;
-bottom: 35%;
-transform: translateX(-50%);
-font-size: 28px;
-color: white;
-}
-.pressure-unit {
-position: absolute;
-left: 50%;
-bottom: 25%;
-transform: translateX(-50%);
-font-size: 12px;
-color: #666;
-}
-/* Common styles */
-.striped-background {
-width: 100%;
-height: 100%;
-background: repeating-linear-gradient(
-    -45deg,
-    #FFFFFF,
-    #FFFFFF 4px,
-    #CCCCCC 4px,
-    #CCCCCC 8px
-);
-}
-.percentage {
-font-size: 20px;
-color: white;
-}
-.encasing-box {
-padding: 15px;
-border-radius: 8px;
-background: #232323;
-border: 1px solid #4F4F4F;
-margin: 12px auto;
-display: flex;
-flex-direction: column;
-width: 100%;
-max-width: 600px;
-height: 94%;
-box-sizing: border-box;
-}
-/* Typography Styles */
-.small-text {
-font-size: 14px;
-color: #FFF;
-font-style: normal;
-font-weight: 600;
-line-height: 22px;
-}
-.large-text {
-font-size: 16px;
-color: #FFF;
-font-style: normal;
-font-weight: 600;
-line-height: 22px;
-}
-
-.progress-fill {
-height: 100%;
-background: #4169E1;
-border-radius: 0;
-transition: background-color 0.3s ease;
-}
-.progress-fill.warning {
-background: #FF0000;
-}
-/* For the oxygen storage gauge fills */
-.gauge-fill {
-position: absolute;
-bottom: 0;
-width: 100%;
-background: #1A1A1A;
-transition: background-color 0.3s ease;
-}
-.gauge-fill .striped-background {
-background: repeating-linear-gradient(
-    -45deg,
-    #FFFFFF,
-    #FFFFFF 4px,
-    #CCCCCC 4px,
-    #CCCCCC 8px
-);
-}
-.gauge-fill.warning .striped-background {
-background: repeating-linear-gradient(
-    -45deg,
-    #FF0000,
-    #FF0000 4px,
-    #CC0000 4px,
-    #CC0000 8px
-);
-}
-/* Pressure gauge needle warning state */
-.needle {
-position: absolute;
-top: 2%;
-left: 50%;
-width: 1.5px;
-height: 22px;
-background: white;
-transform-origin: 50% 350%;
-transform: translateX(-50%) rotate(var(--rotation-angle));
-transition: background-color 0.3s ease;
+    left: 50%; /* Horizontal center of the pressure-gauge */
+    top: 75%;  /* Pivot point Y is at 75% of the pressure-gauge height (aligns with clip-path bottom-center) */
+    width: 2px;
+    height: 33%; /* Length of needle relative to pressure-gauge height */
+    background: #e0e0e0;
+    transform-origin: center top; /* Pivot from the needle's own top-center point */
+    /* transform: translateX(-50%) rotate(0deg); set by inline style */
+    transition: background-color 0.3s ease, transform 0.3s ease;
 }
 .needle.warning {
-background: #FF0000;
-}
-/* Add these classes to your existing CSS file */
-/* For the time-left progress bars (battery and oxygen) */
-.progress-fill {
-height: 100%;
-background: #4169E1;
-border-radius: 0;
-transition: background-color 0.3s ease;
-}
-.progress-fill.warning {
-background: #FF0000;
-}
-/* For the oxygen storage gauge fills */
-.gauge-fill {
-position: absolute;
-bottom: 0;
-width: 100%;
-background: #1A1A1A;
-transition: background-color 0.3s ease;
-}
-.gauge-fill .striped-background {
-background: repeating-linear-gradient(
-    -45deg,
-    #FFFFFF,
-    #FFFFFF 4px,
-    #CCCCCC 4px,
-    #CCCCCC 8px
-);
-}
-.gauge-fill.warning .striped-background {
-background: repeating-linear-gradient(
-    -45deg,
-    #FF0000,
-    #FF0000 4px,
-    #CC0000 4px,
-    #CC0000 8px
-);
+    background: #FF3B30;
 }
 
+.pressure-value {
+    position: absolute;
+    left: 50%;
+    bottom: 12%; /* Adjusted for new gauge size */
+    transform: translateX(-50%);
+    font-size: 1.5rem; /* Adjusted size */
+    color: #e0e0e0;
+}
 
-/* Alert styles */
+.pressure-unit {
+    position: absolute;
+    left: 50%;
+    bottom: 2%;  /* Adjusted for new gauge size */
+    transform: translateX(-50%);
+    font-size: 0.7rem; /* Adjusted size */
+    color: #888;
+}
 
+/* Typography Styles */
+.small-text {
+    font-size: 0.8rem;
+    color: #c0c0c0;
+    font-weight: 400; /* Normal weight for less emphasis */
+    line-height: 1.3;
+}
 
+.large-text { /* For box titles mostly */
+    font-size: 0.95rem;
+    color: #e0e0e0;
+    font-weight: 600;
+    line-height: 1.3;
+}
 
-
-
+/* Alert Indicator Styles (inline alerts) */
 .alert-indicator {
   display: flex;
   align-items: center;
   gap: 0.25rem;
-  margin-top: 0.5rem;
-  position: relative;
-  width: 100%;
+  margin-top: 0.35rem;
+  justify-content: center; /* Default to center */
 }
+
+/* Specific alert indicator positioning */
+.time-item .alert-indicator {
+    justify-content: flex-start;
+    margin-left: 75px; /* Align with progress bar start */
+    margin-top: 2px;
+}
+.coolant .alert-indicator,
+.storage-item .alert-indicator,
+.pressure-section .alert-indicator {
+    margin-top: 0.35rem; /* Consistent top margin */
+}
+
 
 .alert-icon {
-font-size: 14px;
-line-height: 1;
-color: #FF3B30;
+    font-size: 0.8rem;
+    line-height: 1;
+    color: #FF3B30;
 }
-
 
 .alert-text {
-color: #FF3B30;
-font-size: 10px;
-font-weight: 500;
+    color: #FF3B30;
+    font-size: 0.7rem;
+    font-weight: 500;
 }
 
 
-/* Just the alert adjustments for Time Left section */
-.time-item .alert-indicator {
-display: flex;
-position: absolute;
-align-items: center;
-gap: 0.25rem;
-color: #FF3B30;
-top: 3rem;  
-left: -0.5rem;  
-}
-
-
-.time-item .alert-text {
-color: #FF3B30;
-font-size: 10px;
-font-weight: 500;
-}
-
-.time-item .alert-icon {
-font-size: 14px;
-line-height: 1;
-}
-
-
-.oxygen-pressure .alert-indicator {
-position: relative;
-top: -30px; /* Moves the alert upwards */
-text-align: center;
-}
-
-
-
-
+/* Alert Notification Popups */
 .alert-notification {
-position: fixed;
-right: 20px;
-background: #232323;
-border: 1px solid #FF3B30;
-border-radius: 8px;
-padding: 16px;
-z-index: 1000;
-width: 300px; /* Fixed width instead of min-width */
-max-height: 300px;
-transition: opacity 0.3s ease, transform 0.3s ease;
+    position: fixed;
+    right: 20px;
+    background: #2c2c2c;
+    border: 1px solid #FF3B30;
+    border-radius: 6px;
+    padding: 0.75rem 1rem;
+    z-index: 1000;
+    width: 280px;
+    max-height: 300px; /* This is fine */
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
 }
+/* Stacking notifications (adjust these based on actual height of .alert-notification) */
+.alert-notification:nth-child(1) { top: 20px; }
+.alert-notification:nth-child(2) { top: calc(20px + 70px + 10px); } /* Approx: top + height + gap */
+.alert-notification:nth-child(3) { top: calc(20px + (70px + 10px) * 2); }
+.alert-notification:nth-child(4) { top: calc(20px + (70px + 10px) * 3); }
+.alert-notification:nth-child(5) { top: calc(20px + (70px + 10px) * 4); }
+.alert-notification:nth-child(6) { top: calc(20px + (70px + 10px) * 5); }
+.alert-notification:nth-child(7) { top: calc(20px + (70px + 10px) * 6); }
 
 
 .alert-notification-content {
-display: flex;
-align-items: flex-start;
-gap: 12px;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
 }
-
 
 .alert-notification-text {
-flex-grow: 1;
-color: white;
-font-size: 16px;
+    flex-grow: 1;
+    color: #e0e0e0;
+    font-size: 0.9rem;
 }
-
 
 .alert-notification-subtext {
-color: #808080;
-font-size: 14px;
-margin-top: 4px;
+    color: #999;
+    font-size: 0.75rem;
+    margin-top: 0.2rem;
 }
-
 
 .alert-warning-icon {
-color: #FF3B30;
-font-size: 20px;
+    color: #FF3B30;
+    font-size: 1.1rem;
+    margin-top: 1px;
 }
-
 
 .alert-close-icon {
-color: #808080;
-cursor: pointer;
-font-size: 14px;
-padding: 4px;
-transition: color 0.2s ease;
+    color: #999;
+    cursor: pointer;
+    font-size: 1rem;
+    padding: 0.1rem;
+    transition: color 0.2s ease;
+    line-height: 1;
 }
-
 
 .alert-close-icon:hover {
-color: #ffffff;
+    color: #ffffff;
 }
-
-
-/* Stacking notifications */
-.alert-notification:nth-child(1) { top: 20px; }
-.alert-notification:nth-child(2) { top: 100px; }
-.alert-notification:nth-child(3) { top: 180px; }
-.alert-notification:nth-child(4) { top: 260px; }
-.alert-notification:nth-child(5) { top: 340px; }
-.alert-notification:nth-child(6) { top: 420px; }
-.alert-notification:nth-child(7) { top: 500px; }
-
-
-.coolant .alert-indicator {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 4px;
-    color: #FF3B30;
-    margin-top: -0.25rem;
-    position: relative;
-    width: 100%;
-  }
-  
-  .coolant .alert-text {
-    color: #FF3B30;
-    font-size: 10px;
-    font-weight: 500;
-  }
-  
-  .coolant .alert-icon {
-    font-size: 14px;
-    line-height: 1;
-  }
-  
-  
