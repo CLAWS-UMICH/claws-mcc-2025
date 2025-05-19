@@ -1,90 +1,47 @@
-.co2-scrubber-storage {
-  display: flex;
-  flex-direction: column;
-  background-color: #1a1a1a;
-  border-radius: 16px;
-  padding: 20px;
+/* ── Global reset & typography ─────────────────────────────────────────── */
+*{font-family:"Segoe UI",sans-serif;box-sizing:border-box;margin:0;padding:0;}
+.small-text{font-size:.75rem;color:#c0c0c0;font-weight:400;line-height:1.2;}
+.large-text{font-size:.9rem;color:#e0e0e0;font-weight:600;line-height:1.2;}
+
+/* ── Shared alert pill (keep for future) ───────────────────────────────── */
+.alert-indicator{display:flex;align-items:center;gap:.2rem;margin-top:.25rem;}
+.alert-icon{font-size:.7rem;color:#FF3B30;}
+.alert-text{color:#FF3B30;font-size:.65rem;font-weight:500;}
+
+/* ── Panel shell ───────────────────────────────────────────────────────── */
+.co2-scrubber-storage{
+  display:flex;
+  flex-direction:column;
+  align-items: center;
+  gap:.75rem;
+  padding:.75rem;
+  background:#000;
+  border:1px solid #222;
+  border-radius:.5rem;
+  color:#e0e0e0;
+  /* height matches SuitHelmetFan (~140 px incl. padding) */
+  min-height:140px;
   width: 100%;
-  max-width: 600px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
 
-.box-header {
-  color: white;
-  font-size: 2em;
-  margin-bottom: 25px;
-  font-weight: 300;
+/* ── Header ────────────────────────────────────────────────────────────── */
+.co2-scrubber-storage .box-header{
+  display:flex;align-items:center;gap:.5rem;margin-bottom:.5rem;
 }
+.co2-scrubber-storage .box-header span{font-size:.9rem;font-weight:600;}
 
-.storage-content {
-  display: flex;
-  justify-content: space-between;
-  padding: 20px 40px;
-  background: #242424;
-  border-radius: 12px;
+/* ── Two‑column content frame ──────────────────────────────────────────── */
+.storage-content{
+  display:flex;justify-content:space-around;flex:1;gap:1rem;
+  padding:.75rem;background:#000;border:1px solid #222;border-radius:.25rem;
 }
+.separator{width:1px;background:#222;}
 
-.storage-item {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
+/* ── Individual scrubber column ────────────────────────────────────────── */
+.storage-item{display:flex;flex-direction:column;align-items:center;gap:.4rem;flex:1;}
+.storage-label{font-size:.75rem;color:#cccccc;font-weight:500;}
 
-.storage-label {
-  color: white;
-  font-size: 1.5em;
-  font-weight: 300;
-  margin-bottom: 15px;
-}
-
-.gauge-bar {
-  width: 50px;
-  height: 100px;
-  background: transparent;
-  position: relative;
-  border: 1px solid #444;
-  border-radius: 2px;
-  overflow: hidden;
-}
-
-.separator {
-  height: 140px;
-  width: 1px;
-  background-color: rgba(255, 255, 255, 0.2);
-}
-
-.storage-gauge-container {
-  display: flex;
-  align-items: flex-start;
-  gap: 15px;
-}
-
-.percentage {
-  color: white;
-  font-size: 2.5em;
-  font-weight: 400;
-  margin-left: 20px;
-}
-
-.measurement {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  height: 100px;
-  color: rgba(255, 255, 255, 0.7);
-  font-size: 0.9em;
-}
-
-.scrubber-remaining {
-  background: repeating-linear-gradient(
-    -45deg,
-    rgba(255, 255, 255, 0.15),
-    rgba(255, 255, 255, 0.15) 5px,
-    rgba(255, 255, 255, 0.25) 5px,
-    rgba(255, 255, 255, 0.25) 10px
-  );
-}
-
-.scrubber-used {
-  background: #000;
-}
+/* ── Numeric pressure read‑out (mirrors Oxygen Pressure box) ───────────── */
+.pressure-display{display:flex;flex-direction:column;align-items:center;justify-content:center;}
+.pressure-value-direct{font-size:1.4rem;color:#e0e0e0;font-weight:600;}
+.pressure-unit-direct{font-size:.75rem;color:#888;margin-top:.1rem;}
