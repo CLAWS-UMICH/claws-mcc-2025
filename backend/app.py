@@ -186,7 +186,7 @@ import struct
 from flask_socketio import emit, join_room, leave_room
 
 # TSS Server configuration
-TSS_SERVER_IP = '10.0.0.4'  # Your TSS server IP
+TSS_SERVER_IP = '10.0.0.149'  # Your TSS server IP
 TSS_SERVER_PORT = 14141     # Your TSS server port
 TSS_ROOM = 'tss_room'       # Name of the TSS room
 TSS_POLL_INTERVAL = 2.0     # Poll interval in seconds
@@ -266,68 +266,13 @@ def poll_tss_server():
 
         # get data from TSS server
         get_tss_data(tss_data)
-
-        # placeholder data
-        mock_tss_data = {
-            'vitals': { 
-                "telemetry": {
-                    "eva_time": 2820,
-                    "eva1": {
-                        "batt_time_left": 5077.148926,
-                        "oxy_pri_storage": 23,
-                        "oxy_sec_storage": 15,
-                        "oxy_pri_pressure": 1000,
-                        "oxy_sec_pressure": 2500,
-                        "oxy_time_left": 4238,
-                        "heart_rate": 90.000000,
-                        "oxy_consumption": 180,
-                        "co2_production": 100,
-                        "suit_pressure_oxy": 3.072300,
-                        "suit_pressure_co2": 0.005900,
-                        "suit_pressure_other": 11.554200,
-                        "suit_pressure_total": 14.632401,
-                        "fan_pri_rpm": 23000,
-                        "fan_sec_rpm": 30000,
-                        "helmet_pressure_co2": 0.1,
-                        "scrubber_a_co2_storage": 32,
-                        "scrubber_b_co2_storage": 0.000000,
-                        "temperature": 70.000000,
-                        "coolant_ml": 20.508068,
-                        "coolant_gas_pressure": 0.000000,
-                        "coolant_liquid_pressure": 400
-                    },
-                    "eva2": {
-                        "batt_time_left": 3384.893799,
-                        "oxy_pri_storage": 24.231962,
-                        "oxy_sec_storage": 19.419136,
-                        "oxy_pri_pressure": 0.000000,
-                        "oxy_sec_pressure": 0.000000,
-                        "oxy_time_left": 4714,
-                        "heart_rate": 90.000000,
-                        "oxy_consumption": 0.000000,
-                        "co2_production": 0.000000,
-                        "suit_pressure_oxy": 3.072300,
-                        "suit_pressure_cO2": 0.005900,
-                        "suit_pressure_other": 11.554200,
-                        "suit_pressure_total": 14.632401,
-                        "fan_pri_rpm": 0.000000,
-                        "fan_sec_rpm": 0.000000,
-                        "helmet_pressure_co2": 0.000000,
-                        "scrubber_a_co2_storage": 0.000000,
-                        "scrubber_b_co2_storage": 0.000000,
-                        "temperature": 70.000000,
-                        "coolant_ml": 22.034748,
-                        "coolant_gas_pressure": 0.000000,
-                        "coolant_liquid_pressure": 0.000000
-                    }
-                }
-            }
-        }
             
         # Broadcast to all clients in the TSS room
         socketio.emit('tss_update', tss_data, room=TSS_ROOM)
+        logging.info(f"Broadcasted TSS update: {tss_data}")
+        # logging.info(f"Broadcasted TSS update IMU: {tss_data['imu']}")
         # logging.info(f"Broadcasted TSS update: {tss_data}")
-        logging.info(f"Broadcasted TSS update telemetry: {tss_data['telemetry']}")
+        # logging.info(f"Broadcasted TSS update telemetry: {tss_data['telemetry']}")
             
         # Wait until next poll interval
         time.sleep(TSS_POLL_INTERVAL)

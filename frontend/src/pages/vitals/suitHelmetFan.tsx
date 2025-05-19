@@ -17,6 +17,7 @@ function SuitHelmetFan({ fanPriRpm, fanSecRpm }) {
     <div className="suit-helmet-fan-container">
       <div className="suit-helmet-fan">
         <div className="fan-info">
+          <span>Suit Helmet Fan</span>
           <div className="flex-container">
             <FanDisplay label="Primary" rpm={fanPriRpm} />
             <div className="separator"></div>

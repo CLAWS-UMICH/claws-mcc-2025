@@ -1,41 +1,81 @@
-.suit-atmosphere-panel {
+/* GLOBAL -------------------------------------------------------------- */
+* {
+    font-family: "Segoe UI", sans-serif;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+/* SHARED TEXT SIZES ---------------------------------------------------- */
+.small-text { font-size: 0.75rem; color: #c0c0c0; }
+.large-text { font-size: 0.9rem;  color: #e0e0e0; font-weight: 600; }
+
+/* ALERT PILL ----------------------------------------------------------- */
+.alert-indicator { display: flex; align-items: center; gap: 0.2rem; margin-top: 0.2rem; }
+.alert-icon      { font-size: 0.65rem; color: #FF3B30; }
+.alert-text      { font-size: 0.63rem; color: #FF3B30; font-weight: 500; }
+
+/* DIVIDER -------------------------------------------------------------- */
+.horizontal-line {
+    width: 100%;
+    height: 1px;
+    background: #222;
+    border: none;
+    margin: 0.65rem 0;
+}
+
+/* PANEL SHELL --------------------------------------------------------- */
+.suit-pressure-panel {
+    max-width: 330px;           /* compact width */
+    padding: 0.75rem;
+    background: #000;
+    border: 1px solid #222;
+    border-radius: 0.5rem;
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
-    gap: 0.75rem;
+    gap: 1rem;
+    color: #e0e0e0;
+    height: 100%;
 }
 
-.panel-1 {
+/* HEADER -------------------------------------------------------------- */
+.panel-header {
     display: flex;
-    gap: 1.2rem;
-    border-radius: 0.5rem;
+    align-items: center;
+    gap: 0.5rem;
+}
+.panel-header h3 {
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin: 0;
+    color: #e0e0e0;
 }
 
-.personal-data {
-    flex: 133;
+/* GRID LAYOUT --------------------------------------------------------- */
+.pressure-grid {
+    display: flex;
+    gap: 1.5rem;
 }
 
-.data-section {
-    flex: 249;
-    width: 100%;
-    /* flex-direction: column;
-    gap: 0;
-    position: relative;
-    padding-left: 0.5rem; */
+.pressure-column {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
 }
 
+/* DATA ROW ------------------------------------------------------------ */
 .data-row {
     display: flex;
     align-items: flex-start;
+    gap: 1rem;
     padding-left: 0.25rem;
-    gap: 1.25rem;
-    align-self: stretch;
 }
 
 .data-value {
-    font-size: 24px;
+    font-size: 1.1rem;
     font-weight: 500;
-    color: rgba(255, 255, 255, 0.9);
+    color: #e0e0e0;
 }
 
 .data-labels {
@@ -43,100 +83,7 @@
     flex-direction: column;
 }
 
-.suit-pressure-panel {
-    display: flex;
-    width: 26.9375rem;
-    height: 16.25rem;
-    padding: 1rem 1rem 0rem 1rem;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 1.25rem;
-    flex-shrink: 0;
-    border-radius: 0.75rem;
-    border: 1px solid #4F4F4F;
-}
+.unit  { font-size: 0.75rem; color: #888; }
+.label { font-size: 0.75rem; color: #c0c0c0; }
 
-.rounded-border {
-    display: flex;
-    padding: 1.25rem;
-    align-items: flex-start;
-    gap: 1.25rem;
-    border-radius: 0.75rem;
-    border: 1px solid #4F4F4F;
-}
-
-.panel-header {
-    display: flex;
-}
-
-.panel-header-text {
-    color: #FFF;
-    font-size: 1rem;
-    font-style: normal;
-    font-weight: 600;
-}
-
-.temperature-dcu-container {
-    display: flex;
-    gap: 1rem;
-}
-
-.suit-temperature {
-    width: 35%;
-}
-
-.suit-pressure {
-    flex: 1;
-}
-
-.dcu {
-    flex: 1;
-}
-
-.panel-header-padding {
-    margin-top: 1rem;
-}
-
-.panel-header h3 {
-    font-size: 14px;
-    color: rgba(255, 255, 255, 0.9);
-    font-weight: 500;
-    margin-top: 0px;
-    margin-bottom: 0px;
-}
-
-.pressure-grid {
-    display: flex;
-    gap: 2rem;
-}
-
-.pressure-column {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-}
-
-.unit {
-    font-size: 12px;
-    color: rgba(255, 255, 255, 0.6);
-}
-
-.label {
-    font-size: 12px;
-    color: rgb(255, 255, 255);
-}
-
-.horizontal-line {
-    width: 100%;
-    height: 0.10rem;
-    background-color: rgba(255, 255, 255, 0.2);
-    border: none;
-    margin-top: 0.75rem;
-    margin-bottom: 0.75rem;
-}
-
-.error-message {
-    color: red;
-    font-size: 14px;
-    margin-top: 8px;
-}
+.error-message { font-size: 0.7rem; color: #FF3B30; }

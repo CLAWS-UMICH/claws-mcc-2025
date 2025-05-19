@@ -1,66 +1,73 @@
-.suit-atmosphere-panel {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.75rem;
-}
+/* Global reset & typography ------------------------------------------------ */
+*{
+    font-family:"Segoe UI",sans-serif;
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+  }
+  
+  .small-text{font-size:.75rem;color:#c0c0c0;font-weight:400;line-height:1.2;}
+  .large-text{font-size:.9rem;color:#e0e0e0;font-weight:600;line-height:1.2;}
+  
+  /* Generic alert pill (shares palette with SuitResources) ------------------ */
+  .alert-indicator{display:flex;align-items:center;gap:.2rem;margin-top:.25rem;justify-content:flex-start;}
+  .alert-icon{font-size:.7rem;line-height:1;color:#FF3B30;}
+  .alert-text{color:#FF3B30;font-size:.65rem;font-weight:500;}
+  
+  /* ------------------------------------------------------------------------- */
+  .suit-atmosphere-panel{
+    display:flex;
+    flex-direction:column;
+    gap:.75rem;
+    /* width:100%; */
+    padding:.75rem;
+    background:#000;
+    border:1px solid #222;
+    border-radius:.5rem;
+    color:#e0e0e0;
+  }
+  
+  .suit-atmosphere-panel>span{ /* section titles */
+    font-size:.9rem;
+    font-weight:600;
+    text-align:center;
+    color:#e0e0e0;
+  }
+  
+  .panel-1,
+  .temperature-dcu-container{
+    display:flex;
+    gap:1rem;
+  }
+  
+  /* common inner wrapper */
+  .rounded-border{
+    flex:1;
+    display:flex;
+    gap:1.25rem;
+    padding:.75rem;
+    background:#000;
+    border:1px solid #222;
+    border-radius:.5rem;
+  }
+  
+  /* keep individual flex helpers ------------------------------------------- */
+  .data-section,
+  .suit-temperature,
+  .suit-pressure,
+  .dcu{display:flex;flex-direction:column;width:100%;}
 
-.panel-1 {
-    display: flex;
-    gap: 1.2rem;
-    border-radius: 0.5rem;
-}
-
-.personal-data {
-    flex: 133;
-}
-
-.data-section {
-    flex: 249;
-    width: 100%;
-    flex-direction: column;
-    gap: 0;
-    position: relative;
-    padding-left: 0.5rem;
-}
-
-.rounded-border {
-    display: flex;
-    padding: 1.25rem;
-    align-items: flex-start;
-    gap: 1.25rem;
-    border-radius: 0.75rem;
-    border: 1px solid #4F4F4F;
-}
-
-.temperature-dcu-container {
-    display: flex;
-    gap: 1rem;
-}
-
-.suit-temperature {
-    width: 35%;
-}
-
-.suit-pressure {
-    flex: 1;
-}
-
-.dcu {
-    flex: 1;
-}
-
-.horizontal-line {
-    width: 100%;
-    height: 0.10rem;
-    background-color: rgba(255, 255, 255, 0.2);
-    border: none;
-    margin-top: 0.75rem;
-    margin-bottom: 0.75rem;
-}
-
-.error-message {
-    color: red;
-    font-size: 14px;
-    margin-top: 8px;
-}
+  .personal-data {
+    display:flex;
+    flex-direction:column;
+  }
+  
+  /* divider */
+  .horizontal-line{
+    width:100%;
+    height:1px;
+    background:#222;
+    border:none;
+    margin:.75rem 0;
+  }
+  
