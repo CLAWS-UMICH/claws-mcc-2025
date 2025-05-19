@@ -9,11 +9,10 @@
 .alert-text{color:#FF3B30;font-size:.65rem;font-weight:500;}
 
 /* ── Panel shell ───────────────────────────────────────────────────────── */
-.co2-scrubber-storage{
+.scrubber-storage{
   display:flex;
   flex-direction:column;
-  align-items: center;
-  gap:.75rem;
+  /* gap:.75rem; */
   padding:.75rem;
   background:#000;
   border:1px solid #222;
@@ -25,10 +24,10 @@
 }
 
 /* ── Header ────────────────────────────────────────────────────────────── */
-.co2-scrubber-storage .box-header{
+.scrubber-storage .box-header{
   display:flex;align-items:center;gap:.5rem;margin-bottom:.5rem;
 }
-.co2-scrubber-storage .box-header span{font-size:.9rem;font-weight:600;}
+.scrubber-storage .box-header span{font-size:.9rem;font-weight:600;}
 
 /* ── Two‑column content frame ──────────────────────────────────────────── */
 .storage-content{

@@ -1,7 +1,8 @@
 // SuitCO2ScrubberStorage.tsx
+import './styles/suitCO2ScrubberStorage.css'
 function SuitCO2ScrubberStorage({ scrubberA, scrubberB }) {
   return (
-    <div className="co2-scrubber-storage">
+    <div className="scrubber-storage">
       <div className="box-header large-text">
         <span>Suit CO₂ Scrubber Storage</span>
       </div>
