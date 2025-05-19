@@ -1,5 +1,5 @@
 import './Vitals.css';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { io, Socket } from 'socket.io-client';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -10,27 +10,29 @@ import SuitResources from './suitResources';
 
 const Vitals = () => {
   const [suitData, setSuitDataState] = useState<SuitData>();
-  const [socket, setSocket] = useState<Socket>();
+  const socketRef = useRef<Socket | null>(null);
 
   useEffect(() => {
-    const socket = io('http://localhost:8080');
-    
-    socket.on('connect', () => {
-      console.log('Connected to server:', socket.id);
-      // join the TSS room to receive telemetry updates
-      socket.emit('join_tss_room');
-      setSocket(socket);
+    // Create socket connection
+    socketRef.current = io("http://localhost:8080");
+    const socket = socketRef.current;
+
+    // Join TSS room when component mounts
+    socket.emit('join_tss_room');
+
+    // Set up event listeners
+    socket.on('join_response', (response) => {
+      console.log(`Joined room: ${response.room}`);
     });
 
-    // optional acknowledgement
-    socket.on('join_response', ({ status, room }) => {
-      console.log(`Join ${room}: ${status}`);
+    socket.on('leave_response', (response) => {
+      console.log(`Left room: ${response.room}`);
     });
 
     // handle incoming telemetry
     socket.on('tss_update', (data: any) => {
       console.log('TSS Update:', data);
-      const telemetry = data.vitals.telemetry;
+      const telemetry = data.telemetry;
       // pick the EVA you want (here, eva1) and merge eva_time
       const payload = {
         ...telemetry.eva1,
@@ -42,9 +44,10 @@ const Vitals = () => {
     });
 
     return () => {
-      // leave the TSS room before disconnect
-      socket.emit('leave_tss_room');
-      socket.disconnect();
+      if (socket) {
+        socket.emit('leave_tss_room');
+        socket.disconnect();
+      }
     };
   }, []);
 
