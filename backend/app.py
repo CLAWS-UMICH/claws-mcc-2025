@@ -261,17 +261,107 @@ def poll_tss_server():
     
     logging.info("Starting TSS polling thread")
     while tss_polling_active:
-        logging.info("Polling TSS server")
-        tss_data = {}
+        try:
+            # # Prepare the TSS request (same as your example)
+            # time_value = int(time.time())  # Use current time
+            # command = 172                  # Your TSS command
+            # data = 0                       # Optional data
+            
+            # # Pack the request
+            # request = struct.pack('>III', time_value, command, data)
+            
+            # # Send the request to TSS server
+            # tss_sock.sendto(request, (TSS_SERVER_IP, TSS_SERVER_PORT))
+            
+            # # Receive the response
+            # response, _ = tss_sock.recvfrom(4096)
+            
+            # # Process the response
+            # recv_time, recv_command = struct.unpack('>II', response[:8])
+            # data_bytes = response[8:]
+            
+            # # Parse as list of floats (adjust according to your data format)
+            # floats = struct.iter_unpack('>f', data_bytes)
+            # values = [f[0] for f in floats]
+            
+            # Prepare data for clients
+            # object = {
+            # 'nav': data
+            # 'vitals': data
+            # }
 
-        # get data from TSS server
-        get_tss_data(tss_data)
 
-        # Broadcast to all clients in the TSS room
-        socketio.emit('tss_update', tss_data, room=TSS_ROOM)
-        # logging.info(f"Broadcasted TSS update: {tss_data}")
-        logging.info(f"Broadcasted TSS update IMU: {tss_data['imu']}")
-
+            # tss_data = {
+            #     'timestamp': recv_time,
+            #     'command': recv_command,
+            #     'values': values
+            # }
+            # placeholder data
+            tss_data = {
+                'vitals': { 
+                    "telemetry": {
+                        "eva_time": 2820,
+                        "eva1": {
+                            "batt_time_left": 5077.148926,
+                            "oxy_pri_storage": 23,
+                            "oxy_sec_storage": 15,
+                            "oxy_pri_pressure": 1000,
+                            "oxy_sec_pressure": 2500,
+                            "oxy_time_left": 4238,
+                            "heart_rate": 90.000000,
+                            "oxy_consumption": 180,
+                            "co2_production": 100,
+                            "suit_pressure_oxy": 3.072300,
+                            "suit_pressure_co2": 0.005900,
+                            "suit_pressure_other": 11.554200,
+                            "suit_pressure_total": 14.632401,
+                            "fan_pri_rpm": 23000,
+                            "fan_sec_rpm": 30000,
+                            "helmet_pressure_co2": 0.1,
+                            "scrubber_a_co2_storage": 32,
+                            "scrubber_b_co2_storage": 0.000000,
+                            "temperature": 70.000000,
+                            "coolant_ml": 20.508068,
+                            "coolant_gas_pressure": 0.000000,
+                            "coolant_liquid_pressure": 400
+                        },
+                        "eva2": {
+                            "batt_time_left": 3384.893799,
+                            "oxy_pri_storage": 24.231962,
+                            "oxy_sec_storage": 19.419136,
+                            "oxy_pri_pressure": 0.000000,
+                            "oxy_sec_pressure": 0.000000,
+                            "oxy_time_left": 4714,
+                            "heart_rate": 90.000000,
+                            "oxy_consumption": 0.000000,
+                            "co2_production": 0.000000,
+                            "suit_pressure_oxy": 3.072300,
+                            "suit_pressure_cO2": 0.005900,
+                            "suit_pressure_other": 11.554200,
+                            "suit_pressure_total": 14.632401,
+                            "fan_pri_rpm": 0.000000,
+                            "fan_sec_rpm": 0.000000,
+                            "helmet_pressure_co2": 0.000000,
+                            "scrubber_a_co2_storage": 0.000000,
+                            "scrubber_b_co2_storage": 0.000000,
+                            "temperature": 70.000000,
+                            "coolant_ml": 22.034748,
+                            "coolant_gas_pressure": 0.000000,
+                            "coolant_liquid_pressure": 0.000000
+                        }
+                    }
+                }
+            }
+            
+            # Broadcast to all clients in the TSS room
+            socketio.emit('tss_update', tss_data, room=TSS_ROOM)
+            # logging.info(f"Broadcasted TSS update to {TSS_ROOM}: command={recv_command}, data_length={len(values)}")
+            
+        except socket.timeout:
+            logging.warning("TSS server did not respond")
+        except Exception as e:
+            logging.error(f"Error polling TSS server: {e}")
+        
         # Wait until next poll interval
         time.sleep(TSS_POLL_INTERVAL)
     

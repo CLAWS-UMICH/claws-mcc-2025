@@ -21,7 +21,7 @@ const AlertNotification = ({ vital, onClose }) => {
 };
 
 const SuitResources = ({ data }) => {
-  const [alerts, setAlerts] = useState<Array<string>>([]);
+  const [currAlerts, setCurrAlerts] = useState<Array<string>>([]);
 
   const {
     batt_time_left,
@@ -31,19 +31,19 @@ const SuitResources = ({ data }) => {
     oxy_sec_pressure,
     oxy_time_left,
     coolant_storage,
-    alerts: sourceAlerts,
+    currAlerts: alerts,
   } = data;
 
   useEffect(() => {
-    if (!sourceAlerts) return;
+    if (!alerts) return;
 
-    // const newAlerts = sourceAlerts.AllAlerts.map(alert => alert.vital);
+    // const newAlerts = alerts.AllAlerts.map(alert => alert.vital);
     const newAlerts = ['batt_time_left', 'oxy_time_left', 'oxy_pri_storage', 'oxy_sec_storage', 'oxy_pri_pressure', 'oxy_sec_pressure', 'coolant_storage'];
-    setAlerts(newAlerts);
-  }, [sourceAlerts]);
+    setCurrAlerts(newAlerts);
+  }, [alerts]);
 
   const handleDismissNotification = (vitalName: string) => {
-    setAlerts(alerts.filter(a => a !== vitalName));
+    setCurrAlerts(currAlerts.filter(a => a !== vitalName));
   };
 
   const validVitals = [
@@ -57,7 +57,7 @@ const SuitResources = ({ data }) => {
   ];
 
   const hasAlert = (vitalName: string) => {
-    return alerts.includes(vitalName) && validVitals.includes(vitalName);
+    return currAlerts.includes(vitalName) && validVitals.includes(vitalName);
   };
 
   // const hasNotification = (vitalName) => {
@@ -126,7 +126,7 @@ const SuitResources = ({ data }) => {
   };
 
   const renderAlerts = () => {
-    if (!alerts.length) return null;
+    if (!currAlerts.length) return null;
 
     const alertMappings = {
       'batt_time_left': 'Time Left for Battery',
@@ -138,7 +138,7 @@ const SuitResources = ({ data }) => {
       'coolant_storage': 'Coolant Storage'
     };
 
-    return alerts
+    return currAlerts
       .map(alert => (
         <AlertNotification
           key={alert}
