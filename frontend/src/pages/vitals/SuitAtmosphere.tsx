@@ -28,6 +28,7 @@ const SuitAtmosphere = ({ suitData }) => {
                         </div>
                     </div>
                 </div>
+                <span>Suit Helmet Fan</span>
                 <div className="temperature-dcu-container">
                     <SuitHelmetFan fanPriRpm={suitData.fan_pri_rpm} fanSecRpm={suitData.fan_sec_rpm} />
                     <SuitCO2ScrubberStorage scrubberA={suitData.scrubber_a_co2_storage} scrubberB={suitData.scrubber_b_co2_storage} />

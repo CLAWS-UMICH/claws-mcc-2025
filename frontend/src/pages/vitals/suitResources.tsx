@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './styles/SuitResources.css';
-import { Clock, Gauge } from 'lucide-react'; // Battery and Droplet were not used in the original TSX provided for the main component
+import { Clock, Gauge as PressureIcon } from 'lucide-react'; // Renamed Gauge to PressureIcon for clarity
 import oxygenIcon from '../../assets/oxygen.svg';
 import coolantIcon from '../../assets/coolant.svg';
 import batteryIcon from '../../assets/battery.svg';
@@ -28,32 +28,26 @@ interface SuitData {
   oxy_sec_pressure: number;
   oxy_time_left: number;
   coolant_ml: number;
-  currAlerts?: { AllAlerts: { vital: string }[] }; // Made currAlerts optional and typed AllAlerts
+  currAlerts?: { AllAlerts: { vital: string }[] };
 }
 
 const SuitResources = ({ data }: { data: SuitData }) => {
   const [currAlerts, setCurrAlerts] = useState<Array<string>>([]);
 
   const {
-    batt_time_left = 0, // Default values to prevent runtime errors if data is incomplete
+    batt_time_left = 0,
     oxy_pri_storage = 0,
     oxy_sec_storage = 0,
     oxy_pri_pressure = 0,
     oxy_sec_pressure = 0,
     oxy_time_left = 0,
     coolant_ml = 0,
-    currAlerts: alerts, // Renamed to avoid conflict
+    currAlerts: alerts,
   } = data;
 
   useEffect(() => {
     if (!alerts || !alerts.AllAlerts) {
-      // Simulating alerts as per original code if not provided
-      const simulatedAlerts = [
-        // 'batt_time_left', 'oxy_time_left', 'oxy_pri_storage',
-        // 'oxy_sec_storage', 'oxy_pri_pressure', 'oxy_sec_pressure', 'coolant_ml'
-      ];
-      // To test with all alerts active initially, uncomment the above line.
-      // By default, no simulated alerts for a cleaner initial view.
+      const simulatedAlerts: string[] = [];
       setCurrAlerts(simulatedAlerts);
       return;
     }
@@ -87,20 +81,7 @@ const SuitResources = ({ data }: { data: SuitData }) => {
   const oxygenMinutes = Math.floor((oxy_time_left % 3600) / 60);
   const oxygenTimeDisplay = `${oxygenHours}hr ${oxygenMinutes}Min`;
 
-  const calculateNeedleTransform = (value: number): string => {
-    const minPSI = 600;
-    const maxPSI = 3000;
-    const startAngle = 240; // Corresponds to visual start on SVG
-    const endAngle = 480;   // Corresponds to visual end on SVG
-
-    const clampedValue = Math.max(minPSI, Math.min(value, maxPSI));
-    const percentage = (clampedValue - minPSI) / (maxPSI - minPSI);
-    let angle = startAngle + percentage * (endAngle - startAngle);
-
-    // The needle CSS positions its top-center at the pivot.
-    // translateX(-50%) is for centering the needle element itself as its left is at 50%.
-    return `translateX(-50%) rotate(${angle}deg)`;
-  };
+  // Removed calculateNeedleTransform as dials are gone
 
   const getBatteryClassName = () => {
     return `progress-fill ${(batt_time_left / 10800) * 100 < 20 || hasAlert('batt_time_left') ? 'warning' : ''}`;
@@ -111,23 +92,28 @@ const SuitResources = ({ data }: { data: SuitData }) => {
   };
 
   const getOxyPriStorageClassName = () => {
-    return `gauge-fill ${oxy_pri_storage < 20 || hasAlert('oxy_pri_storage') ? 'warning' : ''}`;
+    return `gauge-fill ${(oxy_pri_storage < 20 || hasAlert('oxy_pri_storage')) ? 'warning' : ''}`;
   };
 
   const getOxySecStorageClassName = () => {
-    return `gauge-fill ${oxy_sec_storage < 20 || hasAlert('oxy_sec_storage') ? 'warning' : ''}`;
+    return `gauge-fill ${(oxy_sec_storage < 20 || hasAlert('oxy_sec_storage')) ? 'warning' : ''}`;
   };
 
-  const getOxyPriPressureClassName = () => {
-    return `needle ${oxy_pri_pressure < 750 || hasAlert('oxy_pri_pressure') ? 'warning' : ''}`;
+  // Pressure class names are no longer for needles but can be used for text styling if needed
+  const getOxyPriPressureTextStyle = () => {
+    return hasAlert('oxy_pri_pressure') || oxy_pri_pressure < 750 ? { color: '#FF3B30' } : {};
   };
 
-  const getOxySecPressureClassName = () => {
-    return `needle ${oxy_sec_pressure < 750 || hasAlert('oxy_sec_pressure') ? 'warning' : ''}`;
+  const getOxySecPressureTextStyle = () => {
+    return hasAlert('oxy_sec_pressure') || oxy_sec_pressure < 750 ? { color: '#FF3B30' } : {};
   };
 
   const getCoolantClassName = () => {
-    return `gauge-fill ${coolant_ml < 20 || hasAlert('coolant_ml') ? 'warning' : ''}`;
+    return `gauge-fill ${(coolant_ml < 20 || hasAlert('coolant_ml')) ? 'warning' : ''}`;
+  };
+
+  const roundToNearestTenth = (num: number): number => {
+    return Math.round(num * 10) / 10;
   };
 
   const renderAlertPopups = () => {
@@ -144,7 +130,7 @@ const SuitResources = ({ data }: { data: SuitData }) => {
     };
 
     return currAlerts
-      .filter(alertName => alertMappings[alertName]) // Ensure only valid alerts are mapped
+      .filter(alertName => alertMappings[alertName])
       .map(alertName => (
         <AlertNotification
           key={alertName}
@@ -162,7 +148,7 @@ const SuitResources = ({ data }: { data: SuitData }) => {
         <div className="resources-grid">
           <div className="time-left">
             <div className="box-header large-text">
-              <Clock size={18} /> {/* Adjusted icon size */}
+              <Clock size={16} /> {/* Adjusted icon size */}
               <span>Time Left</span>
             </div>
             <div className="time-content">
@@ -205,8 +191,7 @@ const SuitResources = ({ data }: { data: SuitData }) => {
             <div className="box-header large-text">
               <img src={coolantIcon} alt="Coolant" className="header-icon" />
               <div className="header-text">
-                <span>Coolant</span>
-                <span>Ml</span>
+                <span>Coolant Ml</span>
               </div>
             </div>
             <div className="gauge-container">
@@ -221,7 +206,7 @@ const SuitResources = ({ data }: { data: SuitData }) => {
                   <span>0</span>
                 </div>
               </div>
-              <span className="percentage">{coolant_ml}</span>
+              <span className="percentage">{roundToNearestTenth(coolant_ml)}</span>
             </div>
             {hasAlert('coolant_ml') && (
               <div className="alert-indicator">
@@ -250,11 +235,11 @@ const SuitResources = ({ data }: { data: SuitData }) => {
                     <span>0</span>
                   </div>
                 </div>
-                <span className="percentage storage-percentage">{oxy_pri_storage || 0}%</span>
+                <span className="percentage storage-percentage">{roundToNearestTenth(oxy_pri_storage) || 0}%</span>
                 {hasAlert('oxy_pri_storage') && (
                   <div className="alert-indicator">
                     <div className="alert-icon">⚠</div>
-                    <div className="alert-text">Primary Storage Low</div>
+                    <div className="alert-text">Primary Low</div> {/* Shortened text */}
                   </div>
                 )}
               </div>
@@ -271,11 +256,11 @@ const SuitResources = ({ data }: { data: SuitData }) => {
                     <span>0</span>
                   </div>
                 </div>
-                <span className="percentage storage-percentage">{oxy_sec_storage}%</span>
+                <span className="percentage storage-percentage">{roundToNearestTenth(oxy_sec_storage)}%</span>
                 {hasAlert('oxy_sec_storage') && (
                   <div className="alert-indicator">
                     <div className="alert-icon">⚠</div>
-                    <div className="alert-text">Secondary Storage Low</div>
+                    <div className="alert-text">Secondary Low</div> {/* Shortened text */}
                   </div>
                 )}
               </div>
@@ -284,17 +269,15 @@ const SuitResources = ({ data }: { data: SuitData }) => {
 
           <div className="oxygen-pressure">
             <div className="box-header large-text">
-              <Gauge size={18} /> {/* Adjusted icon size */}
+              <PressureIcon size={16} /> {/* Adjusted icon size, used PressureIcon alias */}
               <span>Oxygen Pressure</span>
             </div>
             <div className="pressure-content">
               <div className="pressure-section">
                 <span className="small-text">Primary</span>
-                <div className="pressure-gauge">
-                  <div className="gauge-marks"></div>
-                  <div className={getOxyPriPressureClassName()} style={{ transform: calculateNeedleTransform(oxy_pri_pressure) }}></div>
-                  <div className="pressure-value">{Math.round(oxy_pri_pressure)}</div>
-                  <div className="pressure-unit">PSI</div>
+                <div className="pressure-display"> {/* New display div */}
+                  <div className="pressure-value-direct" style={getOxyPriPressureTextStyle()}>{Math.round(oxy_pri_pressure)}</div>
+                  <div className="pressure-unit-direct">PSI</div>
                 </div>
                 {hasAlert('oxy_pri_pressure') && (
                   <div className="alert-indicator">
@@ -305,12 +288,9 @@ const SuitResources = ({ data }: { data: SuitData }) => {
               </div>
               <div className="pressure-section">
                 <span className="small-text">Secondary</span>
-                <div className="pressure-gauge">
-                  <div className="gauge-marks"></div>
-                  {/* Removed non-existent gauge-overlay div */}
-                  <div className={getOxySecPressureClassName()} style={{ transform: calculateNeedleTransform(oxy_sec_pressure) }}></div>
-                  <div className="pressure-value">{Math.round(oxy_sec_pressure)}</div>
-                  <div className="pressure-unit">PSI</div>
+                 <div className="pressure-display"> {/* New display div */}
+                  <div className="pressure-value-direct" style={getOxySecPressureTextStyle()}>{Math.round(oxy_sec_pressure)}</div>
+                  <div className="pressure-unit-direct">PSI</div>
                 </div>
                 {hasAlert('oxy_sec_pressure') && (
                   <div className="alert-indicator">
