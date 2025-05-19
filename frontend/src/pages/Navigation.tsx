@@ -19,18 +19,22 @@ const Navigation: React.FC = () => {
 	};
 
 	const leftSectionStyle = {
-		width: '33%',
+		width: '33.6%',
 		display: 'flex',
 		justifyContent: 'center',
 		alignItems: 'center',
 		padding: '0.75rem 1rem',
+		paddingBottom: '0rem',
+		paddingTop: '0rem',
 		borderRight: '1px solid #333'
 	};
 
 	const rightSectionStyle = {
-		width: '67%',
+		width: '66%',
 		display: 'flex',
 		gap: '1rem',
+		paddingBottom: '0rem',
+		paddingTop: '0rem',
 		padding: '0.75rem 1rem'
 	};
 
